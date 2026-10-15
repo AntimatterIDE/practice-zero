@@ -135,6 +135,24 @@ export function SiteHeader() {
             );
           })}
           <Link
+            href="/pricing"
+            className={cn(
+              "rounded-full px-3 py-2 text-sm text-graphite hover:text-ink",
+              pathname === "/pricing" && "text-ink",
+            )}
+          >
+            Pricing
+          </Link>
+          <Link
+            href="/contact"
+            className={cn(
+              "rounded-full px-3 py-2 text-sm text-graphite hover:text-ink",
+              pathname === "/contact" && "text-ink",
+            )}
+          >
+            Contact
+          </Link>
+          <Link
             href="/try"
             className="ml-3 rounded-full bg-slash px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
           >
@@ -163,6 +181,14 @@ export function SiteHeader() {
               ))}
             </div>
           ))}
+          <div className="border-b border-line py-2">
+            <Link href="/pricing" className="block rounded-xl px-2 py-2 text-sm font-medium text-ink hover:bg-mist">
+              Pricing
+            </Link>
+            <Link href="/contact" className="block rounded-xl px-2 py-2 text-sm font-medium text-ink hover:bg-mist">
+              Contact
+            </Link>
+          </div>
           <Link href="/try" className="mt-2 block rounded-full bg-slash px-4 py-2 text-center text-sm text-paper hover:bg-oxide-deep">
             Try the demo
           </Link>

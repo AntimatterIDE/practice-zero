@@ -52,6 +52,8 @@ const columns: {
     title: "About",
     links: [
       { label: "Features", href: "/features" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "Contact", href: "/contact" },
       { label: "Try the demo", href: "/try" },
     ],
   },
