@@ -4,6 +4,14 @@ import { useEffect, useState, type ComponentType } from "react";
 
 const STORAGE_KEY = "pz-intro-v2";
 
+function clearIntroGate() {
+  try {
+    document.documentElement.removeAttribute("data-pz-intro");
+  } catch {
+    /* ignore */
+  }
+}
+
 function shouldSkipIntro() {
   if (typeof window === "undefined") return true;
   if (window.navigator.webdriver) return true;
@@ -36,58 +44,24 @@ function shouldSkipIntro() {
 }
 
 export function BrandIntro() {
-  const [Animation, setAnimation] = useState<ComponentType | null>(null);
+  const [Animation, setAnimation] = useState<ComponentType<{ onReady?: () => void }> | null>(null);
 
   useEffect(() => {
-    if (shouldSkipIntro()) return;
+    if (shouldSkipIntro()) {
+      clearIntroGate();
+      return;
+    }
 
     let cancelled = false;
-    let idleId: number | undefined;
-    const timeouts: number[] = [];
-
-    const load = () => {
-      if (cancelled || shouldSkipIntro()) return;
-      void import("./brand-intro-animation").then((mod) => {
-        if (!cancelled) setAnimation(() => mod.BrandIntroAnimation);
-      });
-    };
-
-    const later = (fn: () => void, ms: number) => {
-      timeouts.push(window.setTimeout(fn, ms));
-    };
-
-    const schedule = () => {
-      if (typeof window.requestIdleCallback === "function") {
-        idleId = window.requestIdleCallback(() => load(), { timeout: 1800 });
-      } else {
-        later(load, 900);
-      }
-    };
-
-    let observer: PerformanceObserver | null = null;
-    try {
-      observer = new PerformanceObserver((list) => {
-        if (list.getEntries().length > 0) {
-          observer?.disconnect();
-          later(schedule, 500);
-        }
-      });
-      observer.observe({ type: "largest-contentful-paint", buffered: true });
-      later(schedule, 2200);
-    } catch {
-      schedule();
-    }
+    void import("./brand-intro-animation").then((mod) => {
+      if (!cancelled) setAnimation(() => mod.BrandIntroAnimation);
+    });
 
     return () => {
       cancelled = true;
-      observer?.disconnect();
-      if (idleId !== undefined && typeof window.cancelIdleCallback === "function") {
-        window.cancelIdleCallback(idleId);
-      }
-      timeouts.forEach((id) => window.clearTimeout(id));
     };
   }, []);
 
   if (!Animation) return null;
-  return <Animation />;
+  return <Animation onReady={clearIntroGate} />;
 }

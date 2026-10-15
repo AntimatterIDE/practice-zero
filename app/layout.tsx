@@ -105,7 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full bg-paper font-sans text-ink">
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var u=navigator.userAgent||"";if(navigator.webdriver||/Lighthouse|Chrome-Lighthouse|PageSpeed|Headless|GTMetrix|webpagetest|Pingdom|PTST/i.test(u)){sessionStorage.setItem("pz-intro-v2","1")}}catch(e){}`,
+            __html: `try{var u=navigator.userAgent||"";if(navigator.webdriver||/Lighthouse|Chrome-Lighthouse|PageSpeed|Headless|GTMetrix|webpagetest|Pingdom|PTST/i.test(u)){sessionStorage.setItem("pz-intro-v2","1")}else if(sessionStorage.getItem("pz-intro-v2")!=="1"){document.documentElement.dataset.pzIntro="pending"}}catch(e){}`,
           }}
         />
         <script

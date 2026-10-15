@@ -13,13 +13,18 @@ const tasks = [
 const STORAGE_KEY = "pz-intro-v2";
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-export function BrandIntroAnimation() {
+export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
   const reduce = useReducedMotion();
   const [gate, setGate] = useState<"play" | "skip">("play");
   const [count, setCount] = useState(23);
   const [cleared, setCleared] = useState(0);
   const [exiting, setExiting] = useState(false);
   const marked = useRef(false);
+
+  useEffect(() => {
+    // Swap the CSS first-paint cover for this overlay without a gap.
+    onReady?.();
+  }, [onReady]);
 
   useEffect(() => {
     if (reduce === null) return;
@@ -86,7 +91,7 @@ export function BrandIntroAnimation() {
         <motion.div
           key="intro"
           className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-ink text-paper will-change-transform"
-          initial={{ opacity: 0 }}
+          initial={false}
           animate={{ opacity: exiting ? 0 : 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.45, ease: EASE }}

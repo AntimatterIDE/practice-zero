@@ -53,6 +53,20 @@ html {
   overscroll-behavior-x: none;
 }
 
+/* Cover the first paint until the brand intro mounts — avoids a homepage flash. */
+html[data-pz-intro="pending"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--color-ink);
+  pointer-events: none;
+}
+
+html[data-pz-intro="pending"] {
+  overflow: hidden;
+}
+
 body {
   max-width: 100%;
   overflow-x: clip;
