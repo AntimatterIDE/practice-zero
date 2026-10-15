@@ -1,14 +1,9 @@
-"use client";
-
 import Link from "next/link";
 import { BarChart3, Clock3, ShieldCheck } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { ZeroDevice } from "@/components/marketing/brand-mark";
 
 export function HomeHero() {
-  const reduce = useReducedMotion();
-
   return (
     <div className="bg-paper">
       <div className="relative z-30 mx-auto w-full max-w-[1400px] px-4 pt-6 sm:px-6 lg:px-8">
@@ -18,14 +13,9 @@ export function HomeHero() {
         <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-2 lg:gap-16">
           <div>
             <p className="kicker">The autonomous practice</p>
-            <motion.h1
-              initial={reduce ? false : { opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="mt-6 max-w-[14ch] font-sans text-5xl font-semibold lowercase leading-[1.02] tracking-[-0.04em] text-ink sm:text-6xl lg:text-7xl"
-            >
+            <h1 className="mt-6 max-w-[14ch] font-sans text-5xl font-semibold lowercase leading-[1.02] tracking-[-0.04em] text-ink sm:text-6xl lg:text-7xl">
               less administration. more care.
-            </motion.h1>
+            </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-graphite">
               practice zero connects clinical, financial, and operational work with agents — from the visit to the remittance.
             </p>
@@ -59,12 +49,7 @@ export function HomeHero() {
             </div>
           </div>
 
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-            className="relative"
-          >
+          <div className="relative">
             <div className="rounded-[1.75rem] border border-line bg-card p-5 shadow-[var(--shadow-card)] sm:p-6">
               <div className="flex items-center justify-between gap-3 border-b border-line pb-4">
                 <div className="flex items-center gap-3">
@@ -99,7 +84,7 @@ export function HomeHero() {
               <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-paper/70">Copay</p>
               <p className="mt-1 font-sans text-2xl font-semibold tracking-tight">$25</p>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </div>

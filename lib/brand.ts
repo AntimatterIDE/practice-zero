@@ -10,5 +10,6 @@ export const brand = {
 export const product = {
   name: "practice zero",
   displayName: "Practice Zero",
-  description: "practice zero is an agentic EHR for any independent practice.",
+  description:
+    "practice zero is an agentic EHR for independent practices — chart, billing, and outreach in one morning board.",
 } as const;

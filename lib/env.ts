@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 const serverEnvSchema = z.object({
-  INDEXING_ENABLED: z.enum(["true", "false"]).default("false"),
+  // Optional — production Vercel indexes unless this is explicitly "false".
+  INDEXING_ENABLED: z.enum(["true", "false"]).optional(),
 });
 
 export type ServerEnv = z.infer<typeof serverEnvSchema>;

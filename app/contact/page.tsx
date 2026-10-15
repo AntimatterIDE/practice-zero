@@ -6,6 +6,12 @@ import { SiteHeader } from "@/components/marketing/site-header";
 export const metadata: Metadata = {
   title: "Contact",
   description: "Request a practice zero consultation for your independent practice.",
+  alternates: { canonical: "/contact" },
+  openGraph: {
+    title: "Contact · practice zero",
+    description: "Request a practice zero consultation for your independent practice.",
+    url: "/contact",
+  },
 };
 
 export default function ContactPage() {

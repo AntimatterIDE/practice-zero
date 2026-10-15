@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { AdminMobileBar } from "@/components/admin/admin-mobile-bar";
 import { ResetDemoButton } from "@/components/admin/reset-demo";
 import { RcmProvider } from "@/components/admin/rcm/store";
 import { samplePractice } from "@/lib/rcm/seed";
+
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default function TryLayout({ children }: { children: React.ReactNode }) {
   return (

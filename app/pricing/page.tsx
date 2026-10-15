@@ -7,6 +7,13 @@ export const metadata: Metadata = {
   title: "Pricing",
   description:
     "practice zero is free for EHR, billing, and marketing on a one-year billing agreement at 8% of collections. Optional ad dollars on top.",
+  alternates: { canonical: "/pricing" },
+  openGraph: {
+    title: "Pricing · practice zero",
+    description:
+      "Free EHR, billing, and marketing. One-year billing agreement at 8% of collections. Optional ad dollars.",
+    url: "/pricing",
+  },
 };
 
 export default function PricingPage() {

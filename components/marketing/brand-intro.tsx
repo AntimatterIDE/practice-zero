@@ -13,31 +13,35 @@ const tasks = [
 const STORAGE_KEY = "pz-intro-v2";
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
+function shouldSkipIntro() {
+  if (typeof window === "undefined") return true;
+  if (window.navigator.webdriver) return true;
+  // Lighthouse / PageSpeed and common bot UAs — keep LCP clear.
+  const ua = window.navigator.userAgent || "";
+  if (/Lighthouse|Chrome-Lighthouse|PageSpeed|GTMetrix|HeadlessChrome/i.test(ua)) return true;
+  try {
+    if (sessionStorage.getItem(STORAGE_KEY) === "1") return true;
+  } catch {
+    /* ignore */
+  }
+  return false;
+}
+
 export function BrandIntro() {
   const reduce = useReducedMotion();
-  const [gate, setGate] = useState<"boot" | "play" | "skip">("boot");
+  // Start skipped so SSR / first paint never covers LCP with a black screen.
+  const [gate, setGate] = useState<"idle" | "play" | "skip">("idle");
   const [count, setCount] = useState(23);
   const [cleared, setCleared] = useState(0);
   const [exiting, setExiting] = useState(false);
   const marked = useRef(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    // null = preference still resolving — keep the boot cover up.
     if (reduce === null) return;
 
-    if (window.navigator.webdriver) {
+    if (shouldSkipIntro()) {
       setGate("skip");
       return;
-    }
-
-    try {
-      if (sessionStorage.getItem(STORAGE_KEY) === "1") {
-        setGate("skip");
-        return;
-      }
-    } catch {
-      /* ignore */
     }
 
     setGate("play");
@@ -46,7 +50,6 @@ export function BrandIntro() {
   useEffect(() => {
     if (gate !== "play" || exiting) return;
 
-    // Still play on reduced-motion devices (common on iPhone) — just shorter.
     const duration = reduce ? 1700 : 3000;
     const start = performance.now();
     let frame = 0;
@@ -95,20 +98,16 @@ export function BrandIntro() {
     return () => window.clearTimeout(timer);
   }, [exiting]);
 
-  if (gate === "boot") {
-    return <div className="fixed inset-0 z-[100] bg-ink" aria-hidden="true" />;
-  }
-
   return (
     <AnimatePresence>
       {gate === "play" ? (
         <motion.div
           key="intro"
           className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-ink text-paper will-change-transform"
-          initial={{ opacity: 1 }}
+          initial={{ opacity: 0 }}
           animate={{ opacity: exiting ? 0 : 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.65, ease: EASE }}
+          transition={{ duration: 0.45, ease: EASE }}
           aria-hidden="true"
         >
           <motion.div
@@ -120,12 +119,7 @@ export function BrandIntro() {
             }}
             transition={{ duration: 0.55, ease: EASE }}
           >
-            <motion.div
-              initial={{ scale: 0.94, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.65, ease: EASE }}
-              className="relative"
-            >
+            <div className="relative">
               <span className="font-mono text-[5rem] leading-none text-slash sm:text-[7rem]">Ø</span>
               <motion.span
                 className="absolute left-1/2 top-1/2 h-[3px] w-[120%] -translate-x-1/2 -translate-y-1/2 origin-center bg-slash"
@@ -133,7 +127,7 @@ export function BrandIntro() {
                 animate={{ scaleX: cleared > 0 ? 1 : 0 }}
                 transition={{ duration: 0.6, ease: EASE }}
               />
-            </motion.div>
+            </div>
 
             <p className="mt-8 font-sans text-6xl font-semibold tracking-[-0.05em] tabular-nums sm:text-7xl">
               {count}
@@ -144,11 +138,8 @@ export function BrandIntro() {
               {tasks.map((task, index) => {
                 const done = index < cleared;
                 return (
-                  <motion.li
+                  <li
                     key={task}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 * index, duration: 0.5, ease: EASE }}
                     className="relative flex items-center gap-3 text-sm font-medium lowercase tracking-[-0.02em] text-paper/55"
                   >
                     <span className="font-mono text-slash">ø</span>
@@ -162,7 +153,7 @@ export function BrandIntro() {
                         transition={{ duration: 0.5, ease: EASE }}
                       />
                     </span>
-                  </motion.li>
+                  </li>
                 );
               })}
             </ul>

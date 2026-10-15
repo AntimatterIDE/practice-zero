@@ -1,9 +1,20 @@
+import dynamic from "next/dynamic";
 import { Footer11 } from "@/components/blocks/footer-11";
 import { BrandIntro } from "@/components/marketing/brand-intro";
 import { HomeHero } from "@/components/marketing/home-hero";
-import { HomeMetrics } from "@/components/marketing/home-metrics";
-import { HomePlatform } from "@/components/marketing/home-platform";
-import { HomeZeroOut } from "@/components/marketing/home-zero-out";
+
+const HomePlatform = dynamic(
+  () => import("@/components/marketing/home-platform").then((mod) => mod.HomePlatform),
+  { ssr: true },
+);
+const HomeZeroOut = dynamic(
+  () => import("@/components/marketing/home-zero-out").then((mod) => mod.HomeZeroOut),
+  { ssr: true },
+);
+const HomeMetrics = dynamic(
+  () => import("@/components/marketing/home-metrics").then((mod) => mod.HomeMetrics),
+  { ssr: true },
+);
 
 export default function HomePage() {
   return (
