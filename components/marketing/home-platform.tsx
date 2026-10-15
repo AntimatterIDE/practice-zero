@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { BarChart3, FileText, Stethoscope, Users } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import { ZeroDevice } from "@/components/marketing/brand-mark";
 
 const pillars = [
   {
@@ -46,10 +45,7 @@ export function HomePlatform() {
           practice zero connects clinical, financial, and operational workflows with agents — from patient encounters to reimbursements.
         </p>
 
-        <div className="relative mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="absolute left-1/2 top-1/2 z-10 hidden h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-ink text-paper lg:flex">
-            <ZeroDevice className="text-[2rem] text-slash" tone="ink" />
-          </div>
+        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {pillars.map((pillar, index) => {
             const Icon = pillar.icon;
             return (
@@ -62,9 +58,9 @@ export function HomePlatform() {
               >
                 <Link
                   href={pillar.href}
-                  className="flex h-full flex-col rounded-[1.5rem] border border-line bg-card p-5 shadow-[var(--shadow-card)] transition-colors hover:border-slash/40"
+                  className="flex h-full flex-col rounded-[1.5rem] border border-line bg-card p-5 shadow-[var(--shadow-card)] transition-colors hover:border-slash/50 hover:bg-slash/[0.03]"
                 >
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-mist text-ink">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slash/10 text-slash">
                     <Icon className="h-5 w-5" strokeWidth={1.6} />
                   </span>
                   <h3 className="mt-6 text-lg font-semibold text-ink">{pillar.title}</h3>

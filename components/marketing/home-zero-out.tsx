@@ -27,6 +27,9 @@ export function HomeZeroOut() {
           <h2 className="mt-5 max-w-[14ch] font-sans text-4xl font-semibold lowercase leading-[1.05] tracking-[-0.035em] text-ink sm:text-5xl">
             the work that should not own the day.
           </h2>
+          <p className="mt-4 max-w-md text-base text-graphite">
+            Agents clear the backlog so the morning starts at <span className="font-medium text-slash">zero</span>.
+          </p>
           <ul className="mt-10 space-y-5">
             {lines.map((line, index) => (
               <motion.li

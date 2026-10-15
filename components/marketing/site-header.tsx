@@ -136,7 +136,7 @@ export function SiteHeader() {
           })}
           <Link
             href="/try"
-            className="ml-3 rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink/90"
+            className="ml-3 rounded-full bg-slash px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
           >
             Try the demo
           </Link>
@@ -163,7 +163,7 @@ export function SiteHeader() {
               ))}
             </div>
           ))}
-          <Link href="/try" className="mt-2 block rounded-full bg-ink px-4 py-2 text-center text-sm text-paper">
+          <Link href="/try" className="mt-2 block rounded-full bg-slash px-4 py-2 text-center text-sm text-paper hover:bg-oxide-deep">
             Try the demo
           </Link>
         </div>
@@ -203,7 +203,7 @@ function MenuPanel({ menu }: { menu: (typeof menus)[number] }) {
               href={menu.href}
               className="flex items-start gap-3 rounded-xl px-3 py-2.5 hover:bg-mist"
             >
-              <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-ink text-paper">
+              <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slash/10 text-slash">
                 <Icon className="h-4 w-4" />
               </span>
               <span>

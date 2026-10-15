@@ -31,7 +31,7 @@ export function HomeMetrics() {
           </p>
           <Link
             href="/try/patients/pt-hale"
-            className="mt-8 inline-flex w-fit rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-colors hover:bg-ink/90"
+            className="mt-8 inline-flex w-fit rounded-full bg-slash px-6 py-3 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
           >
             Open Jordan Hale
           </Link>

@@ -110,10 +110,10 @@ export function Footer11() {
           ))}
         </div>
 
-        <motion.div variants={item} className="mt-16 flex flex-col gap-6 pt-8 sm:mt-20">
+        <motion.div variants={item} className="mt-16 flex flex-col gap-6 border-t border-paper/10 pt-8 sm:mt-20">
           <BrandMark inverted href="/" />
           <p className="max-w-xl font-sans text-3xl font-semibold lowercase leading-tight tracking-[-0.03em] text-paper sm:text-4xl">
-            from the first patient to the claim.
+            from the first patient to the <span className="text-slash">claim</span>.
           </p>
         </motion.div>
       </motion.div>
