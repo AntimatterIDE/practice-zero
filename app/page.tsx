@@ -5,6 +5,10 @@ import { HomeHero } from "@/components/marketing/home-hero";
 import { HomePlatform } from "@/components/marketing/home-platform";
 import { HomeZeroOut } from "@/components/marketing/home-zero-out";
 
+const Hero29 = dynamic(() => import("@/components/blocks/hero-29"), {
+  loading: () => <section className="min-h-screen w-full bg-paper" aria-hidden="true" />,
+});
+
 const HomeMetrics = dynamic(
   () => import("@/components/marketing/home-metrics").then((mod) => mod.HomeMetrics),
   {
@@ -21,6 +25,7 @@ export default function HomePage() {
     <div className="min-h-full bg-paper text-ink">
       <BrandIntro />
       <main>
+        <Hero29 />
         <HomeHero />
         <HomePlatform />
         <HomeZeroOut />

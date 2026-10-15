@@ -89,7 +89,7 @@ const jsonLd = {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
-    description: "Free platform with a one-year billing agreement at 8% of collections. Optional ad dollars.",
+    description: "EHR, billing, and marketing included at no additional license fee under a one-year billing agreement. Optional advertising spend on your terms.",
   },
   publisher: {
     "@type": "Organization",

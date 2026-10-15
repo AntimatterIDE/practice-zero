@@ -10,8 +10,8 @@ const benefits = [
     description: "Share how mornings run today. We map chart, billing, and outreach onto one board.",
   },
   {
-    title: "The free + 8% model",
-    description: "See how the one-year billing agreement works — and when optional ad dollars make sense.",
+    title: "The billing agreement",
+    description: "See how the one-year agreement works — and when optional advertising spend makes sense.",
   },
   {
     title: "Live product time",
@@ -101,7 +101,7 @@ export default function Contact10() {
             variants={item}
             className="mt-6 max-w-md text-base leading-relaxed text-graphite sm:text-lg"
           >
-            Tell us about the practice. We will follow up with a walkthrough of chart, billing, and outreach — and how the free platform plus 8% agreement fits your mornings.
+            Tell us about the practice. We will follow up with a walkthrough of chart, billing, and outreach — and how the one-year billing agreement fits your mornings.
           </motion.p>
 
           <div className="mt-12 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">

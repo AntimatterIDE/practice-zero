@@ -45,15 +45,15 @@ const features = [
   {
     icon: Users,
     title: "Scales with you",
-    body: "Solo or multi-provider — the same free platform, one-year billing agreement at 8% of collections.",
+    body: "Solo or multi-provider — the same platform, one-year billing agreement sized to the practice.",
   },
 ];
 
 const assurances = [
-  { icon: Zap, label: "Software stays free" },
-  { icon: ShieldCheck, label: "8% of collections · one year" },
+  { icon: Zap, label: "No additional license fee" },
+  { icon: ShieldCheck, label: "One-year billing agreement" },
   { icon: FileText, label: "EHR, billing & marketing included" },
-  { icon: Users, label: "Optional ad dollars on top" },
+  { icon: Users, label: "Optional ad spend on your terms" },
 ];
 
 export default function Pricing12() {
@@ -95,9 +95,7 @@ export default function Pricing12() {
               </h1>
 
               <p className="mt-5 max-w-xl text-base leading-relaxed text-paper/70 sm:text-lg">
-                EHR, billing, and marketing are free. Route collections through practice zero on a one-year billing agreement at{" "}
-                <span className="font-medium text-paper">8%</span>
-                — then add optional ad dollars when you want growth spend.
+                EHR, billing, and marketing are included at no additional license fee when you route collections through PracticeZero under a one-year billing agreement. Optional advertising spend is separate, so you can invest in growth on your terms.
               </p>
 
               <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">

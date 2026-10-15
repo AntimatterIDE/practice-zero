@@ -6,12 +6,12 @@ import { SiteHeader } from "@/components/marketing/site-header";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "practice zero is free for EHR, billing, and marketing on a one-year billing agreement at 8% of collections. Optional ad dollars on top.",
+    "EHR, billing, and marketing included at no additional license fee when you route collections through PracticeZero under a one-year billing agreement. Optional advertising spend is separate.",
   alternates: { canonical: "/pricing" },
   openGraph: {
     title: "Pricing · practice zero",
     description:
-      "Free EHR, billing, and marketing. One-year billing agreement at 8% of collections. Optional ad dollars.",
+      "EHR, billing, and marketing included at no additional license fee. One-year billing agreement. Optional advertising spend on your terms.",
     url: "/pricing",
   },
 };
