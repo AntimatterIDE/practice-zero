@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Footer11 } from "@/components/blocks/footer-11";
 import { FollowUpSection } from "@/components/marketing/marketing/follow-up";
 import { OutreachSection } from "@/components/marketing/marketing/outreach";
 import { SchedulingSection } from "@/components/marketing/marketing/scheduling";
@@ -29,6 +30,7 @@ export default function MarketingPage() {
       <SeoSection />
       <SocialSection />
       <CategoryClose title="Open the morning." body="Chris Adelman is still unconfirmed at 10:30. Elena’s balance text is still in the outbox." />
+      <Footer11 />
     </div>
   );
 }

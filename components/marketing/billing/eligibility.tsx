@@ -7,6 +7,7 @@ export function EligibilitySection() {
   const reduce = useReducedMotion();
   return (
     <CategorySection
+      flip
       eyebrow="Eligibility"
       title="Checked before the room."
       body="At 8:10, Jordan Hale is active with Pinetree Health. Office copay $25. Deductible remaining $650. No prior authorization on this visit."

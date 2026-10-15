@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ChecksSection } from "@/components/marketing/billing/checks";
+import { Footer11 } from "@/components/blocks/footer-11";
 import { ClaimsSection } from "@/components/marketing/billing/claims";
 import { CoverageSection } from "@/components/marketing/billing/coverage";
 import { DemographicsSection } from "@/components/marketing/billing/demographics";
@@ -11,7 +11,7 @@ import { SiteHeader } from "@/components/marketing/site-header";
 
 export const metadata: Metadata = {
   title: "Billing",
-  description: "Payment from payers, paper checks, coverage, eligibility, claims, and the plan on the chart.",
+  description: "Payment from payers, coverage, eligibility, claims, and the plan on the chart.",
 };
 
 export default function BillingPage() {
@@ -23,16 +23,16 @@ export default function BillingPage() {
       <CategoryIntro
         kicker="Billing"
         title="The money follows the visit."
-        lede="Payment from the payer, a paper check, coverage found from a name and a birthday, eligibility, the claim, and the plan on the chart."
+        lede="Payment from the payer, coverage found from a name and a birthday, eligibility, the claim, and the plan on the chart."
       />
       <EftSection />
-      <ChecksSection />
       <CoverageSection />
       <DemographicsSection />
       <EligibilitySection />
       <ClaimsSection />
       <PayersSection />
       <CategoryClose title="Open the draft." body="Jordan Hale’s 99203 is queued for $185. It stays in this browser until you submit it." />
+      <Footer11 />
     </div>
   );
 }

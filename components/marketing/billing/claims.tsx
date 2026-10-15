@@ -11,7 +11,6 @@ const slips = [
 export function ClaimsSection() {
   return (
     <CategorySection
-      flip
       eyebrow="Claims"
       title="One draft. One payment. One denial."
       body="Jordan’s 99203 for $185 is still a draft. Elena’s June visit paid $140. The August visit came back denied, CARC 50, medical necessity."

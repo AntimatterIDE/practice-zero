@@ -14,6 +14,7 @@ export function CoverageSection() {
   const reduce = useReducedMotion();
   return (
     <CategorySection
+      flip
       eyebrow="Find the coverage"
       title="Coverage, found for the 9:00 patient."
       body="Jordan Hale’s benefits are already on the chart. Choice PPO, member PT-44021, active with Pinetree Health."

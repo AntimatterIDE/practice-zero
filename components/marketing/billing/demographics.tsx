@@ -7,7 +7,6 @@ export function DemographicsSection() {
   const reduce = useReducedMotion();
   return (
     <CategorySection
-      flip
       eyebrow="Coverage from demographics"
       title="A name and a birthday are enough to start."
       body="Jordan Hale. March 14, 1988. The member ID can come after. The match on this morning is still Pinetree Health."

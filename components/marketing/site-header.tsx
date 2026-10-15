@@ -14,7 +14,6 @@ import {
   Inbox,
   Landmark,
   ListChecks,
-  Mail,
   MessageSquare,
   Mic,
   Search,
@@ -49,7 +48,6 @@ const menus: { id: string; label: string; href: string; items: Item[] }[] = [
     href: "/billing",
     items: [
       { title: "Collect from payers", body: "Enroll for EFTs and collect payment", icon: Landmark },
-      { title: "Paper checks", body: "Deposit checks and track the mail", icon: Mail },
       { title: "Find the coverage", body: "Coverage and benefits for the patient", icon: Search },
       { title: "Coverage from demographics", body: "A name and a date of birth", icon: Fingerprint },
       { title: "Eligibility", body: "A check in the moment, or a batch", icon: ShieldCheck },

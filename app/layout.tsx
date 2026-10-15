@@ -30,7 +30,20 @@ export const metadata: Metadata = {
   applicationName: product.name,
   robots: isIndexingEnabled() ? { index: true, follow: true } : { index: false, follow: false, nocache: true },
   icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  openGraph: {
+    title: product.name,
+    description: product.description,
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Practice Zero" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og.png"],
   },
 };
 

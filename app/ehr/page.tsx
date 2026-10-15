@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Footer11 } from "@/components/blocks/footer-11";
 import { AgreementsSection } from "@/components/marketing/ehr/agreements";
 import { IntakeSection } from "@/components/marketing/ehr/intake";
 import { PatientsSection } from "@/components/marketing/ehr/patients";
@@ -33,6 +34,7 @@ export default function EhrPage() {
       <TasksSection />
       <RequestsSection />
       <CategoryClose title="Open the chart." body="Jordan Hale is in room 2. The note stays hidden until you ask to see it." />
+      <Footer11 />
     </div>
   );
 }

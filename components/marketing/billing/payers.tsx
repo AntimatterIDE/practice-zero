@@ -7,6 +7,7 @@ export function PayersSection() {
   const reduce = useReducedMotion();
   return (
     <CategorySection
+      flip
       eyebrow="Payers"
       title="One plan, on every chart this morning."
       body="Pinetree Health is the payer for Jordan, Elena, and Chris. Choice PPO is the plan on Jordan’s coverage."
