@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SiteHeader } from "@/components/marketing/site-header";
 
 export const metadata: Metadata = {
   title: "Features",
@@ -50,14 +51,9 @@ const groups = [
 export default function FeaturesPage() {
   return (
     <div className="min-h-full bg-paper text-ink">
-      <header className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-5">
-        <Link href="/" className="font-display text-xl">
-          Practice Zero
-        </Link>
-        <Link href="/try" className="rounded-full bg-pine px-4 py-2 text-sm text-paper">
-          Try the demo
-        </Link>
-      </header>
+      <div className="mx-auto w-full max-w-[1400px] px-4 pt-6 sm:px-6 lg:px-8">
+        <SiteHeader />
+      </div>
       <main className="mx-auto max-w-5xl px-6 pb-20 pt-8">
         <h1 className="font-display text-5xl">Every screen in the demo</h1>
         <p className="mt-4 max-w-2xl text-lg text-muted">The sample practice is already mid-morning. Each link opens that desk.</p>
