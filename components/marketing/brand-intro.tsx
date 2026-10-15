@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const tasks = [
@@ -10,132 +10,134 @@ const tasks = [
   "unconfirmed mornings",
 ];
 
-const STORAGE_KEY = "pz-intro-seen";
+const STORAGE_KEY = "pz-intro-v2";
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export function BrandIntro() {
   const reduce = useReducedMotion();
-  const [phase, setPhase] = useState<"boot" | "count" | "open" | "done">("boot");
+  const [gate, setGate] = useState<"boot" | "play" | "skip">("boot");
   const [count, setCount] = useState(23);
   const [cleared, setCleared] = useState(0);
-  const [active, setActive] = useState(false);
+  const [exiting, setExiting] = useState(false);
+  const marked = useRef(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (reduce || window.navigator.webdriver) {
-      setPhase("done");
+    // null = preference still resolving — keep the boot cover up.
+    if (reduce === null) return;
+
+    if (window.navigator.webdriver) {
+      setGate("skip");
       return;
     }
+
     try {
       if (sessionStorage.getItem(STORAGE_KEY) === "1") {
-        setPhase("done");
+        setGate("skip");
         return;
       }
     } catch {
       /* ignore */
     }
-    setActive(true);
-    setPhase("count");
+
+    setGate("play");
   }, [reduce]);
 
   useEffect(() => {
-    if (phase !== "count" || !active) return;
+    if (gate !== "play" || exiting) return;
 
+    // Still play on reduced-motion devices (common on iPhone) — just shorter.
+    const duration = reduce ? 1700 : 3000;
     const start = performance.now();
-    const duration = 3200;
     let frame = 0;
-
     const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
     const tick = (now: number) => {
       const raw = Math.min(1, (now - start) / duration);
       const t = easeOutCubic(raw);
-      const next = Math.round(23 * (1 - t));
-      setCount(next);
-      setCleared(Math.min(tasks.length, Math.floor(t * (tasks.length + 0.15))));
+      setCount(Math.round(23 * (1 - t)));
+      setCleared(Math.min(tasks.length, Math.floor(t * (tasks.length + 0.12))));
       if (raw < 1) {
         frame = requestAnimationFrame(tick);
       } else {
         setCount(0);
         setCleared(tasks.length);
-        setPhase("open");
+        window.setTimeout(() => setExiting(true), 280);
       }
     };
 
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [phase, active]);
+  }, [gate, exiting, reduce]);
 
   useEffect(() => {
-    if (phase !== "open") return;
-    const timer = window.setTimeout(() => {
-      try {
-        sessionStorage.setItem(STORAGE_KEY, "1");
-      } catch {
-        /* ignore */
-      }
-      setPhase("done");
-    }, 1100);
-    return () => window.clearTimeout(timer);
-  }, [phase]);
-
-  useEffect(() => {
-    if (phase === "boot" || phase === "done") return;
+    if (gate !== "play") return;
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previous;
     };
-  }, [phase]);
+  }, [gate]);
 
-  if (phase === "boot") return null;
+  useEffect(() => {
+    if (!exiting) return;
+    const timer = window.setTimeout(() => {
+      if (!marked.current) {
+        marked.current = true;
+        try {
+          sessionStorage.setItem(STORAGE_KEY, "1");
+        } catch {
+          /* ignore */
+        }
+      }
+      setGate("skip");
+    }, 750);
+    return () => window.clearTimeout(timer);
+  }, [exiting]);
+
+  if (gate === "boot") {
+    return <div className="fixed inset-0 z-[100] bg-ink" aria-hidden="true" />;
+  }
 
   return (
     <AnimatePresence>
-      {phase !== "done" ? (
+      {gate === "play" ? (
         <motion.div
           key="intro"
-          className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-ink text-paper"
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-ink text-paper will-change-transform"
           initial={{ opacity: 1 }}
+          animate={{ opacity: exiting ? 0 : 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.65, ease: EASE }}
           aria-hidden="true"
         >
           <motion.div
-            className="absolute inset-0 bg-ink"
-            animate={
-              phase === "open"
-                ? { clipPath: "circle(150% at 50% 50%)", opacity: 0 }
-                : { clipPath: "circle(100% at 50% 50%)", opacity: 1 }
-            }
-            transition={{ duration: 1.05, ease: [0.22, 1, 0.36, 1] }}
-          />
-
-          <div className="relative z-10 flex w-full max-w-lg flex-col items-center px-6 text-center">
+            className="relative z-10 flex w-full max-w-lg flex-col items-center px-6 text-center"
+            animate={{
+              opacity: exiting ? 0 : 1,
+              y: exiting ? -12 : 0,
+              scale: exiting ? 1.03 : 1,
+            }}
+            transition={{ duration: 0.55, ease: EASE }}
+          >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{
-                scale: phase === "open" ? 1.28 : 1,
-                opacity: phase === "open" ? 0 : 1,
-              }}
-              transition={{ duration: phase === "open" ? 0.9 : 0.8, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ scale: 0.94, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.65, ease: EASE }}
               className="relative"
             >
-              <span className="font-mono text-[5.5rem] leading-none text-slash sm:text-[7rem]">Ø</span>
+              <span className="font-mono text-[5rem] leading-none text-slash sm:text-[7rem]">Ø</span>
               <motion.span
-                className="absolute left-1/2 top-1/2 h-[3px] w-[120%] -translate-x-1/2 -translate-y-1/2 origin-left bg-slash"
+                className="absolute left-1/2 top-1/2 h-[3px] w-[120%] -translate-x-1/2 -translate-y-1/2 origin-center bg-slash"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: cleared > 0 ? 1 : 0 }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.6, ease: EASE }}
               />
             </motion.div>
 
-            <motion.p
-              className="mt-8 font-sans text-6xl font-semibold tracking-[-0.05em] sm:text-7xl"
-              animate={{ opacity: phase === "open" ? 0 : 1, y: phase === "open" ? -10 : 0 }}
-              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-            >
+            <p className="mt-8 font-sans text-6xl font-semibold tracking-[-0.05em] tabular-nums sm:text-7xl">
               {count}
-            </motion.p>
+            </p>
             <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.28em] text-slash">Open tasks</p>
 
             <ul className="mt-10 w-full max-w-sm space-y-3 text-left">
@@ -144,9 +146,9 @@ export function BrandIntro() {
                 return (
                   <motion.li
                     key={task}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.14 * index, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 * index, duration: 0.5, ease: EASE }}
                     className="relative flex items-center gap-3 text-sm font-medium lowercase tracking-[-0.02em] text-paper/55"
                   >
                     <span className="font-mono text-slash">ø</span>
@@ -157,21 +159,14 @@ export function BrandIntro() {
                         className="absolute left-0 right-0 top-1/2 h-[2px] -translate-y-1/2 origin-left bg-slash"
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: done ? 1 : 0 }}
-                        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                        transition={{ duration: 0.5, ease: EASE }}
                       />
                     </span>
                   </motion.li>
                 );
               })}
             </ul>
-          </div>
-
-          <motion.div
-            className="pointer-events-none absolute inset-0 bg-slash"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: phase === "open" ? [0, 0.28, 0] : 0 }}
-            transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
-          />
+          </motion.div>
         </motion.div>
       ) : null}
     </AnimatePresence>

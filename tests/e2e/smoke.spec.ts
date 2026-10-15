@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("homepage sells the software and links into the demo", async ({ page }) => {
   await page.addInitScript(() => {
-    window.sessionStorage.setItem("pz-intro-seen", "1");
+    window.sessionStorage.setItem("pz-intro-v2", "1");
   });
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1, name: "less administration. more care." })).toBeVisible();
