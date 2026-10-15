@@ -6,7 +6,16 @@ import { HomePlatform } from "@/components/marketing/home-platform";
 import { HomeZeroOut } from "@/components/marketing/home-zero-out";
 
 const Hero29 = dynamic(() => import("@/components/blocks/hero-29"), {
-  loading: () => <section className="min-h-screen w-full bg-paper" aria-hidden="true" />,
+  loading: () => (
+    <section className="relative flex min-h-screen w-full flex-col bg-paper px-4 pt-6 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-[1400px] pt-24">
+        <p className="kicker">The autonomous practice</p>
+        <h1 className="mt-6 max-w-[14ch] font-sans text-5xl font-semibold lowercase leading-[1.02] tracking-[-0.04em] text-ink sm:text-6xl">
+          less administration. more care.
+        </h1>
+      </div>
+    </section>
+  ),
 });
 
 const HomeMetrics = dynamic(
