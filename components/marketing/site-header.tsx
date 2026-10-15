@@ -23,6 +23,7 @@ import {
   User,
   type LucideIcon,
 } from "lucide-react";
+import { BrandMark } from "@/components/marketing/brand-mark";
 import { cn } from "@/lib/utils";
 
 type Item = { title: string; body: string; icon: LucideIcon };
@@ -103,23 +104,28 @@ export function SiteHeader() {
   return (
     <header className="relative z-40" onMouseLeave={scheduleClose}>
       <div className="flex items-center justify-between gap-4">
-        <Link href="/" className="font-display text-xl text-neutral-950">
-          Practice Zero
-        </Link>
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Practice Zero">
+        <BrandMark size="md" />
+        <nav className="hidden items-center gap-1 md:flex" aria-label="practice zero">
           {menus.map((menu) => {
             const active = pathname === menu.href;
             const shown = open === menu.id;
             return (
-              <div key={menu.id} className="relative" onMouseEnter={() => { clearClose(); setOpen(menu.id); }}>
+              <div
+                key={menu.id}
+                className="relative"
+                onMouseEnter={() => {
+                  clearClose();
+                  setOpen(menu.id);
+                }}
+              >
                 <button
                   type="button"
                   aria-expanded={shown}
                   aria-controls={`${menu.id}-menu`}
                   onClick={() => setOpen(shown ? null : menu.id)}
                   className={cn(
-                    "rounded-full px-3 py-2 text-sm text-neutral-600 hover:text-neutral-950",
-                    (shown || active) && "text-neutral-950",
+                    "rounded-full px-3 py-2 text-sm text-graphite hover:text-ink",
+                    (shown || active) && "text-ink",
                   )}
                 >
                   {menu.label}
@@ -128,13 +134,16 @@ export function SiteHeader() {
               </div>
             );
           })}
-          <Link href="/try" className="ml-3 rounded-full bg-neutral-950 px-4 py-2 text-sm text-white">
+          <Link
+            href="/try"
+            className="ml-3 rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink/90"
+          >
             Try the demo
           </Link>
         </nav>
         <button
           type="button"
-          className="rounded-full border border-neutral-300 px-3 py-1.5 text-sm md:hidden"
+          className="rounded-full border border-line px-3 py-1.5 text-sm text-ink md:hidden"
           aria-expanded={mobile}
           onClick={() => setMobile((value) => !value)}
         >
@@ -142,19 +151,19 @@ export function SiteHeader() {
         </button>
       </div>
       {mobile ? (
-        <div className="absolute inset-x-0 top-full z-40 mt-3 max-h-[70vh] overflow-auto rounded-2xl border border-neutral-200 bg-white p-3 shadow-2xl md:hidden">
+        <div className="absolute inset-x-0 top-full z-40 mt-3 max-h-[70vh] overflow-auto rounded-2xl border border-line bg-paper p-3 shadow-2xl md:hidden">
           {menus.map((menu) => (
-            <div key={menu.id} className="border-b border-neutral-100 py-2 last:border-0">
-              <p className="px-2 pb-1 text-[11px] font-medium uppercase tracking-[0.16em] text-neutral-400">{menu.label}</p>
+            <div key={menu.id} className="border-b border-line py-2 last:border-0">
+              <p className="px-2 pb-1 font-mono text-[11px] uppercase tracking-[0.16em] text-graphite">{menu.label}</p>
               {menu.items.map((item) => (
-                <Link key={item.title} href={menu.href} className="block rounded-xl px-2 py-2 hover:bg-neutral-50">
-                  <span className="block text-sm font-medium text-neutral-950">{item.title}</span>
-                  <span className="block text-xs text-neutral-500">{item.body}</span>
+                <Link key={item.title} href={menu.href} className="block rounded-xl px-2 py-2 hover:bg-mist">
+                  <span className="block text-sm font-medium text-ink">{item.title}</span>
+                  <span className="block text-xs text-graphite">{item.body}</span>
                 </Link>
               ))}
             </div>
           ))}
-          <Link href="/try" className="mt-2 block rounded-full bg-neutral-950 px-4 py-2 text-center text-sm text-white">
+          <Link href="/try" className="mt-2 block rounded-full bg-ink px-4 py-2 text-center text-sm text-paper">
             Try the demo
           </Link>
         </div>
@@ -185,21 +194,21 @@ function MenuPanel({ menu }: { menu: (typeof menus)[number] }) {
       style={{ transform: `translateX(calc(-50% + ${shift}px))` }}
       className="absolute left-1/2 top-full z-50 w-80 pt-3"
     >
-      <div className="rounded-2xl border border-neutral-200 bg-white p-2 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.45)]">
+      <div className="rounded-2xl border border-line bg-paper p-2 shadow-[0_24px_60px_-28px_rgba(17,20,24,0.45)]">
         {menu.items.map((item) => {
           const Icon = item.icon;
           return (
             <Link
               key={item.title}
               href={menu.href}
-              className="flex items-start gap-3 rounded-xl px-3 py-2.5 hover:bg-neutral-50"
+              className="flex items-start gap-3 rounded-xl px-3 py-2.5 hover:bg-mist"
             >
-              <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-neutral-950 text-white">
+              <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-ink text-paper">
                 <Icon className="h-4 w-4" />
               </span>
               <span>
-                <span className="block text-sm font-medium text-neutral-950">{item.title}</span>
-                <span className="block text-xs leading-relaxed text-neutral-500">{item.body}</span>
+                <span className="block text-sm font-medium text-ink">{item.title}</span>
+                <span className="block text-xs leading-relaxed text-graphite">{item.body}</span>
               </span>
             </Link>
           );

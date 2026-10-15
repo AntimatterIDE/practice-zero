@@ -19,10 +19,10 @@ export function VisitsSection() {
       <TiltFrame className="relative h-[26rem]">
         {rooms.map((room) => (
           <Drift key={room.time} dx={room.dx} dy={room.dy} className={`absolute ${room.className}`}>
-            <article className="rounded-3xl border border-neutral-200 bg-white px-5 py-4 shadow-xl shadow-neutral-900/10">
-              <p className="font-display text-3xl text-neutral-950">{room.time}</p>
-              <p className="mt-2 text-sm font-medium text-neutral-950">{room.name}</p>
-              <p className="text-xs text-neutral-500">{room.detail}</p>
+            <article className="rounded-3xl border border-line bg-white px-5 py-4 shadow-xl shadow-ink/10">
+              <p className="font-display text-3xl text-ink">{room.time}</p>
+              <p className="mt-2 text-sm font-medium text-ink">{room.name}</p>
+              <p className="text-xs text-graphite">{room.detail}</p>
             </article>
           </Drift>
         ))}

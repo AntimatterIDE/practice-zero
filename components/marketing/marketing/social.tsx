@@ -17,11 +17,11 @@ export function SocialSection() {
             initial={reduce ? false : { rotate: -8, opacity: 0 }}
             whileInView={{ rotate: -6, opacity: 1 }}
             viewport={{ once: true }}
-            className="rounded-3xl border border-neutral-200 bg-white p-5 shadow-xl"
+            className="rounded-3xl border border-line bg-white p-5 shadow-xl"
           >
-            <div className="h-24 rounded-2xl bg-neutral-100" />
-            <p className="mt-4 font-display text-2xl text-neutral-950">Mornings</p>
-            <p className="mt-1 text-sm text-neutral-600">Wednesday visits, from 8:40.</p>
+            <div className="h-24 rounded-2xl bg-mist" />
+            <p className="mt-4 font-display text-2xl text-ink">Mornings</p>
+            <p className="mt-1 text-sm text-graphite">Wednesday visits, from 8:40.</p>
           </motion.article>
         </Drift>
         <Drift dx={8} dy={12} className="absolute bottom-0 right-0 w-64">
@@ -30,11 +30,11 @@ export function SocialSection() {
             whileInView={{ rotate: 4, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="rounded-3xl bg-neutral-950 p-5 text-white shadow-2xl"
+            className="rounded-3xl bg-ink p-5 text-white shadow-2xl"
           >
-            <div className="h-24 rounded-2xl bg-neutral-800" />
+            <div className="h-24 rounded-2xl bg-ink/80" />
             <p className="mt-4 font-display text-2xl">New patients</p>
-            <p className="mt-1 text-sm text-neutral-300">Blood pressure visits, mornings.</p>
+            <p className="mt-1 text-sm text-paper/55">Blood pressure visits, mornings.</p>
           </motion.article>
         </Drift>
       </TiltFrame>

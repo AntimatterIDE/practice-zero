@@ -1,6 +1,8 @@
+import { product as brandProduct } from "@/lib/brand";
+
 export const product = {
-  name: "Practice Zero",
-  description: "Practice Zero is an agentic EHR for any independent practice.",
+  name: brandProduct.displayName,
+  description: brandProduct.description,
 } as const;
 
 export function canonicalOrigin() {

@@ -15,13 +15,13 @@ export const metadata: Metadata = {
 
 export default function MarketingPage() {
   return (
-    <div className="min-h-full bg-white text-neutral-950">
+    <div className="min-h-full bg-paper text-ink">
       <div className="mx-auto w-full max-w-[1400px] px-4 pt-6 sm:px-6 lg:px-8">
         <SiteHeader />
       </div>
       <CategoryIntro
         kicker="Marketing"
-        title="The practice reaches out."
+        title="the practice reaches out."
         lede="A text waiting to be sent, the follow-up after a visit, a schedule still missing a confirmation, and pages a new patient can find."
       />
       <OutreachSection />
@@ -29,7 +29,7 @@ export default function MarketingPage() {
       <SchedulingSection />
       <SeoSection />
       <SocialSection />
-      <CategoryClose title="Open the morning." body="Chris Adelman is still unconfirmed at 10:30. Elena’s balance text is still in the outbox." />
+      <CategoryClose title="open the morning." body="Chris Adelman is still unconfirmed at 10:30. Elena’s balance text is still in the outbox." />
       <Footer11 />
     </div>
   );

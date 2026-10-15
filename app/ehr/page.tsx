@@ -17,13 +17,13 @@ export const metadata: Metadata = {
 
 export default function EhrPage() {
   return (
-    <div className="min-h-full bg-white text-neutral-950">
+    <div className="min-h-full bg-paper text-ink">
       <div className="mx-auto w-full max-w-[1400px] px-4 pt-6 sm:px-6 lg:px-8">
         <SiteHeader />
       </div>
       <CategoryIntro
         kicker="EHR"
-        title="The chart is already in the room."
+        title="the chart is already in the room."
         lede="Patients, visits, the scribe, intake, agreements, tasks, and requests. Wednesday morning is already underway."
       />
       <PatientsSection />
@@ -33,7 +33,7 @@ export default function EhrPage() {
       <AgreementsSection />
       <TasksSection />
       <RequestsSection />
-      <CategoryClose title="Open the chart." body="Jordan Hale is in room 2. The note stays hidden until you ask to see it." />
+      <CategoryClose title="open the chart." body="Jordan Hale is in room 2. The note stays hidden until you ask to see it." />
       <Footer11 />
     </div>
   );

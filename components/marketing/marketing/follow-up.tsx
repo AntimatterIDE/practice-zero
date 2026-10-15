@@ -18,7 +18,7 @@ export function FollowUpSection() {
       title="The next touch is already chosen."
       body="The June visit was paid. A balance remains. The follow-up is a text, and it waits until someone sends it."
     >
-      <ol className="relative grid gap-6 border-l border-neutral-200 pl-6">
+      <ol className="relative grid gap-6 border-l border-line pl-6">
         {steps.map((step, index) => (
           <motion.li
             key={step.label}
@@ -29,9 +29,9 @@ export function FollowUpSection() {
             className="relative"
           >
             <span className="absolute -left-[1.65rem] top-1 h-3 w-3 rounded-full border-2 border-neutral-950 bg-white" />
-            <p className="text-[11px] uppercase tracking-[0.16em] text-neutral-400">{step.when}</p>
-            <p className="mt-1 font-display text-2xl text-neutral-950">{step.label}</p>
-            <p className="text-sm text-neutral-600">{step.detail}</p>
+            <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">{step.when}</p>
+            <p className="mt-1 font-display text-2xl text-ink">{step.label}</p>
+            <p className="text-sm text-graphite">{step.detail}</p>
           </motion.li>
         ))}
       </ol>

@@ -79,11 +79,11 @@ export function Drift({
 export function CategoryIntro({ kicker, title, lede }: { kicker: string; title: string; lede: string }) {
   return (
     <div className="mx-auto max-w-6xl px-6 pb-4 pt-16 lg:pt-24">
-      <p className="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500">{kicker}</p>
-      <h1 className="mt-6 max-w-3xl font-display text-5xl font-medium leading-[1.05] tracking-tight text-neutral-950 sm:text-6xl">
+      <p className="kicker">{kicker}</p>
+      <h1 className="mt-6 max-w-3xl font-sans text-5xl font-semibold lowercase leading-[1.05] tracking-[-0.04em] text-ink sm:text-6xl">
         {title}
       </h1>
-      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-600">{lede}</p>
+      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-graphite">{lede}</p>
     </div>
   );
 }
@@ -103,7 +103,7 @@ export function CategorySection({
 }) {
   const reduce = useReducedMotion();
   return (
-    <section className="border-t border-neutral-200">
+    <section className="border-t border-line">
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 lg:grid-cols-2 lg:gap-20 lg:py-28">
         <motion.div
           className={flip ? "lg:order-2" : undefined}
@@ -112,11 +112,11 @@ export function CategorySection({
           viewport={{ once: true, margin: "-12%" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500">{eyebrow}</p>
-          <h2 className="mt-4 font-display text-4xl font-medium leading-[1.08] tracking-tight text-neutral-950 sm:text-5xl">
+          <p className="kicker">{eyebrow}</p>
+          <h2 className="mt-4 font-sans text-4xl font-semibold lowercase leading-[1.08] tracking-[-0.035em] text-ink sm:text-5xl">
             {title}
           </h2>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-neutral-600 sm:text-lg">{body}</p>
+          <p className="mt-5 max-w-md text-base leading-relaxed text-graphite sm:text-lg">{body}</p>
         </motion.div>
         <motion.div
           className={flip ? "lg:order-1" : undefined}
@@ -134,13 +134,15 @@ export function CategorySection({
 
 export function CategoryClose({ title, body }: { title: string; body: string }) {
   return (
-    <div className="border-t border-neutral-200">
+    <div className="border-t border-line">
       <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-6 py-20">
-        <h2 className="max-w-xl font-display text-4xl font-medium tracking-tight text-neutral-950 sm:text-5xl">{title}</h2>
-        <p className="max-w-lg text-lg text-neutral-600">{body}</p>
+        <h2 className="max-w-xl font-sans text-4xl font-semibold lowercase tracking-[-0.035em] text-ink sm:text-5xl">
+          {title}
+        </h2>
+        <p className="max-w-lg text-lg text-graphite">{body}</p>
         <Link
           href="/try"
-          className="inline-flex items-center justify-center rounded-full bg-neutral-950 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+          className="inline-flex items-center justify-center rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-colors hover:bg-ink/90"
         >
           Try the demo
         </Link>

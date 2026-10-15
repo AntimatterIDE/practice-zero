@@ -13,13 +13,13 @@ export function AgreementsSection() {
     >
       <TiltFrame className="relative">
         <Drift dx={8} dy={6}>
-          <article className="rounded-3xl border border-neutral-200 bg-[#fbfbf9] p-6 shadow-2xl shadow-neutral-900/10">
-            <p className="text-[11px] uppercase tracking-[0.16em] text-neutral-400">Consent to evaluate and treat</p>
-            <p className="mt-4 font-display text-3xl text-neutral-950">Jordan Hale</p>
-            <p className="mt-3 max-w-sm text-sm leading-relaxed text-neutral-600">
+          <article className="rounded-3xl border border-line bg-paper p-6 shadow-2xl shadow-ink/10">
+            <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Consent to evaluate and treat</p>
+            <p className="mt-4 font-display text-3xl text-ink">Jordan Hale</p>
+            <p className="mt-3 max-w-sm text-sm leading-relaxed text-graphite">
               Signed for the 9:00 visit with Dr. Shah. The chart can be opened.
             </p>
-            <svg viewBox="0 0 280 90" className="mt-6 h-20 w-full text-neutral-950" aria-hidden="true">
+            <svg viewBox="0 0 280 90" className="mt-6 h-20 w-full text-ink" aria-hidden="true">
               <motion.path
                 d="M12 58 C 28 18, 46 78, 70 48 S 104 16, 128 52 S 168 86, 198 44 S 236 22, 266 50"
                 fill="none"
@@ -32,7 +32,7 @@ export function AgreementsSection() {
                 transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
               />
             </svg>
-            <p className="text-xs text-neutral-400">Signed</p>
+            <p className="text-xs text-graphite/70">Signed</p>
           </article>
         </Drift>
       </TiltFrame>

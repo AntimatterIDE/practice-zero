@@ -16,13 +16,13 @@ export const metadata: Metadata = {
 
 export default function BillingPage() {
   return (
-    <div className="min-h-full bg-white text-neutral-950">
+    <div className="min-h-full bg-paper text-ink">
       <div className="mx-auto w-full max-w-[1400px] px-4 pt-6 sm:px-6 lg:px-8">
         <SiteHeader />
       </div>
       <CategoryIntro
         kicker="Billing"
-        title="The money follows the visit."
+        title="the money follows the visit."
         lede="Payment from the payer, coverage found from a name and a birthday, eligibility, the claim, and the plan on the chart."
       />
       <EftSection />
@@ -31,7 +31,7 @@ export default function BillingPage() {
       <EligibilitySection />
       <ClaimsSection />
       <PayersSection />
-      <CategoryClose title="Open the draft." body="Jordan Hale’s 99203 is queued for $185. It stays in this browser until you submit it." />
+      <CategoryClose title="open the draft." body="Jordan Hale’s 99203 is queued for $185. It stays in this browser until you submit it." />
       <Footer11 />
     </div>
   );

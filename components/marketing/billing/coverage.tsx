@@ -27,10 +27,10 @@ export function CoverageSection() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.45, delay: index * 0.08 }}
-            className="rounded-3xl border border-neutral-200 bg-white p-5 shadow-lg shadow-neutral-900/5"
+            className="rounded-3xl border border-line bg-white p-5 shadow-lg shadow-ink/5"
           >
-            <p className="text-[11px] uppercase tracking-[0.16em] text-neutral-400">{label}</p>
-            <p className="mt-3 font-display text-3xl text-neutral-950">{value}</p>
+            <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">{label}</p>
+            <p className="mt-3 font-display text-3xl text-ink">{value}</p>
           </motion.div>
         ))}
       </div>

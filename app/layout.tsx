@@ -1,24 +1,20 @@
 import type { Metadata } from "next";
-import { Newsreader, Plus_Jakarta_Sans } from "next/font/google";
+import { Instrument_Sans, JetBrains_Mono } from "next/font/google";
 import { isIndexingEnabled, product } from "@/lib/site";
 import "./globals.css";
 
-const sans = Plus_Jakarta_Sans({
+const sans = Instrument_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-sans-family",
   display: "swap",
-  preload: false,
 });
 
-const display = Newsreader({
+const mono = JetBrains_Mono({
   subsets: ["latin"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600"],
+  variable: "--font-mono-family",
   display: "swap",
-  variable: "--font-display-family",
-  fallback: ["Georgia", "Times New Roman", "serif"],
-  adjustFontFallback: true,
-  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -39,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: product.name,
     description: product.description,
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Practice Zero" }],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "practice zero" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -49,7 +45,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${display.variable} h-full antialiased`}>
+    <html lang="en" className={`${sans.variable} ${mono.variable} h-full antialiased`}>
       <body className="min-h-full bg-paper font-sans text-ink">{children}</body>
     </html>
   );

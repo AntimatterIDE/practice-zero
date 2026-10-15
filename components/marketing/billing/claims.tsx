@@ -19,13 +19,13 @@ export function ClaimsSection() {
         {slips.map((slip) => (
           <Drift key={slip.what} dx={slip.dx} dy={slip.dy} className={`absolute ${slip.place}`}>
             <article
-              className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-xl shadow-neutral-900/10"
+              className="rounded-2xl border border-line bg-white p-4 shadow-xl shadow-ink/10"
               style={{ rotate: slip.rotate }}
             >
-              <p className="text-[11px] uppercase tracking-[0.14em] text-neutral-400">{slip.when}</p>
-              <p className="mt-2 text-sm font-medium text-neutral-950">{slip.who}</p>
-              <p className="text-xs text-neutral-500">{slip.what}</p>
-              <p className="mt-4 font-display text-3xl text-neutral-950">{slip.amount}</p>
+              <p className="text-[11px] uppercase tracking-[0.14em] text-graphite/70">{slip.when}</p>
+              <p className="mt-2 text-sm font-medium text-ink">{slip.who}</p>
+              <p className="text-xs text-graphite">{slip.what}</p>
+              <p className="mt-4 font-display text-3xl text-ink">{slip.amount}</p>
             </article>
           </Drift>
         ))}

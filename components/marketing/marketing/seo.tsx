@@ -26,11 +26,11 @@ export function SeoSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            className={`rounded-3xl border border-neutral-200 bg-white p-5 shadow-lg shadow-neutral-900/5 ${index === 1 ? "sm:ml-5" : ""} ${index === 2 ? "sm:ml-10" : ""}`}
+            className={`rounded-3xl border border-line bg-white p-5 shadow-lg shadow-ink/5 ${index === 1 ? "sm:ml-5" : ""} ${index === 2 ? "sm:ml-10" : ""}`}
           >
-            <p className="text-[11px] uppercase tracking-[0.16em] text-neutral-400">Page</p>
-            <h3 className="mt-2 font-display text-3xl text-neutral-950">{page.title}</h3>
-            <p className="mt-1 text-sm text-neutral-600">{page.detail}</p>
+            <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Page</p>
+            <h3 className="mt-2 font-display text-3xl text-ink">{page.title}</h3>
+            <p className="mt-1 text-sm text-graphite">{page.detail}</p>
           </motion.article>
         ))}
       </div>

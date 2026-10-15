@@ -25,11 +25,11 @@ export function TasksSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-10%" }}
             transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-3xl border border-neutral-200 bg-white p-5 shadow-lg shadow-neutral-900/5"
+            className="rounded-3xl border border-line bg-white p-5 shadow-lg shadow-ink/5"
           >
-            <p className="text-[11px] uppercase tracking-[0.16em] text-neutral-400">Open · October 14</p>
-            <h3 className="mt-2 font-display text-2xl text-neutral-950">{task.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-neutral-600">{task.detail}</p>
+            <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Open · October 14</p>
+            <h3 className="mt-2 font-display text-2xl text-ink">{task.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-graphite">{task.detail}</p>
           </motion.article>
         ))}
       </div>

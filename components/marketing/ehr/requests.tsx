@@ -13,7 +13,7 @@ export function RequestsSection() {
     >
       <TiltFrame className="relative h-72">
         <Drift dx={14} dy={10} className="absolute inset-x-6 top-8">
-          <div className="h-40 rotate-[-4deg] rounded-3xl bg-neutral-100" />
+          <div className="h-40 rotate-[-4deg] rounded-3xl bg-mist" />
         </Drift>
         <Drift dx={6} dy={4} className="absolute inset-x-0 top-0">
           <motion.article
@@ -21,11 +21,11 @@ export function RequestsSection() {
             whileInView={{ opacity: 1, y: 0, rotate: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-3xl border border-neutral-200 bg-white p-6 shadow-2xl shadow-neutral-900/10"
+            className="rounded-3xl border border-line bg-white p-6 shadow-2xl shadow-ink/10"
           >
-            <p className="text-[11px] uppercase tracking-[0.16em] text-neutral-400">New · 7:40</p>
-            <h3 className="mt-2 font-display text-3xl text-neutral-950">Morgan Lee</h3>
-            <p className="mt-3 text-sm leading-relaxed text-neutral-600">
+            <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">New · 7:40</p>
+            <h3 className="mt-2 font-display text-3xl text-ink">Morgan Lee</h3>
+            <p className="mt-3 text-sm leading-relaxed text-graphite">
               I would like a new-patient visit for blood pressure. Mornings work best.
             </p>
           </motion.article>

@@ -18,18 +18,18 @@ export function PayersSection() {
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         style={{ transformPerspective: 900 }}
-        className="rounded-[2rem] border border-neutral-200 bg-white p-8 shadow-2xl shadow-neutral-900/10"
+        className="rounded-[2rem] border border-line bg-white p-8 shadow-2xl shadow-ink/10"
       >
-        <p className="text-[11px] uppercase tracking-[0.16em] text-neutral-400">Payer</p>
-        <h3 className="mt-3 font-display text-5xl text-neutral-950">Pinetree Health</h3>
+        <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Payer</p>
+        <h3 className="mt-3 font-display text-5xl text-ink">Pinetree Health</h3>
         <div className="mt-8 grid grid-cols-2 gap-6 text-sm">
           <div>
-            <p className="text-neutral-400">Plan</p>
-            <p className="mt-1 font-medium text-neutral-950">Choice PPO</p>
+            <p className="text-graphite/70">Plan</p>
+            <p className="mt-1 font-medium text-ink">Choice PPO</p>
           </div>
           <div>
-            <p className="text-neutral-400">On the 9:00 chart</p>
-            <p className="mt-1 font-medium text-neutral-950">Jordan Hale</p>
+            <p className="text-graphite/70">On the 9:00 chart</p>
+            <p className="mt-1 font-medium text-ink">Jordan Hale</p>
           </div>
         </div>
       </motion.article>

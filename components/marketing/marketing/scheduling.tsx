@@ -28,13 +28,13 @@ export function SchedulingSection() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.08 }}
                 className={`relative rounded-2xl border px-4 py-3 ${
-                  slot.state === "Unconfirmed" ? "border-neutral-950 bg-neutral-950 text-white" : "border-neutral-200 bg-white"
+                  slot.state === "Unconfirmed" ? "border-neutral-950 bg-ink text-white" : "border-line bg-white"
                 }`}
               >
-                <span className="absolute -left-[1.85rem] top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-neutral-950" />
+                <span className="absolute -left-[1.85rem] top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-ink" />
                 <div className="flex items-baseline justify-between gap-3">
                   <p className="font-display text-2xl">{slot.time}</p>
-                  <p className={`text-xs ${slot.state === "Unconfirmed" ? "text-neutral-300" : "text-neutral-500"}`}>{slot.state}</p>
+                  <p className={`text-xs ${slot.state === "Unconfirmed" ? "text-paper/55" : "text-graphite"}`}>{slot.state}</p>
                 </div>
                 <p className="text-sm">{slot.name}</p>
               </motion.div>
