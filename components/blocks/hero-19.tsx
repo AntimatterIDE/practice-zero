@@ -186,7 +186,7 @@ export function Hero19() {
     </div>
     <section
       onPointerMove={handlePointerMove}
-      className="relative flex min-h-[calc(100vh-4.5rem)] w-full items-start overflow-hidden bg-white px-4 pb-16 sm:px-6 lg:px-8"
+      className="relative flex min-h-[calc(100vh-4.5rem)] w-full items-center overflow-hidden bg-white py-16"
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-[repeating-linear-gradient(90deg,transparent_0px,transparent_95px,rgba(23,23,23,0.035)_95px,rgba(23,23,23,0.035)_96px)] [mask-image:linear-gradient(to_bottom,black,transparent_88%)]" />
@@ -194,13 +194,13 @@ export function Hero19() {
         <div className="absolute bottom-[-20%] left-[-8%] h-[400px] w-[400px] rounded-full bg-neutral-50 blur-[100px]" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-[1400px]">
+      <div className="relative z-10 mx-auto w-full max-w-6xl px-6">
         <motion.div
           variants={container}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-80px" }}
-          className="mt-6 grid grid-cols-1 items-center gap-12 lg:mt-10 lg:grid-cols-2 lg:gap-16 xl:gap-20"
+          className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16"
         >
           <div className="flex min-w-0 flex-col items-start">
             <motion.p variants={item} className="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500">

@@ -166,11 +166,26 @@ export function SiteHeader() {
 }
 
 function MenuPanel({ menu }: { menu: (typeof menus)[number] }) {
+  const panel = useRef<HTMLDivElement>(null);
+  const [shift, setShift] = useState(0);
+
+  useEffect(() => {
+    const element = panel.current;
+    if (!element) return;
+    const rect = element.getBoundingClientRect();
+    const pad = 16;
+    let next = 0;
+    if (rect.right > window.innerWidth - pad) next = window.innerWidth - pad - rect.right;
+    if (rect.left + next < pad) next += pad - (rect.left + next);
+    setShift(next);
+  }, [menu.id]);
+
   return (
     <div
+      ref={panel}
       id={`${menu.id}-menu`}
-      className="absolute left-0 top-full z-50 w-80 pt-3"
-      onMouseEnter={() => undefined}
+      style={{ transform: `translateX(calc(-50% + ${shift}px))` }}
+      className="absolute left-1/2 top-full z-50 w-80 pt-3"
     >
       <div className="rounded-2xl border border-neutral-200 bg-white p-2 shadow-[0_24px_60px_-28px_rgba(0,0,0,0.45)]">
         {menu.items.map((item) => {
