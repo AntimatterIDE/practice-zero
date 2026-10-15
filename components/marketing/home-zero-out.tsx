@@ -1,6 +1,3 @@
-"use client";
-
-import { motion, useReducedMotion } from "motion/react";
 import { ZeroDevice } from "@/components/marketing/brand-mark";
 
 const lines = [
@@ -17,8 +14,6 @@ const tiles = [
 ];
 
 export function HomeZeroOut() {
-  const reduce = useReducedMotion();
-
   return (
     <section className="border-t border-line bg-mist px-6 py-20 lg:py-28">
       <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
@@ -31,32 +26,24 @@ export function HomeZeroOut() {
             Agents clear the backlog so the morning starts at <span className="font-medium text-slash">zero</span>.
           </p>
           <ul className="mt-10 space-y-5">
-            {lines.map((line, index) => (
-              <motion.li
+            {lines.map((line) => (
+              <li
                 key={line}
-                initial={reduce ? false : { opacity: 0, x: -12 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.45, delay: index * 0.08 }}
-                className="relative flex items-center gap-3 text-2xl font-semibold lowercase tracking-[-0.03em] text-ink/45 sm:text-3xl"
+                className="relative flex items-center gap-3 text-2xl font-semibold lowercase tracking-[-0.03em] text-graphite sm:text-3xl"
               >
                 <span className="font-mono text-slash">ø</span>
                 <span className="relative">
                   {line}
                   <span aria-hidden="true" className="absolute left-0 right-0 top-1/2 h-[3px] -translate-y-1/2 bg-slash" />
                 </span>
-              </motion.li>
+              </li>
             ))}
           </ul>
         </div>
         <div className="grid gap-4">
-          {tiles.map((tile, index) => (
-            <motion.article
+          {tiles.map((tile) => (
+            <article
               key={tile.title}
-              initial={reduce ? false : { opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: 0.08 * index }}
               className={`flex min-h-36 flex-col justify-between rounded-[1.5rem] p-5 ${
                 tile.tone === "ink"
                   ? "bg-ink text-paper"
@@ -70,7 +57,7 @@ export function HomeZeroOut() {
                 className={tile.tone === "slash" ? "text-paper" : undefined}
               />
               <p className="font-sans text-xl font-semibold lowercase leading-tight tracking-[-0.03em]">{tile.title}</p>
-            </motion.article>
+            </article>
           ))}
         </div>
       </div>

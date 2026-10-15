@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { BarChart3, Clock3, ShieldCheck } from "lucide-react";
-import { SiteHeader } from "@/components/marketing/site-header";
+import { MarketingHeader } from "@/components/marketing/marketing-header";
 import { ZeroDevice } from "@/components/marketing/brand-mark";
 
 export function HomeHero() {
   return (
     <div className="bg-paper">
       <div className="relative z-30 mx-auto w-full max-w-[1400px] px-4 pt-6 sm:px-6 lg:px-8">
-        <SiteHeader />
+        <MarketingHeader />
       </div>
       <section className="relative px-6 pb-20 pt-16 lg:pb-28 lg:pt-24">
         <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-2 lg:gap-16">
@@ -22,12 +22,14 @@ export function HomeHero() {
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/try"
+                prefetch={false}
                 className="inline-flex items-center justify-center rounded-full bg-slash px-7 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
               >
                 Try the demo
               </Link>
               <Link
                 href="/features"
+                prefetch={false}
                 className="inline-flex items-center justify-center rounded-full border border-slash/25 bg-paper px-7 py-3.5 text-sm font-medium text-ink transition-colors hover:border-slash/50 hover:bg-slash/[0.04]"
               >
                 See the screens
@@ -35,15 +37,15 @@ export function HomeHero() {
             </div>
             <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-t border-line pt-6 text-sm text-graphite">
               <span className="inline-flex items-center gap-2">
-                <Clock3 className="h-4 w-4 text-slash" />
+                <Clock3 className="h-4 w-4 text-slash" aria-hidden="true" />
                 Saves hours every day
               </span>
               <span className="inline-flex items-center gap-2">
-                <BarChart3 className="h-4 w-4 text-slash" />
+                <BarChart3 className="h-4 w-4 text-slash" aria-hidden="true" />
                 Improves revenue & cash flow
               </span>
               <span className="inline-flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-slash" />
+                <ShieldCheck className="h-4 w-4 text-slash" aria-hidden="true" />
                 Writes stay in this browser
               </span>
             </div>
@@ -81,7 +83,7 @@ export function HomeHero() {
               <p className="mt-1 text-sm font-medium text-ink">Pinetree Health · Active</p>
             </div>
             <div className="pointer-events-none absolute bottom-full right-0 z-20 hidden translate-x-3 translate-y-3 rounded-2xl bg-slash px-4 py-3 text-paper shadow-xl sm:block lg:translate-x-5">
-              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-paper/70">Copay</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-paper">Copay</p>
               <p className="mt-1 font-sans text-2xl font-semibold tracking-tight">$25</p>
             </div>
           </div>

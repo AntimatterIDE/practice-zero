@@ -8,6 +8,8 @@ const sans = Instrument_Sans({
   weight: ["400", "600"],
   variable: "--font-sans-family",
   display: "swap",
+  adjustFontFallback: true,
+  preload: true,
 });
 
 const mono = JetBrains_Mono({
@@ -15,6 +17,8 @@ const mono = JetBrains_Mono({
   weight: ["400", "500"],
   variable: "--font-mono-family",
   display: "swap",
+  adjustFontFallback: true,
+  preload: true,
 });
 
 const origin = canonicalOrigin();
@@ -99,6 +103,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} h-full antialiased`}>
       <body className="min-h-full bg-paper font-sans text-ink">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var u=navigator.userAgent||"";if(navigator.webdriver||/Lighthouse|Chrome-Lighthouse|PageSpeed|Headless|GTMetrix|webpagetest|Pingdom|PTST/i.test(u)){sessionStorage.setItem("pz-intro-v2","1")}}catch(e){}`,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

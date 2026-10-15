@@ -1,8 +1,5 @@
-"use client";
-
 import Link from "next/link";
 import { BarChart3, FileText, Stethoscope, Users } from "lucide-react";
-import { motion, useReducedMotion } from "motion/react";
 
 const pillars = [
   {
@@ -32,8 +29,6 @@ const pillars = [
 ];
 
 export function HomePlatform() {
-  const reduce = useReducedMotion();
-
   return (
     <section className="border-t border-line bg-paper px-6 py-20 lg:py-28">
       <div className="mx-auto max-w-6xl">
@@ -46,27 +41,21 @@ export function HomePlatform() {
         </p>
 
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {pillars.map((pillar, index) => {
+          {pillars.map((pillar) => {
             const Icon = pillar.icon;
             return (
-              <motion.div
+              <Link
                 key={pillar.title}
-                initial={reduce ? false : { opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-10%" }}
-                transition={{ duration: 0.5, delay: index * 0.06 }}
+                href={pillar.href}
+                prefetch={false}
+                className="flex h-full flex-col rounded-[1.5rem] border border-line bg-card p-5 shadow-[var(--shadow-card)] transition-colors hover:border-slash/50 hover:bg-slash/[0.03]"
               >
-                <Link
-                  href={pillar.href}
-                  className="flex h-full flex-col rounded-[1.5rem] border border-line bg-card p-5 shadow-[var(--shadow-card)] transition-colors hover:border-slash/50 hover:bg-slash/[0.03]"
-                >
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slash/10 text-slash">
-                    <Icon className="h-5 w-5" strokeWidth={1.6} />
-                  </span>
-                  <h3 className="mt-6 text-lg font-semibold text-ink">{pillar.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-graphite">{pillar.body}</p>
-                </Link>
-              </motion.div>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slash/10 text-slash">
+                  <Icon className="h-5 w-5" strokeWidth={1.6} />
+                </span>
+                <h3 className="mt-6 text-lg font-semibold text-ink">{pillar.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-graphite">{pillar.body}</p>
+              </Link>
             );
           })}
         </div>
