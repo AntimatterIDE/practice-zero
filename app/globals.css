@@ -14,8 +14,8 @@
   --color-pine: #071e36;
   --color-gold: #8c6a12;
   --color-gold-soft: #e4c56a;
-  --color-clinic-blue: #0b3d78;
-  --color-clinic-blue-soft: #b9d4f5;
+  --color-ink-blue: #0b3d78;
+  --color-ink-blue-soft: #b9d4f5;
   --color-emergency: #b42318;
   --color-card: #ffffff;
   --color-mist: #e7f2f8;
@@ -108,18 +108,18 @@ body {
   transform: none;
 }
 
-.prose-clinical p + p,
-.prose-clinical ul + p,
-.prose-clinical p + ul {
+.prose-note p + p,
+.prose-note ul + p,
+.prose-note p + ul {
   margin-top: 0.9rem;
 }
 
-.prose-clinical ul {
+.prose-note ul {
   margin-left: 1.1rem;
   list-style: disc;
 }
 
-.prose-clinical a {
+.prose-note a {
   color: #0a6e66;
   text-decoration: underline;
   text-underline-offset: 0.18em;
@@ -152,14 +152,14 @@ body {
   background-size: 140% 140%;
 }
 
-.clinic-card {
+.surface-card {
   transition:
     transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
     border-color 0.35s ease;
 }
 
-.clinic-card:hover {
+.surface-card:hover {
   transform: translateY(-4px);
   border-color: rgb(14 143 132 / 0.45);
   box-shadow: 0 18px 40px -28px rgb(7 30 54 / 0.55);
@@ -318,7 +318,7 @@ body {
     scroll-behavior: auto !important;
   }
 
-  .clinic-card:hover {
+  .surface-card:hover {
     transform: none;
   }
 

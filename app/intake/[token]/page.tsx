@@ -1,60 +1,53 @@
-import type { Metadata } from "next";
+"use client";
+
+import { useParams } from "next/navigation";
 import { ClinicFrame } from "@/components/clinic/frame";
-import { IntakeForm } from "@/components/portal/intake-form";
-import { getPortalStore } from "@/lib/portal/repository";
-import { unlistedShareMetadata } from "@/lib/share-metadata";
-import { practice } from "@/lib/site";
+import { RcmProvider, useRcm } from "@/components/admin/rcm/store";
+import { samplePractice } from "@/lib/rcm/seed";
 
-export const dynamic = "force-dynamic";
+export default function IntakeTokenPage() {
+  return (
+    <RcmProvider>
+      <IntakeToken />
+    </RcmProvider>
+  );
+}
 
-export const metadata: Metadata = {
-  ...unlistedShareMetadata,
-  title: "Patient form",
-};
-
-export default async function IntakePage({ params }: { params: Promise<{ token: string }> }) {
-  const { token } = await params;
-  const invite = await getPortalStore().publicInvite(token);
+function IntakeToken() {
+  const params = useParams<{ token: string }>();
+  const token = typeof params.token === "string" ? params.token : "";
+  const { ready, patients } = useRcm();
+  const hale = patients.find((patient) => patient.id === "pt-hale");
+  const open = token === "intake-hale" && hale;
 
   return (
-    <ClinicFrame kicker={`${practice.physicianName} · Patient form`}>
-      <div className="mx-auto min-w-0 max-w-3xl px-5 py-10 sm:py-14">
-        {invite.status === "missing" ? (
-          <Closed title="This link is not valid." body="Ask the practice to send a new form. The address may have been cut off when it was copied." />
+    <ClinicFrame kicker={`${samplePractice.physicianName} · Patient form`}>
+      <div className="mx-auto max-w-3xl px-5 py-10">
+        {!ready ? <p className="text-sm text-muted">Loading the form…</p> : null}
+        {ready && !open ? (
+          <div className="max-w-xl rounded-3xl border border-line bg-card p-6">
+            <p className="kicker text-oxide-deep">{samplePractice.legalName}</p>
+            <h1 className="mt-3 font-display text-4xl">This link is not valid.</h1>
+            <p className="mt-3 text-muted">The sample form is /intake/intake-hale.</p>
+          </div>
         ) : null}
-        {invite.status === "expired" ? (
-          <Closed title="This link has expired." body="Forms stay open for 14 days. Ask the practice to send a new one." />
-        ) : null}
-        {invite.status === "used" ? (
-          <Closed
-            title="This form was already sent."
-            body="The practice has your answers. Call them if a phone number, pharmacy, or insurance card needs to change."
-          />
-        ) : null}
-        {invite.status === "open" ? (
+        {open ? (
           <>
-            <p className="kicker text-oxide-deep">Before your visit</p>
-            <h1 className="mt-3 max-w-2xl font-display text-4xl tracking-tight sm:text-5xl">{invite.form.title}</h1>
-            {invite.form.recipientName ? (
-              <p className="mt-4 text-xl text-ink">Hello, {invite.form.recipientName}.</p>
-            ) : null}
-            {invite.form.introduction ? (
-              <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">{invite.form.introduction}</p>
-            ) : null}
-            <IntakeForm token={token} form={invite.form} />
+            <p className="kicker text-oxide-deep">{samplePractice.legalName}</p>
+            <h1 className="mt-3 font-display text-4xl">Before your visit</h1>
+            <p className="mt-4 text-xl">Hello, {hale.preferredName || hale.firstName}.</p>
+            <p className="mt-3 text-muted">These answers are already on file.</p>
+            <dl className="mt-6 grid gap-4">
+              {(hale.intakeAnswers ?? []).map((answer) => (
+                <div key={answer.label}>
+                  <dt className="text-sm text-muted">{answer.label}</dt>
+                  <dd className="mt-1">{answer.value}</dd>
+                </div>
+              ))}
+            </dl>
           </>
         ) : null}
       </div>
     </ClinicFrame>
-  );
-}
-
-function Closed({ title, body }: { title: string; body: string }) {
-  return (
-    <div className="max-w-xl rounded-3xl border border-line bg-card p-6 shadow-[0_18px_40px_-32px_rgb(7_30_54_/_0.55)] sm:p-8">
-      <p className="kicker text-oxide-deep">{practice.name}</p>
-      <h1 className="mt-3 font-display text-4xl tracking-tight">{title}</h1>
-      <p className="mt-3 text-base leading-relaxed text-muted">{body}</p>
-    </div>
   );
 }

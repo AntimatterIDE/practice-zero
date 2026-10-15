@@ -3,12 +3,16 @@
 import { createContext, useContext, useMemo, useSyncExternalStore } from "react";
 import { applyPrimaryCoverage, emptyVitals, normalizeAppointment, normalizeLine, normalizePatient, normalizeState, withChart } from "@/lib/rcm/chart";
 import { STORAGE_KEY, createSeedState } from "@/lib/rcm/seed";
+import { nextLocalClaimStatus } from "@/lib/rcm/submit-input";
 import type {
   Appointment,
   AppointmentInput,
   Claim,
   ClaimInput,
+  DemoPacket,
+  DemoRequest,
   EligibilityResult,
+  OutboxItem,
   Patient,
   PatientInput,
   PracticeProfile,
@@ -34,6 +38,13 @@ type RcmContextValue = DeskSnapshot & {
   removeAppointment: (id: string) => void;
   addEligibility: (result: Omit<EligibilityResult, "id" | "createdAt">) => EligibilityResult;
   updatePractice: (patch: Partial<PracticeProfile>) => void;
+  resetDemo: () => void;
+  appendOutbox: (item: Omit<OutboxItem, "id" | "createdAt">) => OutboxItem;
+  submitLocalClaim: (id: string) => string;
+  runCannedEligibility: (patientId: string) => EligibilityResult | null;
+  revealVisitNote: (id: string) => void;
+  setRequestStatus: (id: string, status: DemoRequest["status"]) => void;
+  signPacket: (token: string, signerName: string) => DemoPacket | null;
 };
 
 const RcmContext = createContext<RcmContextValue | null>(null);
@@ -133,6 +144,11 @@ function commit(next: RcmState, mode: "local" | "merge" = "local") {
     for (const listener of removalListeners) listener(removed);
   }
   notifyPortalPush();
+}
+
+export function resetDemoState() {
+  ensureClient();
+  commit(createSeedState());
 }
 
 export function subscribePortalRemoval(listener: (ids: string[]) => void) {
@@ -382,6 +398,82 @@ export function RcmProvider({ children }: { children: React.ReactNode }) {
         const current = getSnapshot();
         commit({ ...current, practice: { ...current.practice, ...patch } });
       },
+      resetDemo: () => {
+        resetDemoState();
+      },
+      appendOutbox: (item) => {
+        const message: OutboxItem = { ...item, id: nid("m"), createdAt: new Date().toISOString() };
+        const current = getSnapshot();
+        commit({ ...current, outbox: [message, ...current.outbox] });
+        return message;
+      },
+      submitLocalClaim: (id) => {
+        const current = getSnapshot();
+        const claim = current.claims.find((item) => item.id === id);
+        if (!claim) return "That claim is not on this chart.";
+        const status = nextLocalClaimStatus(claim.status);
+        if (!status) return "This claim is already finished in the demo.";
+        const at = new Date().toISOString();
+        const events = [
+          ...claim.events,
+          { id: nid("ev"), at, kind: "submit" as const, summary: "Submitted in this browser." },
+          { id: nid("ev"), at, kind: "277ca" as const, summary: "Accepted in this browser." },
+        ];
+        commit({
+          ...current,
+          claims: current.claims.map((item) => (item.id === id ? { ...item, status, events, updatedAt: at } : item)),
+        });
+        return "Submitted, then accepted. Nothing left this browser.";
+      },
+      runCannedEligibility: (patientId) => {
+        const current = getSnapshot();
+        const patient = current.patients.find((item) => item.id === patientId);
+        if (!patient) return null;
+        const saved: EligibilityResult = {
+          id: nid("e"),
+          patientId,
+          payerName: patient.payerName || "Pinetree Health",
+          createdAt: new Date().toISOString(),
+          active: true,
+          copay: 30,
+          coinsurance: 20,
+          deductibleRemaining: 400,
+          priorAuthRequired: false,
+          summary: "Pinetree Health still shows active coverage. Office copay is $30. Deductible remaining is $400.",
+        };
+        commit({ ...current, eligibility: [saved, ...current.eligibility] });
+        return saved;
+      },
+      revealVisitNote: (id) => {
+        const current = getSnapshot();
+        commit({
+          ...current,
+          visitNotes: current.visitNotes.map((note) => (note.id === id ? { ...note, revealed: true } : note)),
+        });
+      },
+      setRequestStatus: (id, status) => {
+        const current = getSnapshot();
+        commit({
+          ...current,
+          requests: current.requests.map((request) => (request.id === id ? { ...request, status } : request)),
+        });
+      },
+      signPacket: (token, signerName) => {
+        const current = getSnapshot();
+        const packet = current.packets.find((item) => item.token === token && item.status === "open");
+        if (!packet) return null;
+        const signed: DemoPacket = {
+          ...packet,
+          status: "signed",
+          signerName,
+          signedAt: new Date().toISOString(),
+        };
+        commit({
+          ...current,
+          packets: current.packets.map((item) => (item.id === packet.id ? signed : item)),
+        });
+        return signed;
+      },
     };
   }, [state]);
 
@@ -390,6 +482,6 @@ export function RcmProvider({ children }: { children: React.ReactNode }) {
 
 export function useRcm() {
   const value = useContext(RcmContext);
-  if (!value) throw new Error("Practice desk is unavailable outside admin.");
+  if (!value) throw new Error("Practice desk is unavailable.");
   return value;
 }

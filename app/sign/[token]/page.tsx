@@ -1,75 +1,69 @@
-import type { Metadata } from "next";
-import { SignForm } from "@/components/agreements/sign-form";
+"use client";
+
+import { useState } from "react";
+import { useParams } from "next/navigation";
 import { ClinicFrame } from "@/components/clinic/frame";
-import { publicPacket } from "@/lib/agreements/store";
-import { unlistedShareMetadata } from "@/lib/share-metadata";
-import { practice } from "@/lib/site";
+import { RcmProvider, useRcm } from "@/components/admin/rcm/store";
+import { Button } from "@/components/ui/button";
+import { samplePractice } from "@/lib/rcm/seed";
 
-export const dynamic = "force-dynamic";
+export default function SignTokenPage() {
+  return (
+    <RcmProvider>
+      <SignToken />
+    </RcmProvider>
+  );
+}
 
-export const metadata: Metadata = {
-  ...unlistedShareMetadata,
-  title: "Sign a document",
-};
-
-export default async function SignPage({ params }: { params: Promise<{ token: string }> }) {
-  const { token } = await params;
-  const packet = await publicPacket(token);
+function SignToken() {
+  const params = useParams<{ token: string }>();
+  const token = typeof params.token === "string" ? params.token : "";
+  const { ready, packets, signPacket } = useRcm();
+  const packet = packets.find((item) => item.token === token);
+  const [name, setName] = useState(packet?.patientName ?? "");
+  const [done, setDone] = useState(false);
 
   return (
     <ClinicFrame kicker="Document to sign">
-      <div className="mx-auto min-w-0 max-w-3xl px-5 py-10 sm:py-14">
-        {packet.status === "missing" ? (
-          <Closed title="This link is not valid." body="Ask the practice to send the document again. The address may have been cut off when it was copied." />
+      <div className="mx-auto max-w-3xl px-5 py-10">
+        {!ready ? <p className="text-sm text-muted">Loading the document…</p> : null}
+        {ready && !packet ? (
+          <div className="max-w-xl rounded-3xl border border-line bg-card p-6">
+            <p className="kicker text-oxide-deep">{samplePractice.legalName}</p>
+            <h1 className="mt-3 font-display text-4xl">This link is not valid.</h1>
+          </div>
         ) : null}
-        {packet.status === "expired" ? (
-          <Closed title="This link has expired." body={`${packet.title} was open for 14 days. Ask the practice to send a new link.`} />
-        ) : null}
-        {packet.status === "void" ? (
-          <Closed title="This document was withdrawn." body={`${packet.title} is no longer waiting for a signature.`} />
-        ) : null}
-        {packet.status === "signed" ? <Signed packet={packet} /> : null}
-        {packet.status === "open" ? (
+        {packet && (packet.status === "signed" || done) ? (
           <>
-            <p className="kicker text-oxide-deep">{practice.name}</p>
-            <h1 className="mt-3 max-w-2xl font-display text-4xl tracking-tight sm:text-5xl">{packet.title}</h1>
-            {packet.recipientName ? <p className="mt-4 text-xl text-ink">Prepared for {packet.recipientName}.</p> : null}
-            <article className="mt-6 whitespace-pre-wrap text-base leading-relaxed text-ink">{packet.body}</article>
-            <SignForm token={packet.token} recipientName={packet.recipientName} />
+            <p className="kicker text-oxide-deep">Signed</p>
+            <h1 className="mt-3 font-display text-4xl">{packet.title}</h1>
+            <p className="mt-3 text-muted">Signed by {packet.signerName || name}.</p>
+            <article className="mt-6 whitespace-pre-wrap leading-relaxed">{packet.body}</article>
+          </>
+        ) : null}
+        {packet && packet.status === "open" && !done ? (
+          <>
+            <p className="kicker text-oxide-deep">{samplePractice.legalName}</p>
+            <h1 className="mt-3 font-display text-4xl">{packet.title}</h1>
+            <p className="mt-4 text-xl">Prepared for {packet.patientName}.</p>
+            <article className="mt-6 whitespace-pre-wrap leading-relaxed">{packet.body}</article>
+            <form
+              className="mt-6 grid max-w-md gap-3"
+              onSubmit={(event) => {
+                event.preventDefault();
+                const signed = signPacket(token, name.trim());
+                if (signed) setDone(true);
+              }}
+            >
+              <label className="grid gap-2 text-sm">
+                <span className="font-medium">Name</span>
+                <input className="min-h-11 rounded-xl border border-line px-3" value={name} onChange={(event) => setName(event.target.value)} required />
+              </label>
+              <Button type="submit">Sign</Button>
+            </form>
           </>
         ) : null}
       </div>
     </ClinicFrame>
-  );
-}
-
-function Signed({
-  packet,
-}: {
-  packet: { title: string; body: string; signerName: string; signedAt: string; signaturePng: string };
-}) {
-  const when = new Date(packet.signedAt).toLocaleString("en-US", { dateStyle: "long", timeStyle: "short" });
-  return (
-    <>
-      <p className="kicker text-oxide-deep">Signed</p>
-      <h1 className="mt-3 font-display text-4xl tracking-tight">{packet.title}</h1>
-      <p className="mt-3 text-muted">Signed by {packet.signerName} on {when}.</p>
-      <article className="mt-6 whitespace-pre-wrap text-base leading-relaxed">{packet.body}</article>
-      {packet.signaturePng ? (
-        // The signature is a data URL produced by this site's signing page.
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={packet.signaturePng} alt={`Signature of ${packet.signerName}`} className="mt-6 h-28 rounded-2xl border border-line bg-white" />
-      ) : null}
-    </>
-  );
-}
-
-function Closed({ title, body }: { title: string; body: string }) {
-  return (
-    <div className="max-w-xl rounded-3xl border border-line bg-card p-6 sm:p-8">
-      <p className="kicker text-oxide-deep">{practice.name}</p>
-      <h1 className="mt-3 font-display text-4xl tracking-tight">{title}</h1>
-      <p className="mt-3 text-base leading-relaxed text-muted">{body}</p>
-    </div>
   );
 }

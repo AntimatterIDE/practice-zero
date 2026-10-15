@@ -5,9 +5,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { claimTotal, formatDay, money, patientName } from "@/lib/rcm/format";
 import type { Appointment, Claim, ClaimStatus } from "@/lib/rcm/types";
-import type { Encounter } from "@/lib/encounters/types";
-import { claimsHref } from "@/lib/encounters/approve";
-import { DemoBilling } from "@/components/admin/rcm/demo-billing";
 import { LoadingDesk, PageHeader, StatusPill, fieldClass, panelClass } from "@/components/admin/rcm/ui";
 import { useRcm } from "@/components/admin/rcm/store";
 
@@ -17,7 +14,7 @@ function sameDay(claim: Claim, visit: Appointment) {
   return claim.appointmentId === visit.id || (claim.patientId === visit.patientId && claim.dateOfService === visit.start.slice(0, 10));
 }
 
-export function ClaimsDesk({ approvedVisits = [] }: { approvedVisits?: Encounter[] }) {
+export function ClaimsDesk() {
   const { ready, claims, patients, appointments, updateClaim } = useRcm();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<ClaimStatus | "all">("all");
@@ -32,9 +29,6 @@ export function ClaimsDesk({ approvedVisits = [] }: { approvedVisits?: Encounter
     const related = claims.filter((claim) => sameDay(claim, visit));
     return !related.some((claim) => claim.status !== "draft" && claim.status !== "held");
   });
-  const claimedEncounters = new Set(claims.map((claim) => claim.encounterId).filter(Boolean));
-  const readyVisits = approvedVisits.filter((encounter) => !claimedEncounters.has(encounter.id));
-
   const review = claims.filter((claim) => claim.status === "ready");
   const rows = claims.filter((claim) => {
     if (status !== "all" && claim.status !== status) return false;
@@ -48,38 +42,8 @@ export function ClaimsDesk({ approvedVisits = [] }: { approvedVisits?: Encounter
       <PageHeader
         kicker="Billing"
         title="Coding"
-        lede="Treated visits wait here until the charges are reviewed. Ready for Bill only moves a case to review. Submit claim files a real claim with the production key."
-        action={<DemoBilling />}
+        lede="Treated visits wait here until the charges are reviewed. Submit on a draft moves it to accepted in this browser."
       />
-
-      <section className="mt-8">
-        <h2 className="font-display text-2xl">Approved visits</h2>
-        <p className="mt-2 max-w-2xl text-sm text-muted">A visit lands here after the doctor approves the note and the codes. Opening it starts the claim with those codes.</p>
-        <ul className="mt-4 grid gap-3">
-          {readyVisits.length === 0 ? <li className="text-sm text-muted">No approved visits are waiting.</li> : null}
-          {readyVisits.map((encounter) => {
-            const visit = appointments.find((appointment) => appointment.id === encounter.appointmentId);
-            const label = encounter.patientLabel.trim().toLowerCase();
-            const patient = (visit ? byId.get(visit.patientId) : undefined) ?? patients.find((item) => patientName(item).trim().toLowerCase() === label);
-            const href = claimsHref({
-              encounterId: encounter.id,
-              patientId: visit?.patientId || patient?.id,
-              appointmentId: encounter.appointmentId,
-            });
-            return (
-              <li key={encounter.id} className={panelClass}>
-                <p className="font-semibold">{encounter.patientLabel || (patient ? patientName(patient) : "Approved visit")}</p>
-                <p className="mt-1 text-sm text-muted">
-                  {formatDay(visit?.start || encounter.createdAt)} · {encounter.icd10.filter((code) => code.approved).map((code) => code.code).join(", ") || "No diagnosis"} · {encounter.billingCodes.filter((code) => code.approved).map((code) => code.code).join(", ") || "No procedure"}
-                </p>
-                <Button asChild className="mt-4">
-                  <Link href={href}>Open in claims</Link>
-                </Button>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
 
       <section className="mt-10">
         <h2 className="font-display text-2xl">Worklist</h2>
@@ -118,7 +82,7 @@ export function ClaimsDesk({ approvedVisits = [] }: { approvedVisits?: Encounter
                   </div>
                 </dl>
                 <Button asChild className="mt-4">
-                  <Link href={`/admin/operations/claims/new?patient=${visit.patientId}&visit=${visit.id}${related ? `&claim=${related.id}` : ""}`}>Open case</Link>
+                  <Link href={`/try/claims/new?patient=${visit.patientId}&visit=${visit.id}${related ? `&claim=${related.id}` : ""}`}>Open case</Link>
                 </Button>
               </li>
             );
@@ -155,7 +119,7 @@ export function ClaimsDesk({ approvedVisits = [] }: { approvedVisits?: Encounter
                   </ul>
                   <div className="flex flex-wrap gap-2">
                     <Button asChild>
-                      <Link href={`/admin/operations/claims/${claim.id}`}>Open claim</Link>
+                      <Link href={`/try/claims/${claim.id}`}>Open claim</Link>
                     </Button>
                     <Button type="button" variant="secondary" onClick={() => updateClaim(claim.id, { status: "draft", returnReason: "Sent back from review." })}>
                       Send back to coding
@@ -182,7 +146,7 @@ export function ClaimsDesk({ approvedVisits = [] }: { approvedVisits?: Encounter
           {rows.length === 0 ? <li className="text-sm text-muted md:col-span-2 xl:col-span-3">No claims match.</li> : null}
           {rows.map((claim) => (
             <li key={claim.id}>
-              <Link href={`/admin/operations/claims/${claim.id}`} className="flex h-full flex-col justify-between gap-4 rounded-2xl border border-line bg-card p-4 hover:border-oxide/40">
+              <Link href={`/try/claims/${claim.id}`} className="flex h-full flex-col justify-between gap-4 rounded-2xl border border-line bg-card p-4 hover:border-oxide/40">
                 <span>
                   <span className="block">{names.get(claim.patientId) ?? "Unknown patient"}</span>
                   <span className="text-sm text-muted">{claim.payerName} · {formatDay(claim.dateOfService)} · {claim.controlNumber}</span>

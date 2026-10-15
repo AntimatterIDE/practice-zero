@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { patientName } from "@/lib/rcm/format";
-import type { Encounter } from "@/lib/encounters/types";
+import { DEMO_CLINIC_DAY } from "@/lib/rcm/chart";
 import { AccountNoteDialog } from "@/components/admin/rcm/account-note";
 import { Field, LoadingDesk, PageHeader, fieldClass } from "@/components/admin/rcm/ui";
 import { useRcm } from "@/components/admin/rcm/store";
@@ -31,34 +31,18 @@ const emptyLine = (physician = ""): LineDraft => ({
   physician,
 });
 
-function linesFromEncounter(encounter: Encounter | null, physician: string): LineDraft[] | null {
-  if (!encounter || encounter.status !== "approved") return null;
-  const diagnoses = encounter.icd10
-    .filter((code) => code.approved)
-    .map((code) => code.code)
-    .join(", ");
-  const procedures = encounter.billingCodes.filter((code) => code.approved);
-  if (!procedures.length) return null;
-  return procedures.map((code) => ({
-    ...emptyLine(physician),
-    cpt: code.code,
-    description: code.description,
-    diagnoses,
-  }));
-}
-
-export function ClaimForm({ initialEncounter = null }: { initialEncounter?: Encounter | null }) {
+export function ClaimForm() {
   const router = useRouter();
   const params = useSearchParams();
   const { ready, patients, appointments, claims, practice, addClaim, updateClaim } = useRcm();
   const requestedPatient = params.get("patient") ?? "";
-  const visitId = params.get("visit") || initialEncounter?.appointmentId || "";
+  const visitId = params.get("visit") || "";
   const claimId = params.get("claim") ?? "";
   const existing = claims.find((claim) => claim.id === claimId);
   const visit = appointments.find((appointment) => appointment.id === visitId);
   const [patientId, setPatientId] = useState(existing?.patientId || requestedPatient);
   const [dateOverride, setDateOverride] = useState<string | null>(existing?.dateOfService ?? null);
-  const dateOfService = dateOverride || visit?.start.slice(0, 10) || initialEncounter?.createdAt.slice(0, 10) || "2026-09-30";
+  const dateOfService = dateOverride || visit?.start.slice(0, 10) || DEMO_CLINIC_DAY;
   const [placeOfService, setPlaceOfService] = useState(existing?.placeOfService || practice.posCode || "11");
   const [lines, setLines] = useState<LineDraft[]>(() => {
     if (existing?.lines.length) {
@@ -73,7 +57,7 @@ export function ClaimForm({ initialEncounter = null }: { initialEncounter?: Enco
         physician: line.physician,
       }));
     }
-    return linesFromEncounter(initialEncounter, visit?.providerName || practice.physicianName) ?? [emptyLine(visit?.providerName || practice.physicianName)];
+    return [emptyLine(visit?.providerName || practice.physicianName)];
   });
   const [holdReason, setHoldReason] = useState(existing?.holdReason ?? "");
   const [selectedProcedures, setSelectedProcedures] = useState<string[]>([]);
@@ -165,7 +149,7 @@ export function ClaimForm({ initialEncounter = null }: { initialEncounter?: Enco
       dateOfService,
       placeOfService,
       appointmentId: visit?.id,
-      encounterId: params.get("encounter") || initialEncounter?.id,
+      encounterId: params.get("encounter") || undefined,
       lines: nextLines,
       status,
       holdReason: status === "held" ? holdReason.trim() : "",
@@ -176,11 +160,11 @@ export function ClaimForm({ initialEncounter = null }: { initialEncounter?: Enco
         ...payload,
         lines: nextLines.map((line, index) => ({ ...line, id: existing.lines[index]?.id || `line-${index + 1}` })),
       });
-      router.push(`/admin/operations/claims/${existing.id}`);
+      router.push(`/try/claims/${existing.id}`);
       return;
     }
     const claim = addClaim(payload);
-    router.push(`/admin/operations/claims/${claim.id}`);
+    router.push(`/try/claims/${claim.id}`);
   }
 
   return (
@@ -211,11 +195,6 @@ export function ClaimForm({ initialEncounter = null }: { initialEncounter?: Enco
               <input className={fieldClass} value={placeOfService} onChange={(event) => setPlaceOfService(event.target.value)} />
             </Field>
           </div>
-          {initialEncounter?.status === "approved" ? (
-            <p className="text-sm text-muted">
-              {initialEncounter.patientLabel || "This visit"} was approved with these diagnosis and procedure codes. Enter the charge for each line.
-            </p>
-          ) : null}
           {visit?.opNoteStatus === "missing" ? <p className="text-sm text-muted">Op note is missing. That is visible here and does not block Ready for Bill.</p> : null}
           {visit && visit.scheduledProcedures.length > 0 ? (
             <fieldset className="grid gap-2">

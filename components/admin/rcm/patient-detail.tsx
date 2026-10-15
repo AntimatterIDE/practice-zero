@@ -59,7 +59,7 @@ export function PatientDetail({ id }: { id: string }) {
     return (
       <main>
         <h1 className="font-display text-4xl">Patient not found</h1>
-        <Link href="/admin/operations/patients" className="mt-4 inline-block text-sm underline">
+        <Link href="/try/patients" className="mt-4 inline-block text-sm underline">
           Back to patients
         </Link>
       </main>
@@ -458,7 +458,7 @@ function Demographics({
           onClick={() => {
             if (!window.confirm("Remove this chart? A portal login for this patient is removed with it.")) return;
             onRemove(patient.id);
-            router.push("/admin/operations/patients");
+            router.push("/try/patients");
           }}
         >
           Remove
@@ -1119,7 +1119,7 @@ function Billing({ claims }: { claims: Claim[] }) {
         {claims.length === 0 ? <li className="py-3 text-sm text-muted">No claims on this chart.</li> : null}
         {claims.map((claim) => (
           <li key={claim.id}>
-            <Link href={`/admin/operations/claims/${claim.id}`} className="flex items-center justify-between gap-3 py-3 text-sm">
+            <Link href={`/try/claims/${claim.id}`} className="flex items-center justify-between gap-3 py-3 text-sm">
               <span>
                 {formatDay(claim.dateOfService)} · {money(claimTotal(claim))}
               </span>

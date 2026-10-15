@@ -1,7 +1,7 @@
 "use client";
 
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { IconPlus } from "@/components/site/icons";
+import { IconPlus } from "@/components/ui/icon-plus";
 import { cn } from "@/lib/utils";
 
 export const Accordion = AccordionPrimitive.Root;

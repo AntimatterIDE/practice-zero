@@ -1,0 +1,84 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Features",
+  description: "Every screen in the Practice Zero demo.",
+};
+
+const groups = [
+  {
+    title: "The morning",
+    items: [
+      ["Today", "/try"],
+      ["Schedule", "/try/scheduling"],
+      ["Requests", "/try/consultations"],
+      ["Tasks", "/try/tasks"],
+    ],
+  },
+  {
+    title: "The chart",
+    items: [
+      ["Patients", "/try/patients"],
+      ["Visits", "/try/visits"],
+      ["Intake", "/try/intake"],
+      ["Agreements", "/try/agreements"],
+    ],
+  },
+  {
+    title: "Getting paid",
+    items: [
+      ["Eligibility", "/try/eligibility"],
+      ["Claims", "/try/claims"],
+      ["Drafts", "/try/claims/drafts"],
+      ["Denials", "/try/denials"],
+      ["Payments", "/try/payments"],
+      ["Upload", "/try/upload"],
+      ["Analytics", "/try/analytics"],
+      ["Tools", "/try/tools"],
+    ],
+  },
+  {
+    title: "The practice",
+    items: [
+      ["People", "/try/people"],
+      ["Practice", "/try/practice"],
+    ],
+  },
+] as const;
+
+export default function FeaturesPage() {
+  return (
+    <div className="min-h-full bg-paper text-ink">
+      <header className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-5">
+        <Link href="/" className="font-display text-xl">
+          Practice Zero
+        </Link>
+        <Link href="/try" className="rounded-full bg-pine px-4 py-2 text-sm text-paper">
+          Try the demo
+        </Link>
+      </header>
+      <main className="mx-auto max-w-5xl px-6 pb-20 pt-8">
+        <h1 className="font-display text-5xl">Every screen in the demo</h1>
+        <p className="mt-4 max-w-2xl text-lg text-muted">The sample practice is already mid-morning. Each link opens that desk.</p>
+        <div className="mt-10 grid gap-8">
+          {groups.map((group) => (
+            <section key={group.title}>
+              <h2 className="font-display text-2xl">{group.title}</h2>
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                {group.items.map(([label, href]) => (
+                  <li key={href}>
+                    <Link href={href} className="block rounded-2xl border border-line bg-card px-4 py-3 hover:border-oxide">
+                      <span className="font-medium">{label}</span>
+                      <span className="mt-1 block text-sm text-muted">{href}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </main>
+    </div>
+  );
+}

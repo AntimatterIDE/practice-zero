@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Newsreader, Plus_Jakarta_Sans } from "next/font/google";
-import { shareImage } from "@/lib/share-metadata";
-import { canonicalOrigin, isIndexingEnabled, practice, practiceName } from "@/lib/site";
+import { isIndexingEnabled, product } from "@/lib/site";
 import "./globals.css";
 
 const sans = Plus_Jakarta_Sans({
@@ -23,40 +22,19 @@ const display = Newsreader({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(canonicalOrigin()),
   title: {
-    default: practiceName.full,
-    template: `%s · ${practice.name}`,
+    default: product.name,
+    template: `%s · ${product.name}`,
   },
-  description: practice.description,
-  applicationName: practice.name,
-  robots: isIndexingEnabled()
-    ? { index: true, follow: true }
-    : { index: false, follow: false, nocache: true },
+  description: product.description,
+  applicationName: product.name,
+  robots: isIndexingEnabled() ? { index: true, follow: true } : { index: false, follow: false, nocache: true },
   icons: {
-    icon: [
-      { url: "/brand/alignment-favicon.svg", type: "image/svg+xml" },
-      { url: "/brand/favicon-32.png", type: "image/png", sizes: "32x32" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
-  },
-  openGraph: {
-    type: "website",
-    siteName: practice.name,
-    title: { absolute: practiceName.full },
-    description: practice.description,
-    url: "/",
-    images: [shareImage],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: { absolute: practiceName.full },
-    description: practice.description,
-    images: [shareImage],
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${sans.variable} ${display.variable} h-full antialiased`}>
       <body className="min-h-full bg-paper font-sans text-ink">{children}</body>

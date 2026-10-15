@@ -167,7 +167,7 @@ export function DaySheet({
                               </>
                             ) : (
                               <>
-                                <Link href={`/admin/operations/patients/${visit.patientId}`} className="block truncate font-semibold hover:text-oxide">
+                                <Link href={`/try/patients/${visit.patientId}`} className="block truncate font-semibold hover:text-oxide">
                                   {name}
                                 </Link>
                                 <p className="truncate text-xs whitespace-nowrap text-muted">

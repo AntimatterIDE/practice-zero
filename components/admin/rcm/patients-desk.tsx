@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { pushPortalChartsAction } from "@/app/portal/actions";
 import { ageFromDob, chartGaps, withChart } from "@/lib/rcm/chart";
 import { formatDay, formatTime, patientName } from "@/lib/rcm/format";
 import type { Patient, PatientInput, Sex } from "@/lib/rcm/types";
@@ -81,15 +80,10 @@ export function PatientsDesk() {
       createdAt: new Date().toISOString(),
       mrn: "",
     };
-    const result = await pushPortalChartsAction({ patients: [patient], appointments: [] });
-    setSaving(false);
-    if (!result.ok) {
-      setError(result.error || "That chart could not be saved for the practice.");
-      return;
-    }
     rememberPatient(patient);
+    setSaving(false);
     setForm(emptyForm);
-    router.push(`/admin/operations/patients/${patient.id}`);
+    router.push(`/try/patients/${patient.id}`);
   }
 
   return (
@@ -97,10 +91,10 @@ export function PatientsDesk() {
       <PageHeader
         kicker="Practice"
         title="Patients"
-        lede="A chart saved here is stored for every staff login. Send an intake link when the patient can fill out the form first."
+        lede="Charts in this demo stay in the browser."
         action={
           <Button asChild variant="secondary">
-            <Link href="/admin/operations/intake">Intake form</Link>
+            <Link href="/try/intake">Intake form</Link>
           </Button>
         }
       />
@@ -137,7 +131,7 @@ export function PatientsDesk() {
               return (
                 <MemberCard
                   key={patient.id}
-                  href={`/admin/operations/patients/${patient.id}`}
+                  href={`/try/patients/${patient.id}`}
                   initials={initials}
                   name={patientName(patient)}
                   meta={`MRN ${patient.mrn || "new"} · ${patient.phone || "No phone"}`}

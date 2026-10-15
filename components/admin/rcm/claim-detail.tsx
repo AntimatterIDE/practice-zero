@@ -2,13 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { checkClaimStatus, requestPaperClaim, submitProfessionalClaim } from "@/app/admin/stedi/actions";
 import { Button } from "@/components/ui/button";
 import { claimTotal, formatDay, formatWhen, money, patientName } from "@/lib/rcm/format";
-import { claimSubmissionInput } from "@/lib/rcm/submit-input";
 import type { Claim, ClaimStatus } from "@/lib/rcm/types";
 import { AccountNoteDialog } from "@/components/admin/rcm/account-note";
-import { applyClaimEvent } from "@/components/admin/rcm/demo-billing";
 import { LoadingDesk, PageHeader, StatusPill } from "@/components/admin/rcm/ui";
 import { useRcm } from "@/components/admin/rcm/store";
 
@@ -30,30 +27,20 @@ function appealLetter(claim: Claim, name: string, practiceName: string) {
 }
 
 export function ClaimDetail({ id }: { id: string }) {
-  const { ready, claims, patients, practice, updateClaim } = useRcm();
+  const { ready, claims, patients, practice, updateClaim, submitLocalClaim } = useRcm();
   const claim = claims.find((item) => item.id === id);
   const patient = patients.find((item) => item.id === claim?.patientId);
   const [noteOpen, setNoteOpen] = useState(true);
   const [message, setMessage] = useState("");
-  const [pending, setPending] = useState(false);
 
   if (!ready) return <LoadingDesk />;
   if (!claim || !patient) {
     return (
       <main>
         <h1 className="font-display text-4xl">Claim not found</h1>
-        <Link href="/admin/operations/claims" className="mt-4 inline-block text-sm underline">Back to claims</Link>
+        <Link href="/try/claims" className="mt-4 inline-block text-sm underline">Back to claims</Link>
       </main>
     );
-  }
-
-  async function run(action: () => Promise<{ message: string; status?: Claim["status"]; stediClaimId?: string; stediSubmissionId?: string; attachmentId?: string; event?: { kind: Claim["events"][number]["kind"]; summary: string } }>) {
-    if (!claim) return;
-    setPending(true);
-    const result = await action();
-    updateClaim(claim.id, applyClaimEvent(claim, result));
-    setMessage(result.message);
-    setPending(false);
   }
 
   const balance = Math.max(0, claimTotal(claim) - (claim.paymentAmount ?? 0));
@@ -68,7 +55,7 @@ export function ClaimDetail({ id }: { id: string }) {
         action={<StatusPill status={claim.status} />}
       />
       <p className="mt-4 text-sm text-muted">
-        <Link href={`/admin/operations/patients/${patient.id}`} className="underline">Open chart</Link>
+        <Link href={`/try/patients/${patient.id}`} className="underline">Open chart</Link>
         {" · "}
         {money(claimTotal(claim))} billed
         {claim.paymentAmount != null ? ` · ${money(claim.paymentAmount)} paid` : ""}
@@ -102,33 +89,19 @@ export function ClaimDetail({ id }: { id: string }) {
       <div className="mt-6 flex flex-wrap gap-2">
         {claim.status === "draft" || claim.status === "held" || claim.status === "ready" ? (
           <Button asChild variant="secondary">
-            <Link href={`/admin/operations/claims/new?patient=${patient.id}&claim=${claim.id}${claim.appointmentId ? `&visit=${claim.appointmentId}` : ""}`}>Edit charges</Link>
+            <Link href={`/try/claims/new?patient=${patient.id}&claim=${claim.id}${claim.appointmentId ? `&visit=${claim.appointmentId}` : ""}`}>Edit charges</Link>
           </Button>
         ) : null}
-        <Button type="button" disabled={pending || claim.status !== "ready"} onClick={() => run(() => submitProfessionalClaim(claimSubmissionInput(claim, patient, practice)))}>
-          Submit claim
-        </Button>
-        <Button type="button" variant="secondary" disabled={pending || !claim.stediClaimId} onClick={() => run(() => checkClaimStatus(claimSubmissionInput(claim, patient, practice)))}>
-          Check status
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={pending}
-          onClick={() =>
-            run(async () => {
-              const paper = await requestPaperClaim();
-              return { ...paper, event: { kind: "paper" as const, summary: paper.message } };
-            })
-          }
-        >
-          Paper claim
+        {claim.status === "draft" || claim.status === "held" || claim.status === "ready" || claim.status === "submitted" || claim.status === "processing" ? (
+          <Button type="button" onClick={() => setMessage(submitLocalClaim(claim.id))}>
+            Submit claim
+          </Button>
+        ) : null}
+        <Button asChild variant="secondary">
+          <Link href={`/try/claims/${claim.id}/print`}>Print preview</Link>
         </Button>
         <Button asChild variant="secondary">
-          <Link href={`/admin/operations/claims/${claim.id}/print`}>Print preview</Link>
-        </Button>
-        <Button asChild variant="secondary">
-          <Link href={`/admin/operations/claims/${claim.id}/statement`}>Patient statement</Link>
+          <Link href={`/try/claims/${claim.id}/statement`}>Patient statement</Link>
         </Button>
       </div>
       {message ? <p className="mt-4 max-w-2xl text-sm text-muted">{message}</p> : null}
@@ -144,8 +117,8 @@ export function ClaimDetail({ id }: { id: string }) {
         </ol>
       ) : null}
       <div className="mt-8">
-        <p className="text-sm font-medium">Record a status you learned outside Stedi</p>
-        <p className="mt-1 text-sm text-muted">These buttons stay in the chart. They do not send anything.</p>
+        <p className="text-sm font-medium">Record a status in this browser</p>
+        <p className="mt-1 text-sm text-muted">These buttons stay on this chart.</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {localStatuses.map((status) => (
             <Button key={status} type="button" variant={claim.status === status ? "primary" : "secondary"} onClick={() => updateClaim(claim.id, { status })}>

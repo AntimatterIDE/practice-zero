@@ -1,18 +1,13 @@
-import { Footer } from "@/components/site/footer";
-import { Header } from "@/components/site/header";
-import { MissingPage } from "@/components/site/missing-page";
-
 export default function NotFound() {
   return (
-    <div className="flex min-h-full flex-col">
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-      <Header />
-      <main id="main" className="flex-1">
-        <MissingPage />
-      </main>
-      <Footer />
-    </div>
+    <main className="mx-auto max-w-xl px-6 py-24">
+      <p className="text-sm font-medium text-oxide-deep">Practice Zero</p>
+      <h1 className="mt-3 font-display text-4xl">This page is not on the site.</h1>
+      <p className="mt-4 text-muted">
+        <a className="underline" href="/">
+          Back to Practice Zero
+        </a>
+      </p>
+    </main>
   );
 }

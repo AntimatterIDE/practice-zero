@@ -24,7 +24,7 @@ export function PracticeDesk() {
       <PageHeader
         kicker="Practice"
         title="Practice profile"
-        lede="Billing defaults for claims written here. Add the NPI, tax id, and address before a claim is filed."
+        lede="The sample practice on this demo. Changes stay in this browser."
       />
       <form
         className="mt-8 grid max-w-2xl gap-4 sm:grid-cols-2"
@@ -54,6 +54,9 @@ export function PracticeDesk() {
         </Field>
         <Field label="Phone">
           <input className={fieldClass} value={value.phone} onChange={(event) => update("phone", event.target.value)} />
+        </Field>
+        <Field label="Email" className="sm:col-span-2">
+          <input className={fieldClass} value={value.email} onChange={(event) => update("email", event.target.value)} />
         </Field>
         <Field label="Address" className="sm:col-span-2">
           <input className={fieldClass} value={value.address} placeholder="Street, city, ST ZIP" onChange={(event) => update("address", event.target.value)} />

@@ -323,7 +323,70 @@ export type PracticeProfile = {
   taxonomy: string;
   phone: string;
   address: string;
+  email: string;
   posCode: string;
+};
+
+export type OutboxKind = "text" | "email" | "call";
+
+export type OutboxItem = {
+  id: string;
+  kind: OutboxKind;
+  to: string;
+  body: string;
+  createdAt: string;
+};
+
+export type AgentRun = {
+  id: string;
+  title: string;
+  detail: string;
+  href: string;
+  at: string;
+};
+
+export type VisitCodeLine = {
+  system: "ICD-10" | "CPT";
+  code: string;
+  description: string;
+};
+
+export type VisitNote = {
+  id: string;
+  patientId: string;
+  appointmentId: string;
+  transcript: string;
+  note: string;
+  codes: VisitCodeLine[];
+  revealed: boolean;
+};
+
+export type DemoRequestStatus = "new" | "reached" | "closed";
+
+export type DemoRequest = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  kind: "consultation" | "question";
+  status: DemoRequestStatus;
+  message: string;
+  createdAt: string;
+};
+
+export type DemoPacketStatus = "open" | "signed" | "void";
+
+export type DemoPacket = {
+  id: string;
+  token: string;
+  patientId: string;
+  patientName: string;
+  email: string;
+  title: string;
+  body: string;
+  status: DemoPacketStatus;
+  signerName: string;
+  signedAt: string;
 };
 
 export type RcmState = {
@@ -333,4 +396,9 @@ export type RcmState = {
   eligibility: EligibilityResult[];
   tasks: PracticeTask[];
   practice: PracticeProfile;
+  outbox: OutboxItem[];
+  agentRuns: AgentRun[];
+  visitNotes: VisitNote[];
+  requests: DemoRequest[];
+  packets: DemoPacket[];
 };

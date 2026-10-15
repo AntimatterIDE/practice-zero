@@ -1,5 +1,5 @@
 {
-  "name": "elvis-practice",
+  "name": "practice-zero",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,8 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:e2e": "playwright test",
-    "seed": "node --experimental-strip-types scripts/seed-content.ts"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.20",

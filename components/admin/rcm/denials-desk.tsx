@@ -107,7 +107,7 @@ export function DenialsDesk() {
                 Write off
               </Button>
               <Button asChild variant="ghost">
-                <Link href={`/admin/operations/claims/${selected.id}`}>Open claim</Link>
+                <Link href={`/try/claims/${selected.id}`}>Open claim</Link>
               </Button>
             </div>
             {selected.appealDraft ? (

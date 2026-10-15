@@ -43,7 +43,7 @@ export function TasksDesk() {
                 <div>
                   <p className={task.status === "done" ? "text-muted line-through" : "font-semibold"}>{task.title}</p>
                   <p className="text-sm text-muted">
-                    <Link href={`/admin/operations/patients/${task.patientId}`} className="underline">
+                    <Link href={`/try/patients/${task.patientId}`} className="underline">
                       {names.get(task.patientId) ?? "Unknown patient"}
                     </Link>
                     {" · "}

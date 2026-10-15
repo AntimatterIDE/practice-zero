@@ -11,7 +11,7 @@ import type {
   Vitals,
 } from "@/lib/rcm/types";
 
-export const DEMO_CLINIC_DAY = "2026-09-30";
+export const DEMO_CLINIC_DAY = "2026-10-14";
 
 const requiredDocuments = ["Photo ID", "Insurance card", "New patient intake"];
 
@@ -218,11 +218,17 @@ export function normalizeClaim(claim: Claim): Claim {
 export function normalizeState(state: RcmState): RcmState {
   return {
     ...state,
+    practice: { ...state.practice, email: state.practice.email || "" },
     patients: state.patients.map((patient) => normalizePatient(patient)),
     claims: (state.claims ?? []).map((claim) => normalizeClaim(claim)),
     appointments: state.appointments.map((appointment) => normalizeAppointment(appointment)),
     tasks: state.tasks ?? [],
     eligibility: state.eligibility ?? [],
+    outbox: state.outbox ?? [],
+    agentRuns: state.agentRuns ?? [],
+    visitNotes: state.visitNotes ?? [],
+    requests: state.requests ?? [],
+    packets: state.packets ?? [],
   };
 }
 

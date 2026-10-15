@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DaySheet } from "@/components/admin/rcm/day-sheet";
 import { chartGaps, focusClinicDay } from "@/lib/rcm/chart";
-import { formatClinicDay, formatTime, patientName } from "@/lib/rcm/format";
+import { formatClinicDay, formatTime, formatWhen, patientName } from "@/lib/rcm/format";
 import { recordVisitHref } from "@/lib/rcm/record-visit";
 import { MetricTile } from "@/components/admin/bits/surface";
 import { LoadingDesk, PageHeader, useClinicToday } from "@/components/admin/rcm/ui";
@@ -12,7 +12,7 @@ import { useRcm } from "@/components/admin/rcm/store";
 import { cn } from "@/lib/utils";
 
 export function Workbench() {
-  const { ready, patients, appointments, tasks } = useRcm();
+  const { ready, patients, appointments, tasks, agentRuns } = useRcm();
   const today = useClinicToday();
   if (!ready) return <LoadingDesk />;
 
@@ -36,21 +36,21 @@ export function Workbench() {
   const queue = [
     ...toConfirm.map((appointment) => ({
       key: `call-${appointment.id}`,
-      href: `/admin/operations/patients/${appointment.patientId}`,
+      href: `/try/patients/${appointment.patientId}`,
       kicker: "Call",
       title: names.get(appointment.patientId) ?? "Unknown patient",
       detail: `Confirm ${formatTime(appointment.start)} · ${appointment.reason}`,
     })),
     ...openTasks.map((task) => ({
       key: task.id,
-      href: `/admin/operations/patients/${task.patientId}`,
+      href: `/try/patients/${task.patientId}`,
       kicker: "Task",
       title: task.title,
       detail: task.detail || names.get(task.patientId) || "Front desk",
     })),
     ...gaps.map(({ patient, gaps: items }) => ({
       key: patient.id,
-      href: `/admin/operations/patients/${patient.id}`,
+      href: `/try/patients/${patient.id}`,
       kicker: "Chart",
       title: patientName(patient),
       detail: items.slice(0, 2).join(" · "),
@@ -59,25 +59,25 @@ export function Workbench() {
 
   const pulse = [
     {
-      href: "/admin/operations/scheduling",
+      href: "/try/scheduling",
       label: "Next",
       value: nextVisit ? formatTime(nextVisit.start) : "Clear",
       detail: nextVisit ? (names.get(nextVisit.patientId) ?? "Unknown patient") : "Nothing else on the board",
     },
     {
-      href: "/admin/operations/scheduling",
+      href: "/try/scheduling",
       label: "In the office",
       value: String(inOffice.length),
       detail: inOffice.length ? inOffice.map((visit) => names.get(visit.patientId)).filter(Boolean).slice(0, 2).join(", ") : "No one has arrived",
     },
     {
-      href: "/admin/operations/scheduling",
+      href: "/try/scheduling",
       label: "Still to confirm",
       value: String(toConfirm.length),
       detail: toConfirm.length ? "Waiting on a confirmation call" : "Nothing left to confirm",
     },
     {
-      href: "/admin/operations/patients",
+      href: "/try/patients",
       label: "Charts open",
       value: String(unfinished.length),
       detail: unfinished[0] ? unfinished[0].gaps.slice(0, 2).join(" · ") : "Nothing missing on the charts",
@@ -93,10 +93,10 @@ export function Workbench() {
         action={
           <div className="flex flex-wrap gap-3">
             <Button asChild variant="secondary">
-              <Link href="/admin/operations/intake">Send an intake link</Link>
+              <Link href="/try/intake">Send an intake link</Link>
             </Button>
             <Button asChild>
-              <Link href="/admin/operations/scheduling">Schedule a visit</Link>
+              <Link href="/try/scheduling">Schedule a visit</Link>
             </Button>
           </div>
         }
@@ -116,7 +116,7 @@ export function Workbench() {
               <p className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">Front desk</p>
               <h2 className="mt-1 text-sm font-medium text-neutral-900">Needs you</h2>
             </div>
-            <Link href="/admin/operations/tasks" className="text-[13px] text-neutral-700 underline decoration-neutral-300 underline-offset-4">
+            <Link href="/try/tasks" className="text-[13px] text-neutral-700 underline decoration-neutral-300 underline-offset-4">
               All tasks
             </Link>
           </div>
@@ -136,6 +136,25 @@ export function Workbench() {
           </ul>
         </aside>
       </div>
+      <section className="mt-6 overflow-hidden rounded-[var(--rb-r-2xl,14px)] border border-neutral-200/80 bg-white">
+        <div className="border-b border-neutral-200 px-5 py-4">
+          <p className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">This morning</p>
+          <h2 className="mt-1 text-sm font-medium text-neutral-900">Agent runs</h2>
+        </div>
+        <ul className="grid">
+          {agentRuns.map((run) => (
+            <li key={run.id} className="border-t border-neutral-100 first:border-t-0">
+              <Link href={run.href} className="grid gap-1 px-5 py-4 hover:bg-neutral-50 sm:grid-cols-[9rem_1fr]">
+                <span className="text-[13px] text-neutral-500">{formatWhen(run.at)}</span>
+                <span>
+                  <span className="block text-[13px] font-medium text-neutral-900">{run.title}</span>
+                  <span className="mt-0.5 block text-[13px] text-neutral-500">{run.detail}</span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
   );
 }

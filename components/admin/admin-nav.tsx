@@ -4,45 +4,33 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-const siteLinks = [
-  ["/admin", "Overview"],
-  ["/admin/conditions", "Conditions"],
-  ["/admin/treatments", "Treatments"],
-  ["/admin/faqs", "Questions"],
-  ["/admin/journal", "Journal"],
-  ["/admin/ads", "Ads"],
-  ["/admin/media", "Media"],
-  ["/admin/settings", "Settings"],
-  ["/admin/audit", "Audit"],
-] as const;
-
 const practiceLinks = [
-  ["/admin/operations", "Today"],
-  ["/admin/operations/patients", "Patients"],
-  ["/admin/operations/scheduling", "Schedule"],
-  ["/admin/operations/visits", "Visits"],
-  ["/admin/operations/consultations", "Requests"],
-  ["/admin/operations/intake", "Intake"],
-  ["/admin/operations/agreements", "Agreements"],
-  ["/admin/operations/tasks", "Tasks"],
-  ["/admin/operations/people", "People"],
-  ["/admin/operations/practice", "Practice"],
+  ["/try", "Today"],
+  ["/try/patients", "Patients"],
+  ["/try/scheduling", "Schedule"],
+  ["/try/visits", "Visits"],
+  ["/try/consultations", "Requests"],
+  ["/try/intake", "Intake"],
+  ["/try/agreements", "Agreements"],
+  ["/try/tasks", "Tasks"],
+  ["/try/people", "People"],
+  ["/try/practice", "Practice"],
 ] as const;
 
 const billingLinks = [
-  ["/admin/operations/claims", "Claims"],
-  ["/admin/operations/eligibility", "Eligibility"],
-  ["/admin/operations/denials", "Denials"],
-  ["/admin/operations/payments", "Payments"],
-  ["/admin/operations/claims/drafts", "Drafts"],
-  ["/admin/operations/upload", "Upload"],
-  ["/admin/operations/analytics", "Analytics"],
-  ["/admin/operations/tools", "Tools"],
+  ["/try/claims", "Claims"],
+  ["/try/eligibility", "Eligibility"],
+  ["/try/denials", "Denials"],
+  ["/try/payments", "Payments"],
+  ["/try/claims/drafts", "Drafts"],
+  ["/try/upload", "Upload"],
+  ["/try/analytics", "Analytics"],
+  ["/try/tools", "Tools"],
 ] as const;
 
 function isActive(pathname: string, href: string) {
-  if (href === "/admin" || href === "/admin/operations") return pathname === href;
-  if (href === "/admin/operations/claims") {
+  if (href === "/try") return pathname === href;
+  if (href === "/try/claims") {
     return pathname === href || (pathname.startsWith(`${href}/`) && !pathname.startsWith(`${href}/drafts`));
   }
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -83,17 +71,16 @@ function Group({
 }
 
 export function currentDeskLabel(pathname: string) {
-  const links = [...practiceLinks, ...billingLinks, ...siteLinks];
+  const links = [...practiceLinks, ...billingLinks];
   return links.find(([href]) => isActive(pathname, href))?.[1] ?? "Desk";
 }
 
 export function AdminNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   return (
-    <nav aria-label="Admin" onClick={onNavigate}>
+    <nav aria-label="Practice" onClick={onNavigate}>
       <Group label="Clinic" links={practiceLinks} pathname={pathname} />
       <Group label="Billing" links={billingLinks} pathname={pathname} />
-      <Group label="Website" links={siteLinks} pathname={pathname} />
     </nav>
   );
 }
