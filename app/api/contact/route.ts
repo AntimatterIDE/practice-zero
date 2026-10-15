@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { z } from "zod";
+import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
 
@@ -30,24 +31,13 @@ function escapeHtml(value: string) {
     .replaceAll('"', "&quot;");
 }
 
-export async function POST(request: Request) {
-  const json = await request.json().catch(() => null);
-  const parsed = bodySchema.safeParse(json);
-  if (!parsed.success) {
-    return NextResponse.json({ error: "Check the form and try again." }, { status: 400 });
-  }
-
-  const data = parsed.data;
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: "Email delivery is not configured yet. Add RESEND_API_KEY and try again." },
-      { status: 503 },
-    );
-  }
+async function notifyTeam(data: z.infer<typeof bodySchema>) {
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const from = process.env.CONTACT_FROM_EMAIL?.trim();
+  // Without a verified domain From address, Resend sandbox rejects team recipients.
+  if (!apiKey || !from) return;
 
   const resend = new Resend(apiKey);
-  const from = process.env.CONTACT_FROM_EMAIL || "practice zero <onboarding@resend.dev>";
   const subject = `Consultation request · ${data.company}`;
   const text = [
     "New practice zero consultation request",
@@ -61,6 +51,8 @@ export async function POST(request: Request) {
     "",
     "Message:",
     data.message || "—",
+    "",
+    "View in admin: /admin/leads",
   ].join("\n");
 
   const html = `
@@ -80,18 +72,55 @@ export async function POST(request: Request) {
     </div>
   `;
 
-  const { error } = await resend.emails.send({
-    from,
-    to: [...recipients],
-    replyTo: data.email,
-    subject,
-    text,
-    html,
-  });
-
-  if (error) {
-    return NextResponse.json({ error: error.message || "Email could not be sent." }, { status: 502 });
+  try {
+    await resend.emails.send({
+      from,
+      to: [...recipients],
+      replyTo: data.email,
+      subject,
+      text,
+      html,
+    });
+  } catch {
+    // Email is best-effort. Leads live in the admin panel.
   }
+}
+
+export async function POST(request: Request) {
+  const json = await request.json().catch(() => null);
+  const parsed = bodySchema.safeParse(json);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Check the form and try again." }, { status: 400 });
+  }
+
+  const data = parsed.data;
+
+  try {
+    const supabase = getSupabaseAdmin();
+    const { error } = await supabase.from("consultation_leads").insert({
+      email: data.email,
+      first_name: data.firstName,
+      last_name: data.lastName,
+      practice_name: data.company,
+      role: data.title,
+      practice_size: data.size,
+      phone: data.phone || null,
+      message: data.message || null,
+      source: "contact",
+      status: "new",
+    });
+
+    if (error) {
+      console.error("consultation_leads insert failed", error.message);
+      return NextResponse.json({ error: "Could not save the request." }, { status: 502 });
+    }
+  } catch (error) {
+    console.error("consultation_leads unavailable", error);
+    return NextResponse.json({ error: "Could not save the request." }, { status: 503 });
+  }
+
+  // Never fail the request on email issues (Resend sandbox / unverified domain).
+  void notifyTeam(data);
 
   return NextResponse.json({ ok: true });
 }

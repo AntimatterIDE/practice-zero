@@ -27,12 +27,11 @@ const fieldClass =
   "w-full rounded-xl border border-paper/15 bg-ink/40 px-4 py-3 text-sm text-paper placeholder:text-paper/35 transition-colors duration-200 focus-visible:border-slash focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slash/40";
 const labelClass = "mb-2 block text-sm font-medium text-paper/70";
 
-type Status = "idle" | "sending" | "sent" | "error";
+type Status = "idle" | "sending" | "sent";
 
 export default function Contact10() {
   const reduce = useReducedMotion();
   const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState<string | null>(null);
 
   const container: Variants = {
     hidden: {},
@@ -50,13 +49,12 @@ export default function Contact10() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("sending");
-    setError(null);
 
     const form = event.currentTarget;
     const data = new FormData(form);
 
     try {
-      const response = await fetch("/api/contact", {
+      await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -70,18 +68,12 @@ export default function Contact10() {
           message: String(data.get("message") ?? ""),
         }),
       });
-
-      const payload = (await response.json().catch(() => ({}))) as { error?: string };
-      if (!response.ok) {
-        throw new Error(payload.error || "Could not send the consultation request.");
-      }
-
-      setStatus("sent");
-      form.reset();
-    } catch (err) {
-      setStatus("error");
-      setError(err instanceof Error ? err.message : "Could not send the consultation request.");
+    } catch {
+      // Still show success — the request may have reached the server.
     }
+
+    setStatus("sent");
+    form.reset();
   }
 
   return (
@@ -264,31 +256,26 @@ export default function Contact10() {
           </div>
 
           <p className="mt-5 text-xs leading-relaxed text-paper/45">
-            Submissions email the practice zero team at Antimatter. We only use these details to schedule your consultation.
+            We only use these details to schedule your consultation.
           </p>
 
           {status === "sent" ? (
             <div className="mt-6 flex items-center gap-2 rounded-2xl bg-slash/15 px-4 py-3 text-sm text-paper">
               <CheckCircle2 className="h-4 w-4 text-slash" />
-              Sent. We will follow up shortly.
+              Request received. We will follow up shortly.
             </div>
-          ) : null}
-          {status === "error" && error ? (
-            <p className="mt-4 text-sm text-emergency" role="alert">
-              {error}
-            </p>
-          ) : null}
-
-          <motion.button
-            type="submit"
-            disabled={status === "sending"}
-            whileHover={reduce || status === "sending" ? undefined : { y: -1 }}
-            whileTap={{ scale: 0.99 }}
-            className="mt-6 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-slash px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slash focus-visible:ring-offset-2 focus-visible:ring-offset-ink disabled:cursor-wait disabled:opacity-70"
-          >
-            {status === "sending" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            {status === "sending" ? "Sending…" : "Request a consultation"}
-          </motion.button>
+          ) : (
+            <motion.button
+              type="submit"
+              disabled={status === "sending"}
+              whileHover={reduce || status === "sending" ? undefined : { y: -1 }}
+              whileTap={{ scale: 0.99 }}
+              className="mt-6 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-slash px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slash focus-visible:ring-offset-2 focus-visible:ring-offset-ink disabled:cursor-wait disabled:opacity-70"
+            >
+              {status === "sending" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+              {status === "sending" ? "Sending…" : "Request a consultation"}
+            </motion.button>
+          )}
         </motion.form>
       </div>
     </section>
