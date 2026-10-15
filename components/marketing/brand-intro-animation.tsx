@@ -81,6 +81,11 @@ export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
         }
       }
       setGate("skip");
+      try {
+        window.dispatchEvent(new Event("pz-intro-done"));
+      } catch {
+        /* ignore */
+      }
     }, 750);
     return () => window.clearTimeout(timer);
   }, [exiting]);

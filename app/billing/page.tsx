@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
 import { Footer11 } from "@/components/blocks/footer-11";
-import { ClaimsSection } from "@/components/marketing/billing/claims";
-import { CoverageSection } from "@/components/marketing/billing/coverage";
-import { DemographicsSection } from "@/components/marketing/billing/demographics";
-import { EftSection } from "@/components/marketing/billing/eft";
-import { EligibilitySection } from "@/components/marketing/billing/eligibility";
-import { PayersSection } from "@/components/marketing/billing/payers";
-import { CategoryClose, CategoryIntro } from "@/components/marketing/depth";
+import { BillingLanding } from "@/components/marketing/billing/billing-landing";
 import { SiteHeader } from "@/components/marketing/site-header";
 
 export const metadata: Metadata = {
   title: "Billing",
-  description: "Payment from payers, coverage, eligibility, claims, and the plan on the chart.",
+  description:
+    "Connect care to collections. Reduce billing friction, keep claims moving, and gain a clearer view of cash flow.",
+  alternates: { canonical: "/billing" },
 };
 
 export default function BillingPage() {
@@ -20,18 +16,9 @@ export default function BillingPage() {
       <div className="mx-auto w-full max-w-[1400px] px-4 pt-6 sm:px-6 lg:px-8">
         <SiteHeader />
       </div>
-      <CategoryIntro
-        kicker="Billing"
-        title="the money follows the visit."
-        lede="Payment from the payer, coverage found from a name and a birthday, eligibility, the claim, and the plan on the chart."
-      />
-      <EftSection />
-      <CoverageSection />
-      <DemographicsSection />
-      <EligibilitySection />
-      <ClaimsSection />
-      <PayersSection />
-      <CategoryClose title="open the draft." body="Jordan Hale’s 99203 is queued for $185. It stays in this browser until you submit it." />
+      <main>
+        <BillingLanding />
+      </main>
       <Footer11 />
     </div>
   );

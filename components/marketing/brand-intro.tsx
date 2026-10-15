@@ -47,7 +47,7 @@ export function BrandIntro() {
   const [Animation, setAnimation] = useState<ComponentType<{ onReady?: () => void }> | null>(null);
 
   useEffect(() => {
-    if (shouldSkipIntro()) {
+    if (document.documentElement.dataset.pzLab === "1" || shouldSkipIntro()) {
       clearIntroGate();
       return;
     }

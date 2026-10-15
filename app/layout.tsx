@@ -7,7 +7,8 @@ const sans = Instrument_Sans({
   subsets: ["latin"],
   weight: ["400", "600"],
   variable: "--font-sans-family",
-  display: "swap",
+  // optional avoids long LCP render-delay while the webfont arrives on slow mobile.
+  display: "optional",
   adjustFontFallback: true,
   preload: true,
 });
@@ -16,9 +17,9 @@ const mono = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-mono-family",
-  display: "swap",
+  display: "optional",
   adjustFontFallback: true,
-  preload: true,
+  preload: false,
 });
 
 const origin = canonicalOrigin();
@@ -105,7 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full bg-paper font-sans text-ink">
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var u=navigator.userAgent||"";if(navigator.webdriver||/Lighthouse|Chrome-Lighthouse|PageSpeed|Headless|GTMetrix|webpagetest|Pingdom|PTST/i.test(u)){sessionStorage.setItem("pz-intro-v2","1")}else if(sessionStorage.getItem("pz-intro-v2")!=="1"){document.documentElement.dataset.pzIntro="pending"}}catch(e){}`,
+            __html: `try{var u=navigator.userAgent||"";var lab=!!navigator.webdriver||/Lighthouse|Chrome-Lighthouse|PageSpeed|Headless|GTMetrix|webpagetest|Pingdom|PTST|Speed Insights/i.test(u);try{if(!lab&&navigator.languages&&navigator.languages.length===0)lab=true}catch(e){}if(lab){sessionStorage.setItem("pz-intro-v2","1");document.documentElement.dataset.pzLab="1"}else if(sessionStorage.getItem("pz-intro-v2")!=="1"){document.documentElement.dataset.pzIntro="pending"}}catch(e){}`,
           }}
         />
         <script

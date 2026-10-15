@@ -67,6 +67,32 @@ html[data-pz-intro="pending"] {
   overflow: hidden;
 }
 
+/* Keep funnel step list in normal flow until WebGL mounts (desktop). */
+#pz-home-hero:not([data-funnel-ready]) #pz-hero-steps {
+  position: relative;
+  inset: auto;
+  padding-top: 0;
+  pointer-events: auto;
+}
+
+#pz-home-hero:not([data-funnel-ready]) #pz-hero-steps button {
+  position: relative;
+  width: 100%;
+  transform: none;
+}
+
+/* Reserve mobile funnel space only after WebGL is ready — keeps LCP on the headline. */
+.pz-hero-band {
+  display: none;
+  height: 0;
+}
+
+#pz-home-hero[data-funnel-ready] .pz-hero-band {
+  display: block;
+  height: min(19rem, 76vw);
+  margin-top: 2rem;
+}
+
 body {
   max-width: 100%;
   overflow-x: clip;
