@@ -116,7 +116,7 @@ export default function Pricing12() {
                 </Link>
               </div>
 
-              <div className="relative mt-12 flex flex-1 items-end">
+              <div className="relative mt-10 flex-1 lg:mt-12">
                 <PlatformPreview />
               </div>
             </div>
@@ -159,87 +159,170 @@ export default function Pricing12() {
 }
 
 function PlatformPreview() {
+  const rooms = [
+    { time: "9:00", name: "Jordan Hale", room: "Room 2", state: "In progress", live: true },
+    { time: "9:30", name: "Elena Ruiz", room: "Room 1", state: "Checked in", live: false },
+    { time: "10:00", name: "Marcus Chen", room: "Room 3", state: "Confirmed", live: false },
+  ];
+
   return (
-    <div className="relative w-full max-w-xl pb-2">
-      <div className="overflow-hidden rounded-2xl border border-paper/10 bg-[#1a1d22] shadow-2xl shadow-black/40">
-        <div className="flex items-center gap-1.5 border-b border-paper/10 px-3 py-2">
-          <span className="h-2 w-2 rounded-full bg-paper/20" />
-          <span className="h-2 w-2 rounded-full bg-paper/20" />
-          <span className="h-2 w-2 rounded-full bg-paper/20" />
-          <span className="ml-3 font-mono text-[10px] uppercase tracking-[0.16em] text-paper/35">
-            morning board
+    <div className="relative w-full max-w-2xl pb-8 pt-4">
+      {/* Main workbench */}
+      <div className="overflow-hidden rounded-2xl border border-paper/10 bg-[#16191e] shadow-2xl shadow-black/50">
+        <div className="flex items-center justify-between border-b border-paper/10 px-3 py-2.5">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[1.1rem] leading-none text-foam">Ø</span>
+            <div>
+              <p className="text-[11px] font-semibold text-paper">Northline Family Medicine</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-paper/40">Wednesday · practice desk</p>
+            </div>
+          </div>
+          <span className="rounded-full bg-slash/20 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-foam">
+            Live
           </span>
         </div>
-        <div className="grid gap-3 p-3 sm:grid-cols-[4.5rem_1fr]">
-          <div className="hidden flex-col gap-2 rounded-xl bg-paper/5 p-2 sm:flex">
-            {["Today", "Chart", "Claims", "Tasks"].map((item) => (
+
+        <div className="grid sm:grid-cols-[5rem_1fr]">
+          <aside className="hidden border-r border-paper/10 bg-black/20 p-2 sm:block">
+            {["Today", "Patients", "Visits", "Claims", "Tasks", "Outreach"].map((item, index) => (
               <div
                 key={item}
-                className={`rounded-lg px-2 py-1.5 font-mono text-[9px] uppercase tracking-[0.12em] ${
-                  item === "Today" ? "bg-slash text-paper" : "text-paper/40"
+                className={`mb-1 rounded-lg px-2 py-2 font-mono text-[9px] uppercase tracking-[0.12em] ${
+                  index === 0 ? "bg-slash text-paper" : "text-paper/40"
                 }`}
               >
                 {item}
               </div>
             ))}
-          </div>
-          <div className="space-y-3">
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          </aside>
+
+          <div className="space-y-3 p-3">
+            <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
               {[
-                ["12", "Patients"],
-                ["9", "Claims"],
-                ["$18k", "Collections"],
+                ["12", "Patients today"],
+                ["4", "In rooms"],
+                ["$18.4k", "Collections"],
                 ["23", "Open tasks"],
               ].map(([value, label]) => (
-                <div key={label} className="rounded-xl bg-paper/5 px-2.5 py-2">
-                  <p className="font-sans text-sm font-semibold text-paper">{value}</p>
-                  <p className="font-mono text-[9px] uppercase tracking-[0.12em] text-paper/40">{label}</p>
+                <div key={label} className="rounded-xl border border-paper/8 bg-paper/[0.04] px-2.5 py-2">
+                  <p className="font-sans text-base font-semibold tracking-tight text-paper">{value}</p>
+                  <p className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.12em] text-paper/40">{label}</p>
                 </div>
               ))}
             </div>
-            <div className="rounded-xl bg-paper/5 p-3">
-              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-paper/40">Collections trend</p>
-              <div className="mt-3 flex h-16 items-end gap-1.5">
-                {[40, 55, 48, 70, 62, 85, 78].map((height, index) => (
-                  <div
-                    key={index}
-                    className="flex-1 rounded-t-sm bg-slash/80"
-                    style={{ height: `${height}%` }}
-                  />
-                ))}
+
+            <div className="grid gap-3 lg:grid-cols-[1.15fr_0.85fr]">
+              <div className="rounded-xl border border-paper/8 bg-paper/[0.04] p-3">
+                <div className="flex items-center justify-between">
+                  <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-paper/45">Today’s rooms</p>
+                  <p className="font-mono text-[9px] text-foam">3 in progress</p>
+                </div>
+                <div className="mt-3 space-y-2">
+                  {rooms.map((visit) => (
+                    <div
+                      key={visit.name}
+                      className={`flex items-center justify-between rounded-lg px-2.5 py-2 ${
+                        visit.live ? "bg-slash/20 ring-1 ring-slash/40" : "bg-black/25"
+                      }`}
+                    >
+                      <div>
+                        <p className="text-[11px] font-medium text-paper">{visit.name}</p>
+                        <p className="font-mono text-[8px] uppercase tracking-[0.12em] text-paper/45">
+                          {visit.time} · {visit.room}
+                        </p>
+                      </div>
+                      <span className={`text-[10px] ${visit.live ? "text-foam" : "text-paper/50"}`}>{visit.state}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div className="rounded-xl bg-paper/5 p-3">
-              <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-paper/40">Recent claims</p>
-              <div className="mt-2 space-y-1.5">
-                {[
-                  ["Jordan Hale", "$185", "Queued"],
-                  ["Elena Ruiz", "$92", "Paid"],
-                ].map(([name, amount, status]) => (
-                  <div key={name} className="flex items-center justify-between text-[11px]">
-                    <span className="text-paper/80">{name}</span>
-                    <span className="text-paper/50">
-                      {amount} · {status}
-                    </span>
+
+              <div className="space-y-3">
+                <div className="rounded-xl border border-paper/8 bg-paper/[0.04] p-3">
+                  <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-paper/45">Claims queue</p>
+                  <div className="mt-2 space-y-1.5">
+                    {[
+                      ["Hale · 99203", "$185", "Queued"],
+                      ["Ruiz · 99213", "$92", "Paid"],
+                      ["Chen · 99214", "$145", "Draft"],
+                    ].map(([label, amount, status]) => (
+                      <div key={label} className="flex items-center justify-between text-[10px]">
+                        <span className="text-paper/80">{label}</span>
+                        <span className="text-paper/45">
+                          {amount} · <span className={status === "Queued" ? "text-foam" : ""}>{status}</span>
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+                <div className="rounded-xl border border-paper/8 bg-paper/[0.04] p-3">
+                  <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-paper/45">Outbox</p>
+                  <p className="mt-2 text-[11px] text-paper/80">Elena · balance text</p>
+                  <p className="mt-0.5 text-[10px] text-paper/45">Waiting to send · $40 remaining</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="absolute -bottom-1 right-2 w-[7.5rem] overflow-hidden rounded-[1.35rem] border-[3px] border-[#2a2e34] bg-[#12151a] shadow-xl sm:right-6 sm:w-36">
-        <div className="mx-auto mt-1.5 h-1 w-10 rounded-full bg-paper/15" />
-        <div className="space-y-1.5 p-2.5">
-          {["Today’s schedule", "Charting", "Claims", "Messages", "Tasks"].map((label, index) => (
+      {/* Chart card overlay */}
+      <div className="absolute -right-1 top-0 hidden w-[13.5rem] overflow-hidden rounded-2xl border border-paper/15 bg-[#1c2027] p-3 shadow-2xl shadow-black/50 sm:block lg:-right-4">
+        <div className="flex items-center justify-between gap-2 border-b border-paper/10 pb-2">
+          <div>
+            <p className="text-[12px] font-semibold text-paper">Jordan Hale</p>
+            <p className="font-mono text-[8px] uppercase tracking-[0.12em] text-paper/45">9:00 · room 2</p>
+          </div>
+          <span className="rounded-full bg-slash/25 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.12em] text-foam">
+            Chart
+          </span>
+        </div>
+        <div className="mt-2 space-y-1.5">
+          {[
+            ["Scribe", "Listening · ready"],
+            ["Codes", "I10 · Z00.00 · 99203"],
+            ["Claim", "Draft · $185"],
+            ["Meds", "No changes"],
+          ].map(([label, detail]) => (
+            <div key={label} className="flex items-center justify-between rounded-lg bg-paper/[0.05] px-2 py-1.5">
+              <span className="text-[10px] font-medium text-paper">{label}</span>
+              <span className="text-[9px] text-paper/50">{detail}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Eligibility chip */}
+      <div className="absolute bottom-16 left-2 hidden rounded-xl border border-paper/15 bg-[#1c2027] px-3 py-2 shadow-xl sm:block">
+        <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-paper/45">Eligibility</p>
+        <p className="mt-0.5 text-[11px] font-medium text-paper">Pinetree Health · Active</p>
+      </div>
+
+      {/* Copay chip */}
+      <div className="absolute bottom-14 left-[9.5rem] hidden rounded-xl bg-slash px-3 py-2 text-paper shadow-xl sm:block">
+        <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-paper/80">Copay</p>
+        <p className="font-sans text-lg font-semibold tracking-tight">$25</p>
+      </div>
+
+      {/* Phone */}
+      <div className="absolute -bottom-2 right-3 w-[7.75rem] overflow-hidden rounded-[1.4rem] border-[3px] border-[#2f343c] bg-[#0f1216] shadow-2xl sm:right-8 sm:w-36">
+        <div className="mx-auto mt-1.5 h-1 w-10 rounded-full bg-paper/20" />
+        <div className="space-y-1.5 p-2">
+          <p className="px-1 font-mono text-[8px] uppercase tracking-[0.14em] text-paper/40">On the floor</p>
+          {[
+            ["Schedule", true],
+            ["Charting", false],
+            ["Claims", false],
+            ["Messages", false],
+            ["Tasks", false],
+          ].map(([label, active]) => (
             <div
-              key={label}
-              className={`rounded-lg px-2 py-2 font-mono text-[9px] uppercase tracking-[0.1em] ${
-                index === 0 ? "bg-slash text-paper" : "bg-paper/5 text-paper/55"
+              key={String(label)}
+              className={`rounded-lg px-2 py-2 font-mono text-[8px] uppercase tracking-[0.1em] ${
+                active ? "bg-slash text-paper" : "bg-paper/[0.06] text-paper/55"
               }`}
             >
-              {label}
+              {label as string}
             </div>
           ))}
         </div>
