@@ -17,11 +17,11 @@ export function IntakeSection() {
       flip
       eyebrow="Intake"
       title="The answers arrived last night."
-      body="Jordan’s intake is on file for the 9:00 visit. Reason, pharmacy, medication, and the penicillin rash."
+      body="Paul’s intake is on file for the 9:00 visit. Reason, pharmacy, medication, and the penicillin rash."
     >
       <div className="overflow-hidden rounded-3xl border border-line bg-white shadow-xl shadow-ink/10">
         <div className="border-b border-line px-5 py-4">
-          <p className="text-sm font-medium text-ink">Intake · Jordan Hale</p>
+          <p className="text-sm font-medium text-ink">Intake · Paul Wallace</p>
           <p className="text-xs text-graphite">On file for Wednesday, October 14</p>
         </div>
         <div>

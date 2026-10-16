@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const queue = [
-  { id: "hale", label: "Jordan Hale · room 2", detail: "Scribe listening" },
+  { id: "hale", label: "Paul Wallace · room 2", detail: "Scribe listening" },
   { id: "claim", label: "Claim · $185", detail: "Queued for payer" },
   { id: "elena", label: "Elena · balance text", detail: "Waiting in outbox" },
   { id: "elig", label: "Eligibility · Pinetree", detail: "Active · confirmed" },
@@ -122,14 +122,14 @@ export function HomeMetrics() {
             from the first patient to the claim.
           </h2>
           <p className="mt-5 max-w-md text-lg text-graphite">
-            Jordan Hale is in room 2. The note is drafted. The claim is queued. Elena’s balance text is waiting in the outbox.
+            Paul Wallace is in room 2. The note is drafted. The claim is queued. Elena’s balance text is waiting in the outbox.
           </p>
           <Link
             href="/try/patients/pt-hale"
             prefetch={false}
             className="mt-8 inline-flex w-fit rounded-full bg-slash px-6 py-3 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
           >
-            Open Jordan Hale
+            Open Paul Wallace
           </Link>
         </div>
       </div>

@@ -37,7 +37,7 @@ export function HomeHero() {
               <div className="flex items-center gap-3">
                 <ZeroDevice />
                 <div>
-                  <p className="text-sm font-semibold text-ink">Jordan Hale</p>
+                  <p className="text-sm font-semibold text-ink">Paul Wallace</p>
                   <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-graphite">9:00 · room 2 · in progress</p>
                 </div>
               </div>

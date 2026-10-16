@@ -41,7 +41,7 @@ const columns: {
     title: "The morning",
     links: [
       { label: "Today", href: "/try" },
-      { label: "Open Jordan Hale", href: "/try/patients/pt-hale" },
+      { label: "Open Paul Wallace", href: "/try/patients/pt-hale" },
       { label: "The draft claim", href: "/try/claims/clm-hale" },
       { label: "The practice", href: "/try/practice" },
     ],

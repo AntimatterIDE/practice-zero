@@ -15,12 +15,12 @@ export function PatientProfile() {
     ["Preferred name", patient.preferredName || patient.firstName],
     ["Date of birth", patient.dateOfBirth],
     ["Phone", patient.phone],
-    ["Email", "jordan.hale@email.com"],
+    ["Email", "paul.wallace@email.com"],
     ["Record number", patient.mrn],
     ["Coverage", `${patient.payerName} · Active`],
     ["Member ID", "PNH-882014"],
     ["Preferred pharmacy", "Northline Rx"],
-    ["Emergency contact", "Alex Hale · (555) 014-2290"],
+    ["Emergency contact", "Alex Wallace · (555) 014-2290"],
   ];
 
   return (

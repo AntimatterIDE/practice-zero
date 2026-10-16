@@ -5,7 +5,7 @@ import { CategorySection } from "@/components/marketing/depth";
 
 const pages = [
   { title: "New patients", detail: "A first visit, and what to bring." },
-  { title: "Blood pressure", detail: "The reason Jordan came in." },
+  { title: "Blood pressure", detail: "The reason Paul came in." },
   { title: "Morning hours", detail: "When the practice is open." },
 ];
 

@@ -40,7 +40,7 @@ export default function EhrPage() {
       <AgreementsSection />
       <TasksSection />
       <RequestsSection />
-      <CategoryClose title="open the chart." body="Jordan Hale is in room 2. The note stays hidden until you ask to see it." />
+      <CategoryClose title="open the chart." body="Paul Wallace is in room 2. The note stays hidden until you ask to see it." />
       <Footer11 />
     </div>
   );

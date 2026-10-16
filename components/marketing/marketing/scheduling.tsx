@@ -5,7 +5,7 @@ import { CategorySection, Drift, TiltFrame } from "@/components/marketing/depth"
 
 const slots = [
   { time: "8:40", name: "Elena Voss", state: "Completed" },
-  { time: "9:00", name: "Jordan Hale", state: "In room 2" },
+  { time: "9:00", name: "Paul Wallace", state: "In room 2" },
   { time: "10:30", name: "Chris Adelman", state: "Unconfirmed" },
 ];
 

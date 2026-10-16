@@ -9,7 +9,7 @@ export function DemographicsSection() {
     <CategorySection
       eyebrow="Coverage from demographics"
       title="A name and a birthday are enough to start."
-      body="Jordan Hale. March 14, 1988. The member ID can come after. The match on this morning is still Pinetree Health."
+      body="Paul Wallace. March 14, 1988. The member ID can come after. The match on this morning is still Pinetree Health."
     >
       <div className="relative h-80">
         <motion.article
@@ -19,7 +19,7 @@ export function DemographicsSection() {
           className="absolute inset-x-0 top-0 rounded-3xl border border-line bg-white p-6 shadow-xl"
         >
           <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">What the practice already knows</p>
-          <p className="mt-4 font-display text-4xl text-ink">Jordan Hale</p>
+          <p className="mt-4 font-display text-4xl text-ink">Paul Wallace</p>
           <p className="mt-2 text-graphite">March 14, 1988</p>
         </motion.article>
         <motion.article

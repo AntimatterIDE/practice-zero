@@ -31,7 +31,7 @@ export default function PortalLoginPage() {
           sign in to your record.
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-graphite">
-          Demo credentials are prefilled. Continue to walk Jordan Hale’s patient experience.
+          Demo credentials are prefilled. Continue to walk Paul Wallace’s patient experience.
         </p>
 
         <form onSubmit={onSubmit} className="mt-8 space-y-4">
@@ -40,7 +40,7 @@ export default function PortalLoginPage() {
             <input
               name="email"
               type="email"
-              defaultValue="jordan.hale@email.com"
+              defaultValue="paul.wallace@email.com"
               className="w-full rounded-xl border border-line bg-paper px-3 py-2.5 text-sm text-ink outline-none focus:border-slash"
             />
           </label>

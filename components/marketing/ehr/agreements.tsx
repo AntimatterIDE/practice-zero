@@ -9,13 +9,13 @@ export function AgreementsSection() {
     <CategorySection
       eyebrow="Agreements"
       title="The consent is already signed."
-      body="Jordan signed the consent to evaluate and treat. Chris Adelman’s records release is the one still missing."
+      body="Paul signed the consent to evaluate and treat. Chris Adelman’s records release is the one still missing."
     >
       <TiltFrame className="relative">
         <Drift dx={8} dy={6}>
           <article className="rounded-3xl border border-line bg-paper p-6 shadow-2xl shadow-ink/10">
             <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Consent to evaluate and treat</p>
-            <p className="mt-4 font-display text-3xl text-ink">Jordan Hale</p>
+            <p className="mt-4 font-display text-3xl text-ink">Paul Wallace</p>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-graphite">
               Signed for the 9:00 visit with Dr. Shah. The chart can be opened.
             </p>

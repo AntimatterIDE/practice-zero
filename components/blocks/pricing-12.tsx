@@ -158,7 +158,7 @@ export default function Pricing12() {
 
 function PlatformPreview() {
   const rooms = [
-    { time: "9:00", name: "Jordan Hale", room: "Room 2", state: "In progress", live: true },
+    { time: "9:00", name: "Paul Wallace", room: "Room 2", state: "In progress", live: true },
     { time: "9:30", name: "Elena Ruiz", room: "Room 1", state: "Checked in", live: false },
     { time: "10:00", name: "Marcus Chen", room: "Room 3", state: "Confirmed", live: false },
   ];
@@ -240,7 +240,7 @@ function PlatformPreview() {
                   <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-paper/45">Claims queue</p>
                   <div className="mt-1.5 space-y-1">
                     {[
-                      ["Hale · 99203", "$185", "Queued"],
+                      ["Wallace · 99203", "$185", "Queued"],
                       ["Ruiz · 99213", "$92", "Paid"],
                       ["Chen · 99214", "$145", "Draft"],
                     ].map(([label, amount, status]) => (
@@ -268,7 +268,7 @@ function PlatformPreview() {
       <div className="absolute right-0 top-0 hidden w-[12.5rem] overflow-hidden rounded-xl border border-paper/15 bg-[#1c2027] p-2.5 shadow-2xl shadow-black/50 sm:block">
         <div className="flex items-center justify-between gap-2 border-b border-paper/10 pb-1.5">
           <div>
-            <p className="text-[11px] font-semibold text-paper">Jordan Hale</p>
+            <p className="text-[11px] font-semibold text-paper">Paul Wallace</p>
             <p className="font-mono text-[7px] uppercase tracking-[0.12em] text-paper/45">9:00 · room 2</p>
           </div>
           <span className="rounded-full bg-slash/25 px-2 py-0.5 font-mono text-[7px] uppercase tracking-[0.12em] text-foam">

@@ -18,7 +18,7 @@ export function PatientHome() {
   const { ready, patients, appointments, packets } = useRcm();
   const patient = patients.find((item) => item.id === "pt-hale");
   if (!ready || !patient) {
-    return <p className="text-sm text-graphite">Loading Jordan’s portal…</p>;
+    return <p className="text-sm text-graphite">Loading Paul’s portal…</p>;
   }
   const visits = appointments.filter((visit) => visit.patientId === patient.id).slice(0, 3);
   const toSign = packets.filter((packet) => packet.patientId === patient.id && packet.status === "open");

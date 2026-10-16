@@ -6,9 +6,9 @@ test("homepage sells the software and links into the demo", async ({ page }) => 
   });
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1, name: "less administration. more care." })).toBeVisible();
-  await page.getByRole("link", { name: "Open Jordan Hale" }).click();
+  await page.getByRole("link", { name: "Open Paul Wallace" }).click();
   await expect(page).toHaveURL(/\/try\/patients\/pt-hale/);
-  await expect(page.getByText("Jordan Hale").first()).toBeVisible();
+  await expect(page.getByText("Paul Wallace").first()).toBeVisible();
 });
 
 test("missing pages use the custom 404", async ({ page }) => {

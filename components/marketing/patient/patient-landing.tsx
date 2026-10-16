@@ -135,7 +135,7 @@ function PortalLoginCard() {
             <label className="block">
               <span className="mb-1.5 block text-xs font-medium text-graphite">Email</span>
               <div className="rounded-xl border border-line bg-mist px-3 py-2.5 text-sm text-ink">
-                jordan.hale@email.com
+                paul.wallace@email.com
               </div>
             </label>
             <label className="block">
@@ -175,7 +175,7 @@ function ProfileCard() {
           JH
         </span>
         <div>
-          <p className="text-base font-semibold text-ink">Jordan Hale</p>
+          <p className="text-base font-semibold text-ink">Paul Wallace</p>
           <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">
             MRN · 10482 · DOB 04/18/1989
           </p>

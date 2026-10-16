@@ -10,7 +10,7 @@ export function EligibilitySection() {
       flip
       eyebrow="Eligibility"
       title="Checked before the room."
-      body="At 8:10, Jordan Hale is active with Pinetree Health. Office copay $25. Deductible remaining $650. No prior authorization on this visit."
+      body="At 8:10, Paul Wallace is active with Pinetree Health. Office copay $25. Deductible remaining $650. No prior authorization on this visit."
     >
       <TiltFrame className="grid grid-cols-2 gap-4">
         <Drift dx={8} dy={10}>

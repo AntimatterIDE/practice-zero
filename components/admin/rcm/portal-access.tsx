@@ -10,7 +10,7 @@ export function PortalAccess({ patient }: { patient: Patient }) {
       <p className="mt-2 text-sm text-muted">The sample chart opens without a password.</p>
       {patient.id === "pt-hale" ? (
         <Link href="/portal" className="mt-4 inline-block text-sm underline">
-          Open Jordan Hale's portal
+          Open Paul Wallace's portal
         </Link>
       ) : (
         <p className="mt-4 text-sm text-muted">This demo opens the 9:00 patient's portal.</p>

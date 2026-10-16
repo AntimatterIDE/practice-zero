@@ -64,7 +64,7 @@ export function PatientPortalShell({ children }: { children: React.ReactNode }) 
           })}
         </nav>
         <div className="border-t border-line p-4">
-          <p className="text-[13px] font-medium text-ink">Jordan Hale</p>
+          <p className="text-[13px] font-medium text-ink">Paul Wallace</p>
           <p className="text-xs text-graphite">Sample patient · demo only</p>
         </div>
       </aside>

@@ -17,7 +17,7 @@ export function CoverageSection() {
       flip
       eyebrow="Find the coverage"
       title="Coverage, found for the 9:00 patient."
-      body="Jordan Hale’s benefits are already on the chart. Choice PPO, member PT-44021, active with Pinetree Health."
+      body="Paul Wallace’s benefits are already on the chart. Choice PPO, member PT-44021, active with Pinetree Health."
     >
       <div className="grid grid-cols-2 gap-3">
         {lines.map(([label, value], index) => (

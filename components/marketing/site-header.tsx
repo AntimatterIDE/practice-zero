@@ -700,7 +700,7 @@ function FeaturePreview({
             JH
           </span>
           <div>
-            <p className="text-xs font-medium">Jordan Hale</p>
+            <p className="text-xs font-medium">Paul Wallace</p>
             <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-paper/45">
               Patient
             </p>

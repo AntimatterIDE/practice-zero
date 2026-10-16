@@ -6,7 +6,7 @@ export function PatientsSection() {
   return (
     <CategorySection
       eyebrow="Patients"
-      title="Jordan Hale is already on the chart."
+      title="Paul Wallace is already on the chart."
       body="Demographics, coverage, and the problem list are in the room before anyone asks for them. MRN 100481. March 14, 1988."
     >
       <TiltFrame className="relative mx-auto h-[28rem] w-full max-w-md">
@@ -27,7 +27,7 @@ export function PatientsSection() {
         <Drift dx={4} dy={3} className="absolute inset-x-0 top-0">
           <article className="rounded-3xl border border-line bg-white p-6 shadow-2xl shadow-ink/10">
             <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Patient</p>
-            <h3 className="mt-3 font-display text-4xl text-ink">Jordan Hale</h3>
+            <h3 className="mt-3 font-display text-4xl text-ink">Paul Wallace</h3>
             <dl className="mt-6 grid grid-cols-2 gap-4 text-sm">
               <div>
                 <dt className="text-graphite/70">MRN</dt>

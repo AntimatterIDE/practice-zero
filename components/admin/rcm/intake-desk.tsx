@@ -15,7 +15,7 @@ export function IntakeDesk() {
       <PageHeader
         kicker="Clinic"
         title="Intake"
-        lede="Jordan Hale already answered the form. The answers stay on the chart."
+        lede="Paul Wallace already answered the form. The answers stay on the chart."
       />
       {hale ? (
         <section className="mt-8 max-w-2xl rounded-2xl border border-line bg-card p-5">

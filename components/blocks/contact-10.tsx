@@ -15,7 +15,7 @@ const benefits = [
   },
   {
     title: "Live product time",
-    description: "Open Jordan Hale, the draft claim, and the outbox with someone who knows the product.",
+    description: "Open Paul Wallace, the draft claim, and the outbox with someone who knows the product.",
   },
   {
     title: "A clear next step",
@@ -151,7 +151,7 @@ export default function Contact10() {
                   name="firstName"
                   type="text"
                   autoComplete="given-name"
-                  placeholder="Jordan"
+                  placeholder="Paul"
                   required
                   className={fieldClass}
                 />
@@ -165,7 +165,7 @@ export default function Contact10() {
                   name="lastName"
                   type="text"
                   autoComplete="family-name"
-                  placeholder="Hale"
+                  placeholder="Wallace"
                   required
                   className={fieldClass}
                 />
