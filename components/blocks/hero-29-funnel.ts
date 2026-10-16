@@ -1171,7 +1171,8 @@ export function createFunnel(
   };
 
   const onDown = (event: PointerEvent) => {
-    if (event.button !== 0 || (event.target as Element | null)?.closest?.("a,button")) return;
+    if (event.button !== 0 || (event.target as Element | null)?.closest?.("a,button,[data-funnel-step]"))
+      return;
     swell();
   };
 

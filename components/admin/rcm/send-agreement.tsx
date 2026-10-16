@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { formatWhen } from "@/lib/rcm/format";
+import { PacketStatus } from "@/components/admin/agreements-desk";
 import { useRcm } from "@/components/admin/rcm/store";
 
 export function SendAgreement({ patientId, name, email }: { patientId: string; name: string; email: string }) {
@@ -36,14 +37,26 @@ export function SendAgreement({ patientId, name, email }: { patientId: string; n
         Send
       </Button>
       <ul className="mt-4 divide-y divide-line border-y border-line text-sm">
-        {mine.length === 0 ? <li className="py-3 text-muted">Nothing is on this chart.</li> : null}
+        {mine.length === 0 ? <li className="py-3 text-muted">Nothing is on this chart yet. Send one above.</li> : null}
         {mine.map((packet) => (
-          <li key={packet.id} className="py-3">
-            <span className="font-medium">{packet.title}</span>
-            <span className="mt-0.5 block text-muted">
-              {packet.status === "signed" ? `Signed ${packet.signedAt ? formatWhen(packet.signedAt) : ""}` : "Waiting for a signature"}
-              {packet.signerName ? ` · ${packet.signerName}` : ""}
-            </span>
+          <li key={packet.id}>
+            <Link
+              href={`/try/agreements/${packet.id}`}
+              className="group flex items-center justify-between gap-3 py-3"
+            >
+              <span className="min-w-0">
+                <span className="block font-medium group-hover:text-oxide-deep group-hover:underline">{packet.title}</span>
+                <span className="mt-0.5 block text-muted">
+                  {packet.status === "signed"
+                    ? `Signed${packet.signedAt ? ` ${formatWhen(packet.signedAt)}` : ""}`
+                    : packet.status === "open"
+                      ? "Waiting for a signature"
+                      : "Void"}
+                  {packet.signerName ? ` · ${packet.signerName}` : ""}
+                </span>
+              </span>
+              <PacketStatus status={packet.status} />
+            </Link>
           </li>
         ))}
       </ul>

@@ -93,19 +93,22 @@ html[data-pz-intro="pending"] {
   }
 
   /* Soft-hide desktop step chrome until the funnel is painted — no layout shift.
-     Also kill pointer events while hidden so invisible absolute buttons cannot steal nav clicks. */
+     Keep buttons inert while hidden so they cannot steal nav clicks. */
   #pz-home-hero:not([data-funnel-ready]) #pz-hero-steps {
     opacity: 0;
-    pointer-events: none !important;
   }
 
-  #pz-home-hero:not([data-funnel-ready]) #pz-hero-steps button {
+  #pz-home-hero:not([data-funnel-ready]) #pz-hero-steps [data-funnel-step] {
     pointer-events: none !important;
   }
 
   #pz-home-hero[data-funnel-ready] #pz-hero-steps {
     opacity: 1;
     transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  #pz-home-hero[data-funnel-ready] #pz-hero-steps [data-funnel-step] {
+    pointer-events: auto !important;
   }
 }
 

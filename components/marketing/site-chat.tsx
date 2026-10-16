@@ -16,10 +16,45 @@ const STARTERS = [
   "What can agents handle?",
 ];
 
-/** Fixed popup size — never tied to visualViewport / keyboard. */
 const PANEL =
   "pointer-events-auto flex w-[min(24rem,calc(100vw-1.75rem))] flex-col overflow-hidden rounded-3xl border border-line bg-paper shadow-[0_28px_80px_-32px_rgba(17,20,24,0.55)]";
-const PANEL_HEIGHT = "h-[min(28rem,calc(100svh-7.5rem))]";
+
+/**
+ * Keep the popup docked to the visible viewport when the mobile keyboard opens.
+ * Never call scrollIntoView on document — only scroll the messages pane.
+ */
+function useChatViewport() {
+  const [inset, setInset] = useState({ bottom: 20, maxHeight: 448 });
+
+  useEffect(() => {
+    const sync = () => {
+      const vv = window.visualViewport;
+      const layoutH = window.innerHeight;
+      if (!vv) {
+        setInset({ bottom: 20, maxHeight: Math.min(448, layoutH - 120) });
+        return;
+      }
+      // Distance from layout bottom to the visible viewport bottom (= keyboard + browser chrome).
+      const obscured = Math.max(0, layoutH - vv.height - vv.offsetTop);
+      const bottom = Math.max(16, obscured + 16);
+      const maxHeight = Math.max(240, Math.min(448, vv.height - 88));
+      setInset({ bottom, maxHeight });
+    };
+
+    sync();
+    const vv = window.visualViewport;
+    vv?.addEventListener("resize", sync);
+    vv?.addEventListener("scroll", sync);
+    window.addEventListener("resize", sync);
+    return () => {
+      vv?.removeEventListener("resize", sync);
+      vv?.removeEventListener("scroll", sync);
+      window.removeEventListener("resize", sync);
+    };
+  }, []);
+
+  return inset;
+}
 
 export function SiteChat() {
   const pathname = usePathname();
@@ -33,8 +68,9 @@ export function SiteChat() {
         "Hi — ask anything about Practice Zero: agentic EHR, room hardware, billing, pricing, or the demo.",
     },
   ]);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const viewport = useChatViewport();
 
   const hidden =
     pathname.startsWith("/admin") ||
@@ -44,7 +80,9 @@ export function SiteChat() {
 
   useEffect(() => {
     if (!open) return;
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
   }, [open, messages, busy]);
 
   if (hidden) return null;
@@ -90,13 +128,17 @@ export function SiteChat() {
   }
 
   return (
-    <div className="pointer-events-none fixed bottom-5 right-5 z-[60] flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
+    <div
+      className="pointer-events-none fixed right-4 z-[60] flex flex-col items-end gap-3 sm:right-6"
+      style={{ bottom: viewport.bottom }}
+    >
       {open ? (
         <div
           role="dialog"
           aria-modal="true"
           aria-label="Practice Zero product guide"
-          className={cn(PANEL, PANEL_HEIGHT)}
+          className={cn(PANEL)}
+          style={{ height: viewport.maxHeight, maxHeight: viewport.maxHeight }}
         >
           <header className="flex shrink-0 items-center justify-between gap-3 border-b border-line bg-ink px-4 py-3 text-paper">
             <div className="min-w-0">
@@ -113,7 +155,10 @@ export function SiteChat() {
             </button>
           </header>
 
-          <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4">
+          <div
+            ref={scrollerRef}
+            className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4"
+          >
             {messages.map((msg, i) =>
               msg.role === "user" ? (
                 <div
@@ -131,7 +176,6 @@ export function SiteChat() {
                 Thinking…
               </div>
             ) : null}
-            <div ref={bottomRef} />
           </div>
 
           {messages.length <= 2 ? (
@@ -164,7 +208,7 @@ export function SiteChat() {
               placeholder="Ask about Practice Zero…"
               disabled={busy}
               enterKeyHint="send"
-              // 16px prevents iOS focus-zoom, which feels like the popup expanding
+              // 16px prevents iOS focus-zoom
               className="h-11 min-w-0 flex-1 rounded-full border border-line bg-paper px-4 text-base text-ink placeholder:text-graphite/70 focus:border-slash focus:outline-none focus:ring-2 focus:ring-slash/25 disabled:opacity-60 sm:text-sm"
             />
             <button

@@ -28,7 +28,7 @@ describe("practice desk fixture", () => {
     expect(state.patients.map((patient) => patient.id)).toEqual(["pt-hale", "pt-voss", "pt-adelman"]);
     expect(state.appointments).toHaveLength(3);
     expect(state.tasks.filter((task) => task.status === "open")).toHaveLength(2);
-    expect(state.packets.filter((packet) => packet.status === "open")).toHaveLength(1);
+    expect(state.packets.filter((packet) => packet.status === "open")).toHaveLength(4);
     expect(state.claims.find((claim) => claim.id === "clm-hale")?.status).toBe("draft");
     expect(state.claims.find((claim) => claim.id === "clm-voss-denial")?.status).toBe("denied");
     expect(state.claims.find((claim) => claim.id === "clm-voss-paid")?.status).toBe("paid");

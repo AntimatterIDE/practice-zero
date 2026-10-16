@@ -3,17 +3,7 @@ import { ArrowRight, BarChart3, Clock3, ShieldCheck } from "lucide-react";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { HeroFunnelMount } from "@/components/blocks/hero-funnel-mount";
 import { ComplianceBadges } from "@/components/marketing/compliance-badges";
-
-const STEPS = [
-  { name: "Visits completed", count: 1284 },
-  { name: "Charts closed", count: 1102, share: "85.8", left: 182 },
-  { name: "Claims submitted", count: 986, share: "89.5", left: 116 },
-  { name: "Payments posted", count: 841, share: "85.3", left: 145 },
-] as const;
-
-function formatCount(value: number) {
-  return value.toLocaleString("en-US");
-}
+import { HeroSteps } from "@/components/marketing/hero-steps";
 
 export function HomeTop() {
   return (
@@ -21,17 +11,14 @@ export function HomeTop() {
       id="pz-home-hero"
       className="relative isolate flex min-h-screen w-full flex-col overflow-x-clip bg-paper px-4 pb-10 pt-6 text-ink sm:px-6 lg:px-8 lg:pb-12"
     >
-      {/*
-        Header sits outside overflow clipping so mega-menus are not cut off.
-        z-50 keeps it above the absolute step overlay.
-      */}
       <div className="relative z-50 mx-auto w-full max-w-[1400px]">
         <SiteHeader />
       </div>
 
       {/*
-        pointer-events-none on the content shell so empty space over the WebGL funnel
-        still receives hover/click on #pz-home-hero. Interactive children re-enable hits.
+        Copy / CTAs sit in a pointer-events-none shell so the WebGL funnel can
+        still receive hover on empty space. Interactive children opt back in —
+        and stay narrowly sized so they never cover the step labels on the right.
       */}
       <div
         id="pz-hero-content"
@@ -47,8 +34,8 @@ export function HomeTop() {
           </p>
         </div>
 
-        <div className="pointer-events-auto mt-8 flex flex-col gap-6 lg:mt-auto">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+        <div className="mt-8 flex flex-col gap-6 lg:mt-auto">
+          <div className="pointer-events-auto flex w-fit max-w-full flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
             <Link
               href="/try"
               prefetch={false}
@@ -65,7 +52,7 @@ export function HomeTop() {
               <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </Link>
           </div>
-          <div className="flex flex-wrap gap-x-8 gap-y-3 text-sm text-graphite">
+          <div className="pointer-events-auto flex w-fit max-w-xl flex-wrap gap-x-8 gap-y-3 text-sm text-graphite">
             <span className="inline-flex items-center gap-2">
               <Clock3 className="h-4 w-4 text-slash" aria-hidden="true" />
               Saves hours every day
@@ -79,60 +66,17 @@ export function HomeTop() {
               Writes stay in this browser
             </span>
           </div>
-          <ComplianceBadges className="mt-1 max-w-xl opacity-90" />
+          <ComplianceBadges className="pointer-events-auto mt-1 max-w-xl opacity-90" />
         </div>
 
-        {/* Reserved mobile funnel band — height is stable; canvas fades in when WebGL is ready. */}
         <div id="pz-hero-band" aria-hidden="true" className="pz-hero-band shrink-0 lg:hidden" />
-
-        <ol
-          id="pz-hero-steps"
-          aria-label="Revenue cycle steps"
-          className="pointer-events-none mt-7 flex flex-col gap-1 lg:absolute lg:inset-0 lg:m-0 lg:pt-28"
-        >
-          {STEPS.map((step, index) => {
-            const selected = index === 1;
-            return (
-              <li key={step.name} className="contents">
-                <button
-                  type="button"
-                  data-funnel-step={index}
-                  aria-pressed={selected}
-                  className="group flex w-full cursor-pointer items-center rounded-md py-1.5 text-left outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current lg:absolute lg:w-auto lg:-translate-y-1/2 lg:py-1 lg:pointer-events-auto"
-                >
-                  <span
-                    aria-hidden="true"
-                    className={`mr-4 hidden h-px flex-1 transition-colors duration-500 lg:block ${
-                      selected ? "bg-slash" : "bg-ink/15"
-                    }`}
-                  />
-                  <span className="flex w-full flex-col lg:w-56 lg:shrink-0">
-                    <span
-                      className={`flex items-baseline justify-between gap-4 text-sm font-medium ${
-                        selected ? "text-ink" : "text-graphite"
-                      }`}
-                    >
-                      {step.name}
-                      <span className="tabular-nums">{formatCount(step.count)}</span>
-                    </span>
-                    <span
-                      className={`mt-0.5 whitespace-nowrap text-xs tabular-nums ${
-                        selected && index > 0 ? "text-slash" : "text-graphite"
-                      }`}
-                    >
-                      {index === 0
-                        ? "This week, updating live"
-                        : `${"share" in step ? step.share : ""}% continued · ${formatCount(
-                            "left" in step ? step.left : 0,
-                          )} still open`}
-                    </span>
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ol>
       </div>
+
+      {/*
+        Steps are a direct child of #pz-home-hero so funnel JS coordinates
+        (section-relative) match the absolute containing block.
+      */}
+      <HeroSteps />
 
       <HeroFunnelMount />
     </section>

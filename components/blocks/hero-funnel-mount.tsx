@@ -66,7 +66,7 @@ export function HeroFunnelMount() {
     const start = () => {
       if (cancelled || started) return;
       started = true;
-      detach();
+      detachWarm();
 
       const quality =
         window.matchMedia("(max-width: 1023px)").matches ||
@@ -77,9 +77,16 @@ export function HeroFunnelMount() {
       void import("@/components/blocks/hero-29-funnel").then(({ createFunnel }) => {
         if (cancelled) return;
         const rows = Array.from(
-          section.querySelectorAll<HTMLButtonElement>("[data-funnel-step]"),
+          section.querySelectorAll<HTMLElement>("[data-funnel-step]"),
         );
-        funnel = createFunnel(section, band, copy, content, rows, () => {}, quality);
+        const onFocus = (index: number) => {
+          try {
+            window.dispatchEvent(new CustomEvent("pz-funnel-focus", { detail: index }));
+          } catch {
+            /* ignore */
+          }
+        };
+        funnel = createFunnel(section, band, copy, content, rows, onFocus, quality);
         if (funnel) {
           markFunnelReady(section);
           funnel.focus(1);
@@ -89,7 +96,13 @@ export function HeroFunnelMount() {
       });
     };
 
-    const detach = () => {
+    const onSelect = (event: Event) => {
+      const index = (event as CustomEvent<number>).detail;
+      if (typeof index === "number") funnel?.focus(index);
+    };
+    window.addEventListener("pz-funnel-select", onSelect);
+
+    const detachWarm = () => {
       window.removeEventListener("pointerdown", start);
       window.removeEventListener("keydown", start);
       window.removeEventListener("touchstart", start);
@@ -109,7 +122,8 @@ export function HeroFunnelMount() {
 
     return () => {
       cancelled = true;
-      detach();
+      detachWarm();
+      window.removeEventListener("pz-funnel-select", onSelect);
       funnel?.destroy();
       funnel = null;
       delete section.dataset.funnelReady;
