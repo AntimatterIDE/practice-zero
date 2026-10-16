@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 const queue = [
   { id: "hale", label: "Paul Wallace · room 2", detail: "Scribe listening" },
   { id: "claim", label: "Claim · $185", detail: "Queued for payer" },
-  { id: "elena", label: "Elena · balance text", detail: "Waiting in outbox" },
+  { id: "elena", label: "Anas · balance text", detail: "Waiting in outbox" },
   { id: "elig", label: "Eligibility · Pinetree", detail: "Active · confirmed" },
   { id: "sched", label: "Unconfirmed mornings", detail: "3 still open" },
 ];
@@ -122,7 +122,7 @@ export function HomeMetrics() {
             from the first patient to the claim.
           </h2>
           <p className="mt-5 max-w-md text-lg text-graphite">
-            Paul Wallace is in room 2. The note is drafted. The claim is queued. Elena’s balance text is waiting in the outbox.
+            Paul Wallace is in room 2. The note is drafted. The claim is queued. Anas’s balance text is waiting in the outbox.
           </p>
           <Link
             href="/try/patients/pt-hale"

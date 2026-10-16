@@ -27,14 +27,14 @@ describe("starter agreements", () => {
 describe("chart agreement matching", () => {
   const packet = {
     recipientEmail: "signer@example.com",
-    recipientName: "Elena Voss",
+    recipientName: "Anas Khan",
   };
 
   it("keeps a signed copy on the chart when the name matches and the email does not", () => {
     expect(
       unassignedReason(packet, {
         email: "chart@example.com",
-        name: "Elena Voss",
+        name: "Anas Khan",
       }),
     ).toBe("name");
   });

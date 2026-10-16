@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { CategorySection } from "@/components/marketing/depth";
 
 const steps = [
-  { when: "June 3", label: "Visit", detail: "Elena Voss, established visit" },
+  { when: "June 3", label: "Visit", detail: "Anas Khan, established visit" },
   { when: "June 20", label: "Paid", detail: "$140 from Pinetree Health" },
   { when: "October 14", label: "Next touch", detail: "Balance text, still in the outbox" },
 ];

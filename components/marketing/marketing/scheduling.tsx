@@ -4,9 +4,9 @@ import { motion, useReducedMotion } from "motion/react";
 import { CategorySection, Drift, TiltFrame } from "@/components/marketing/depth";
 
 const slots = [
-  { time: "8:40", name: "Elena Voss", state: "Completed" },
+  { time: "8:40", name: "Anas Khan", state: "Completed" },
   { time: "9:00", name: "Paul Wallace", state: "In room 2" },
-  { time: "10:30", name: "Chris Adelman", state: "Unconfirmed" },
+  { time: "10:30", name: "Garrett Holliday", state: "Unconfirmed" },
 ];
 
 export function SchedulingSection() {
@@ -15,7 +15,7 @@ export function SchedulingSection() {
     <CategorySection
       eyebrow="Scheduling"
       title="10:30 is still unconfirmed."
-      body="The board already holds the morning. Chris Adelman has a follow-up at 10:30, and nobody has confirmed it yet."
+      body="The board already holds the morning. Garrett Holliday has a follow-up at 10:30, and nobody has confirmed it yet."
     >
       <TiltFrame className="relative pl-8">
         <div className="absolute bottom-2 left-3 top-2 w-px bg-neutral-200" />

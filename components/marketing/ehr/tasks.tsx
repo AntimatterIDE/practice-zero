@@ -4,8 +4,8 @@ import { motion, useReducedMotion } from "motion/react";
 import { CategorySection } from "@/components/marketing/depth";
 
 const tasks = [
-  { title: "Records release is unsigned", detail: "Chris Adelman still needs to sign before 10:30.", from: -28 },
-  { title: "Denial follow-up", detail: "Elena Voss has an August claim denied for medical necessity.", from: 28 },
+  { title: "Records release is unsigned", detail: "Garrett Holliday still needs to sign before 10:30.", from: -28 },
+  { title: "Denial follow-up", detail: "Anas Khan has an August claim denied for medical necessity.", from: 28 },
 ];
 
 export function TasksSection() {
@@ -15,7 +15,7 @@ export function TasksSection() {
       flip
       eyebrow="Tasks"
       title="Two things are still open."
-      body="The morning has a records release waiting on Chris, and a denial follow-up waiting on Elena. Both are due today."
+      body="The morning has a records release waiting on Garrett, and a denial follow-up waiting on Anas. Both are due today."
     >
       <div className="grid gap-4">
         {tasks.map((task, index) => (

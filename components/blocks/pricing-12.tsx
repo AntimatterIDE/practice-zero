@@ -159,7 +159,7 @@ export default function Pricing12() {
 function PlatformPreview() {
   const rooms = [
     { time: "9:00", name: "Paul Wallace", room: "Room 2", state: "In progress", live: true },
-    { time: "9:30", name: "Elena Ruiz", room: "Room 1", state: "Checked in", live: false },
+    { time: "9:30", name: "Anas Khan", room: "Room 1", state: "Checked in", live: false },
     { time: "10:00", name: "Marcus Chen", room: "Room 3", state: "Confirmed", live: false },
   ];
 
@@ -241,7 +241,7 @@ function PlatformPreview() {
                   <div className="mt-1.5 space-y-1">
                     {[
                       ["Wallace · 99203", "$185", "Queued"],
-                      ["Ruiz · 99213", "$92", "Paid"],
+                      ["Khan · 99213", "$92", "Paid"],
                       ["Chen · 99214", "$145", "Draft"],
                     ].map(([label, amount, status]) => (
                       <div key={label} className="flex items-center justify-between text-[9px]">
@@ -255,7 +255,7 @@ function PlatformPreview() {
                 </div>
                 <div className="rounded-lg border border-paper/8 bg-paper/[0.04] p-2.5">
                   <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-paper/45">Outbox</p>
-                  <p className="mt-1.5 text-[10px] text-paper/80">Elena · balance text</p>
+                  <p className="mt-1.5 text-[10px] text-paper/80">Anas · balance text</p>
                   <p className="mt-0.5 text-[9px] text-paper/45">Waiting · $40 remaining</p>
                 </div>
               </div>

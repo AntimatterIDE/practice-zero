@@ -9,7 +9,7 @@ export function OutreachSection() {
     <CategorySection
       eyebrow="Outreach"
       title="The text is written. It has not been sent."
-      body="Elena Voss has a balance from the June visit. The message is sitting in the outbox, in this browser, waiting."
+      body="Anas Khan has a balance from the June visit. The message is sitting in the outbox, in this browser, waiting."
     >
       <TiltFrame className="relative mx-auto h-80 w-full max-w-sm">
         <Drift dx={10} dy={8} className="absolute inset-x-8 top-0">
@@ -23,7 +23,7 @@ export function OutreachSection() {
                 transition={{ duration: 0.6 }}
                 className="mt-auto rounded-2xl rounded-bl-md bg-white px-3 py-3 text-sm leading-relaxed text-ink"
               >
-                Elena, a balance from the June visit is waiting. Reply if you want a statement.
+                Anas, a balance from the June visit is waiting. Reply if you want a statement.
               </motion.div>
               <p className="mt-3 text-center text-[11px] text-graphite">Nothing has been sent</p>
             </div>

@@ -36,7 +36,7 @@ export default function MarketingPage() {
       <SchedulingSection />
       <SeoSection />
       <SocialSection />
-      <CategoryClose title="open the morning." body="Chris Adelman is still unconfirmed at 10:30. Elena’s balance text is still in the outbox." />
+      <CategoryClose title="open the morning." body="Garrett Holliday is still unconfirmed at 10:30. Anas’s balance text is still in the outbox." />
       <Footer11 />
     </div>
   );

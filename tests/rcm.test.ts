@@ -7,17 +7,17 @@ import { nextLocalClaimStatus } from "@/lib/rcm/submit-input";
 describe("practice desk fixture", () => {
   it("parses a patient and claim csv", () => {
     const parsed = parsePracticeCsv(
-      ["first,last,dob,payer,member,dos,cpt,description,charge,icd", "Elena,Voss,1984-04-12,Aetna,AET1,2026-09-28,99214,Office visit,210,M54.5"].join(
+      ["first,last,dob,payer,member,dos,cpt,description,charge,icd", "Anas,Khan,1984-04-12,Aetna,AET1,2026-09-28,99214,Office visit,210,M54.5"].join(
         "\n",
       ),
     );
     expect(parsed.ok).toBe(true);
     if (!parsed.ok) return;
-    expect(parsed.rows[0]).toMatchObject({ firstName: "Elena", charge: 210, cpt: "99214" });
+    expect(parsed.rows[0]).toMatchObject({ firstName: "Anas", charge: 210, cpt: "99214" });
   });
 
   it("rejects a csv without the expected columns", () => {
-    const parsed = parsePracticeCsv("name,charge\nElena,10");
+    const parsed = parsePracticeCsv("name,charge\nAnas,10");
     expect(parsed.ok).toBe(false);
   });
 
@@ -25,8 +25,14 @@ describe("practice desk fixture", () => {
     const state = createSeedState();
     expect(state.practice.legalName).toBe("Northline Medical");
     expect(state.practice.physicianName).toBe("Elvis Francois, MD");
-    expect(state.patients.map((patient) => patient.id)).toEqual(["pt-hale", "pt-voss", "pt-adelman"]);
-    expect(state.appointments).toHaveLength(3);
+    expect(state.patients.map((patient) => patient.id)).toEqual([
+      "pt-hale",
+      "pt-voss",
+      "pt-adelman",
+      "pt-gulri",
+      "pt-charania",
+    ]);
+    expect(state.appointments).toHaveLength(5);
     expect(state.tasks.filter((task) => task.status === "open")).toHaveLength(2);
     expect(state.packets.filter((packet) => packet.status === "open")).toHaveLength(4);
     expect(state.claims.find((claim) => claim.id === "clm-hale")?.status).toBe("draft");

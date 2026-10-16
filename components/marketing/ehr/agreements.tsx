@@ -9,7 +9,7 @@ export function AgreementsSection() {
     <CategorySection
       eyebrow="Agreements"
       title="The consent is already signed."
-      body="Paul signed the consent to evaluate and treat. Chris Adelman’s records release is the one still missing."
+      body="Paul signed the consent to evaluate and treat. Garrett Holliday’s records release is the one still missing."
     >
       <TiltFrame className="relative">
         <Drift dx={8} dy={6}>
