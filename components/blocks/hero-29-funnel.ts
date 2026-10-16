@@ -1006,7 +1006,7 @@ export function createFunnel(
     hover.height += hover.velocity * dt;
     hover.amount += (goal - hover.amount) * (1 - Math.exp(-dt / 0.5));
     const ease = reduced ? 1 : 1 - Math.exp(-dt / 0.28);
-    focusAmount.x *= 1 - ease;
+    focusAmount.x += ((focused === 0 ? 1 : 0) - focusAmount.x) * ease;
     focusAmount.y += ((focused === 1 ? 1 : 0) - focusAmount.y) * ease;
     focusAmount.z += ((focused === 2 ? 1 : 0) - focusAmount.z) * ease;
     focusAmount.w += ((focused === 3 ? 1 : 0) - focusAmount.w) * ease;
@@ -1023,6 +1023,7 @@ export function createFunnel(
   const disturbed = () => hover.amount > 1e-3 || swells.some((item) => item.z > 0 && waveClock - item.y < 7);
 
   const settled = () =>
+    Math.abs(focusAmount.x - (focused === 0 ? 1 : 0)) < 0.002 &&
     Math.abs(focusAmount.y - (focused === 1 ? 1 : 0)) < 0.002 &&
     Math.abs(focusAmount.z - (focused === 2 ? 1 : 0)) < 0.002 &&
     Math.abs(focusAmount.w - (focused === 3 ? 1 : 0)) < 0.002;

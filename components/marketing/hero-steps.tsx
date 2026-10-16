@@ -76,7 +76,7 @@ export function HeroSteps() {
                 </span>
                 <span
                   className={`mt-0.5 whitespace-nowrap text-xs tabular-nums ${
-                    active && index > 0 ? "text-slash" : "text-graphite"
+                    active ? "text-slash" : "text-graphite"
                   }`}
                 >
                   {index === 0
