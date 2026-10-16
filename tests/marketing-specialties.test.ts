@@ -10,11 +10,16 @@ describe("specialty landers", () => {
     );
   });
 
-  it("resolves each specialty", () => {
+  it("resolves each specialty with full lander content", () => {
     for (const specialty of specialties) {
       expect(getSpecialty(specialty.slug)?.label).toBe(specialty.label);
-      expect(specialty.zeroOut.length).toBe(3);
-      expect(specialty.faq.length).toBe(3);
+      expect(specialty.support.length).toBeGreaterThan(120);
+      expect(specialty.reality.title.length).toBeGreaterThan(10);
+      expect(specialty.reality.body.length).toBeGreaterThan(120);
+      expect(specialty.howWeHelp.length).toBeGreaterThanOrEqual(4);
+      expect(specialty.board.length).toBe(4);
+      expect(specialty.zeroOut.length).toBeGreaterThanOrEqual(4);
+      expect(specialty.faq.length).toBeGreaterThanOrEqual(4);
     }
   });
 });

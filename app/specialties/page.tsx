@@ -31,7 +31,8 @@ export default function SpecialtiesIndexPage() {
           built for independent practices — framed for your specialty.
         </h1>
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-graphite sm:text-lg">
-          Same agentic EHR. Specialty-specific mornings. Pick your lane to see what goes to zero.
+          Same agentic EHR. Specialty-specific mornings — how the day actually breaks, how
+          practice zero maps to it, and what goes to zero on the board.
         </p>
         <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {specialties.map((specialty) => (
@@ -44,8 +45,12 @@ export default function SpecialtiesIndexPage() {
                   {specialty.kicker}
                 </p>
                 <p className="mt-3 text-lg font-medium text-ink">{specialty.label}</p>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-graphite">
-                  {specialty.searchDescription}
+                <p className="mt-2 text-base font-medium lowercase leading-snug text-ink">
+                  {specialty.headline}
+                </p>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-graphite">
+                  {specialty.support.slice(0, 160).trim()}
+                  {specialty.support.length > 160 ? "…" : ""}
                 </p>
                 <span className="mt-6 inline-flex items-center gap-1 text-sm text-slash">
                   Open page

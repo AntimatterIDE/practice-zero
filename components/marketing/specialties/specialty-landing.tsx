@@ -81,17 +81,58 @@ export function SpecialtyLanding({ specialty }: { specialty: SpecialtyContent })
       <section className="border-y border-line bg-mist/40">
         <div className="mx-auto w-full max-w-[1400px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <FadeIn>
-            <p className="kicker">What goes to zero</p>
-            <h2 className="mt-4 max-w-2xl font-sans text-3xl font-semibold lowercase tracking-[-0.03em] text-ink sm:text-4xl">
-              the work that should not own the day.
+            <p className="kicker">The specialty</p>
+            <h2 className="mt-4 max-w-3xl font-sans text-3xl font-semibold lowercase tracking-[-0.03em] text-ink sm:text-4xl">
+              {specialty.reality.title}
             </h2>
+            <p className="mt-6 max-w-3xl text-base leading-relaxed text-graphite sm:text-lg">
+              {specialty.reality.body}
+            </p>
           </FadeIn>
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
-            {specialty.zeroOut.map((item, index) => (
+        </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-[1400px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+        <FadeIn>
+          <p className="kicker">How practice zero helps</p>
+          <h2 className="mt-4 max-w-2xl font-sans text-3xl font-semibold lowercase tracking-[-0.03em] text-ink sm:text-4xl">
+            mapped to how {specialty.label.toLowerCase()} actually runs.
+          </h2>
+        </FadeIn>
+        <ol className="mt-12 grid gap-10 md:grid-cols-2">
+          {specialty.howWeHelp.map((item, index) => (
+            <FadeIn key={item.title} delay={0.04 * index}>
+              <p className="font-mono text-xs uppercase tracking-[0.16em] text-slash">
+                {String(index + 1).padStart(2, "0")}
+              </p>
+              <h3 className="mt-3 text-lg font-medium lowercase text-ink">{item.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-graphite sm:text-base">
+                {item.body}
+              </p>
+            </FadeIn>
+          ))}
+        </ol>
+      </section>
+
+      <section className="border-y border-line bg-ink text-paper">
+        <div className="mx-auto w-full max-w-[1400px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+          <FadeIn>
+            <p className="font-mono text-xs uppercase tracking-[0.16em] text-slash">
+              Morning board
+            </p>
+            <h2 className="mt-4 max-w-2xl font-sans text-3xl font-semibold lowercase tracking-[-0.03em] sm:text-4xl">
+              what your team opens before first light.
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-paper/65 sm:text-base">
+              chart, eligibility, claims, and outreach on one surface — framed for{" "}
+              {specialty.label.toLowerCase()}, not a generic hospital EHR.
+            </p>
+          </FadeIn>
+          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {specialty.board.map((item, index) => (
               <FadeIn key={item.title} delay={0.05 * index}>
-                <p className="font-mono text-xs uppercase tracking-[0.16em] text-slash">ø</p>
-                <h3 className="mt-3 text-lg font-medium lowercase text-ink">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-graphite">{item.body}</p>
+                <h3 className="text-base font-medium lowercase text-paper">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-paper/65">{item.body}</p>
               </FadeIn>
             ))}
           </div>
@@ -100,31 +141,55 @@ export function SpecialtyLanding({ specialty }: { specialty: SpecialtyContent })
 
       <section className="mx-auto w-full max-w-[1400px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
         <FadeIn>
-          <p className="kicker">Platform</p>
+          <p className="kicker">What goes to zero</p>
           <h2 className="mt-4 max-w-2xl font-sans text-3xl font-semibold lowercase tracking-[-0.03em] text-ink sm:text-4xl">
-            every workflow. one morning.
+            the work that should not own the day.
           </h2>
         </FadeIn>
-        <div className="mt-12 grid gap-6 sm:grid-cols-3">
-          {pillars.map((pillar, index) => (
-            <FadeIn key={pillar.href} delay={0.05 * index}>
-              <Link
-                href={pillar.href}
-                className="group block rounded-2xl border border-line bg-card p-6 transition-colors hover:border-slash/40"
-              >
-                <p className="text-sm font-medium text-ink">{pillar.label}</p>
-                <p className="mt-2 text-sm text-graphite">{pillar.body}</p>
-                <span className="mt-4 inline-flex items-center gap-1 text-sm text-slash">
-                  Learn more
-                  <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </Link>
+        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {specialty.zeroOut.map((item, index) => (
+            <FadeIn key={item.title} delay={0.05 * index}>
+              <p className="font-mono text-xs uppercase tracking-[0.16em] text-slash">ø</p>
+              <h3 className="mt-3 text-lg font-medium lowercase text-ink">{item.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-graphite">{item.body}</p>
             </FadeIn>
           ))}
         </div>
       </section>
 
-      <section className="border-t border-line bg-ink text-paper">
+      <section className="border-y border-line bg-mist/40">
+        <div className="mx-auto w-full max-w-[1400px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+          <FadeIn>
+            <p className="kicker">Platform</p>
+            <h2 className="mt-4 max-w-2xl font-sans text-3xl font-semibold lowercase tracking-[-0.03em] text-ink sm:text-4xl">
+              every workflow. one morning.
+            </h2>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-graphite sm:text-base">
+              same practice zero platform for every specialty — clinical, revenue, and
+              operations under a one-year billing agreement with no extra license fee.
+            </p>
+          </FadeIn>
+          <div className="mt-12 grid gap-6 sm:grid-cols-3">
+            {pillars.map((pillar, index) => (
+              <FadeIn key={pillar.href} delay={0.05 * index}>
+                <Link
+                  href={pillar.href}
+                  className="group block rounded-2xl border border-line bg-card p-6 transition-colors hover:border-slash/40"
+                >
+                  <p className="text-sm font-medium text-ink">{pillar.label}</p>
+                  <p className="mt-2 text-sm text-graphite">{pillar.body}</p>
+                  <span className="mt-4 inline-flex items-center gap-1 text-sm text-slash">
+                    Learn more
+                    <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-ink text-paper">
         <div className="mx-auto w-full max-w-[1400px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <FadeIn>
             <p className="font-mono text-xs uppercase tracking-[0.16em] text-slash">FAQ</p>
@@ -132,7 +197,7 @@ export function SpecialtyLanding({ specialty }: { specialty: SpecialtyContent })
               before you book a walkthrough.
             </h2>
           </FadeIn>
-          <dl className="mt-12 grid gap-8 md:grid-cols-3">
+          <dl className="mt-12 grid gap-8 sm:grid-cols-2">
             {specialty.faq.map((item, index) => (
               <FadeIn key={item.q} delay={0.05 * index}>
                 <dt className="text-base font-medium text-paper">{item.q}</dt>
@@ -140,7 +205,7 @@ export function SpecialtyLanding({ specialty }: { specialty: SpecialtyContent })
               </FadeIn>
             ))}
           </dl>
-          <FadeIn className="mt-12">
+          <FadeIn className="mt-12 flex flex-wrap items-center gap-3">
             <TrackCtaLink
               href={contactHref}
               ctaName="request_consultation_faq"
@@ -149,6 +214,14 @@ export function SpecialtyLanding({ specialty }: { specialty: SpecialtyContent })
             >
               Request a consultation
               <ArrowRight className="size-4" />
+            </TrackCtaLink>
+            <TrackCtaLink
+              href="/try"
+              ctaName="try_demo_faq"
+              ctaLocation={`specialty_${specialty.slug}`}
+              className="inline-flex items-center gap-2 rounded-full border border-paper/25 px-6 py-3 text-sm font-medium text-paper transition-colors hover:border-paper/50"
+            >
+              Try the demo
             </TrackCtaLink>
           </FadeIn>
         </div>
