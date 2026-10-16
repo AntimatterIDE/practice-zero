@@ -19,9 +19,12 @@ export default async function AdminPanelLayout({ children }: { children: React.R
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-4">
           <div className="flex items-center gap-6">
             <BrandMark href="/admin/leads" />
-            <nav className="flex items-center gap-3 text-sm">
-              <Link href="/admin/leads" className="font-medium text-ink">
+            <nav className="flex items-center gap-4 text-sm">
+              <Link href="/admin/leads" className="font-medium text-ink hover:text-slash">
                 Leads
+              </Link>
+              <Link href="/admin/research" className="font-medium text-ink hover:text-slash">
+                Research
               </Link>
             </nav>
           </div>

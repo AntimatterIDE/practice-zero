@@ -48,11 +48,11 @@ export function HomeTop() {
               Try the demo
             </Link>
             <Link
-              href="/features"
+              href="/portal"
               prefetch={false}
               className="group inline-flex h-12 items-center gap-2 rounded-full text-sm font-medium text-graphite transition-colors duration-200 hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
             >
-              See the screens
+              See patient experience
               <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
             </Link>
           </div>

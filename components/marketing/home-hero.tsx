@@ -13,7 +13,7 @@ export function HomeHero() {
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-graphite">
             Open a live visit, watch the scribe land codes, and queue the claim — without leaving the morning board.
           </p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/try"
               prefetch={false}
@@ -22,11 +22,11 @@ export function HomeHero() {
               Try the demo
             </Link>
             <Link
-              href="/features"
+              href="/portal"
               prefetch={false}
               className="inline-flex items-center justify-center rounded-full border border-slash/25 bg-paper px-7 py-3.5 text-sm font-medium text-ink transition-colors hover:border-slash/50 hover:bg-slash/[0.04]"
             >
-              See the screens
+              See patient experience
             </Link>
           </div>
         </div>

@@ -5,6 +5,9 @@ const links = [
   { href: "/ehr", label: "EHR" },
   { href: "/billing", label: "Billing" },
   { href: "/marketing", label: "Marketing" },
+  { href: "/ai", label: "AI" },
+  { href: "/research", label: "Research" },
+  { href: "/patient", label: "Patient" },
   { href: "/pricing", label: "Pricing" },
   { href: "/contact", label: "Contact" },
 ] as const;
@@ -32,10 +35,17 @@ export function MarketingHeader() {
           >
             Try the demo
           </Link>
+          <Link
+            href="/portal"
+            prefetch={false}
+            className="rounded-full px-3 py-2 text-sm font-medium text-graphite hover:text-ink"
+          >
+            See patient experience
+          </Link>
         </nav>
         <div className="flex items-center gap-2 md:hidden">
-          <Link href="/pricing" prefetch={false} className="rounded-full px-3 py-1.5 text-sm text-graphite">
-            Pricing
+          <Link href="/portal" prefetch={false} className="rounded-full px-3 py-1.5 text-sm text-graphite">
+            Patient
           </Link>
           <Link
             href="/try"

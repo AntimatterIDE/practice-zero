@@ -7,6 +7,7 @@ import {
   Bell,
   Building2,
   Calendar,
+  ChevronDown,
   ClipboardList,
   FileCheck,
   FileText,
@@ -68,17 +69,38 @@ const menus: { id: string; label: string; href: string; items: Item[] }[] = [
       { title: "Social", body: "How the practice shows up", icon: Share2 },
     ],
   },
+  {
+    id: "patient",
+    label: "Patient",
+    href: "/patient",
+    items: [
+      { title: "Patient profile", body: "Demographics, coverage, and preferences", icon: User },
+      { title: "Portal login", body: "A secure door into their record", icon: ShieldCheck },
+      { title: "Messages", body: "Talk with the practice between visits", icon: MessageSquare },
+      { title: "Documents", body: "Upload cards, IDs, and forms", icon: FileText },
+      { title: "Updates", body: "Appointments, results, and balances", icon: Bell },
+    ],
+  },
 ];
+
+const flatLinks = [
+  { href: "/ai", label: "AI" },
+  { href: "/research", label: "Research" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/contact", label: "Contact" },
+] as const;
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState<string | null>(null);
   const [mobile, setMobile] = useState(false);
+  const [mobileSection, setMobileSection] = useState<string | null>(null);
   const closeTimer = useRef<number | null>(null);
 
   useEffect(() => {
     setOpen(null);
     setMobile(false);
+    setMobileSection(null);
   }, [pathname]);
 
   useEffect(() => {
@@ -86,11 +108,21 @@ export function SiteHeader() {
       if (event.key === "Escape") {
         setOpen(null);
         setMobile(false);
+        setMobileSection(null);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  useEffect(() => {
+    if (!mobile) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobile]);
 
   const clearClose = () => {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
@@ -134,64 +166,158 @@ export function SiteHeader() {
               </div>
             );
           })}
-          <Link
-            href="/pricing"
-            className={cn(
-              "rounded-full px-3 py-2 text-sm text-graphite hover:text-ink",
-              pathname === "/pricing" && "text-ink",
-            )}
-          >
-            Pricing
-          </Link>
-          <Link
-            href="/contact"
-            className={cn(
-              "rounded-full px-3 py-2 text-sm text-graphite hover:text-ink",
-              pathname === "/contact" && "text-ink",
-            )}
-          >
-            Contact
-          </Link>
+          {flatLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                "rounded-full px-3 py-2 text-sm text-graphite hover:text-ink",
+                (link.href === "/research"
+                  ? pathname.startsWith("/research")
+                  : pathname === link.href) && "text-ink",
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
           <Link
             href="/try"
             className="ml-3 rounded-full bg-slash px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
           >
             Try the demo
           </Link>
+          <Link
+            href="/portal"
+            className="rounded-full px-3 py-2 text-sm font-medium text-graphite hover:text-ink"
+          >
+            See patient experience
+          </Link>
         </nav>
         <button
           type="button"
-          className="rounded-full border border-line px-3 py-1.5 text-sm text-ink md:hidden"
+          className="inline-flex h-9 items-center rounded-full border border-line px-3.5 text-sm font-medium text-ink md:hidden"
           aria-expanded={mobile}
+          aria-controls="mobile-nav"
           onClick={() => setMobile((value) => !value)}
         >
-          Menu
+          {mobile ? "Close" : "Menu"}
         </button>
       </div>
+
       {mobile ? (
-        <div className="absolute inset-x-0 top-full z-40 mt-3 max-h-[70vh] overflow-auto rounded-2xl border border-line bg-paper p-3 shadow-2xl md:hidden">
-          {menus.map((menu) => (
-            <div key={menu.id} className="border-b border-line py-2 last:border-0">
-              <p className="px-2 pb-1 font-mono text-[11px] uppercase tracking-[0.16em] text-graphite">{menu.label}</p>
-              {menu.items.map((item) => (
-                <Link key={item.title} href={menu.href} className="block rounded-xl px-2 py-2 hover:bg-mist">
-                  <span className="block text-sm font-medium text-ink">{item.title}</span>
-                  <span className="block text-xs text-graphite">{item.body}</span>
-                </Link>
-              ))}
-            </div>
-          ))}
-          <div className="border-b border-line py-2">
-            <Link href="/pricing" className="block rounded-xl px-2 py-2 text-sm font-medium text-ink hover:bg-mist">
-              Pricing
+        <div
+          id="mobile-nav"
+          className="fixed inset-0 z-50 flex flex-col bg-paper md:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
+        >
+          <div className="flex items-center justify-between gap-4 border-b border-line px-4 py-3">
+            <BrandMark size="md" />
+            <button
+              type="button"
+              className="inline-flex h-9 items-center rounded-full border border-line px-3.5 text-sm font-medium text-ink"
+              onClick={() => setMobile(false)}
+            >
+              Close
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4">
+            <nav aria-label="Mobile" className="mx-auto w-full max-w-lg">
+              <ul className="divide-y divide-line rounded-2xl border border-line bg-card">
+                {menus.map((menu) => {
+                  const expanded = mobileSection === menu.id;
+                  return (
+                    <li key={menu.id}>
+                      <button
+                        type="button"
+                        aria-expanded={expanded}
+                        onClick={() =>
+                          setMobileSection(expanded ? null : menu.id)
+                        }
+                        className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left"
+                      >
+                        <span className="text-[15px] font-medium text-ink">
+                          {menu.label}
+                        </span>
+                        <ChevronDown
+                          className={cn(
+                            "size-4 shrink-0 text-graphite transition-transform duration-200",
+                            expanded && "rotate-180",
+                          )}
+                          aria-hidden
+                        />
+                      </button>
+                      {expanded ? (
+                        <ul className="space-y-0.5 border-t border-line bg-mist/50 px-2 py-2">
+                          <li>
+                            <Link
+                              href={menu.href}
+                              className="block rounded-xl px-3 py-2.5 text-sm font-medium text-slash"
+                            >
+                              Overview
+                            </Link>
+                          </li>
+                          {menu.items.map((item) => {
+                            const Icon = item.icon;
+                            return (
+                              <li key={item.title}>
+                                <Link
+                                  href={menu.href}
+                                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-paper"
+                                >
+                                  <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-slash/10 text-slash">
+                                    <Icon className="size-3.5" />
+                                  </span>
+                                  <span className="min-w-0">
+                                    <span className="block text-sm font-medium text-ink">
+                                      {item.title}
+                                    </span>
+                                    <span className="block truncate text-xs text-graphite">
+                                      {item.body}
+                                    </span>
+                                  </span>
+                                </Link>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      ) : null}
+                    </li>
+                  );
+                })}
+              </ul>
+
+              <ul className="mt-3 divide-y divide-line rounded-2xl border border-line bg-card">
+                {flatLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="block px-4 py-3.5 text-[15px] font-medium text-ink"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+
+          <div className="shrink-0 space-y-2 border-t border-line bg-paper px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+            <Link
+              href="/try"
+              className="block rounded-full bg-slash px-4 py-3 text-center text-sm font-medium text-paper hover:bg-oxide-deep"
+            >
+              Try the demo
             </Link>
-            <Link href="/contact" className="block rounded-xl px-2 py-2 text-sm font-medium text-ink hover:bg-mist">
-              Contact
+            <Link
+              href="/portal"
+              className="block rounded-full border border-line px-4 py-3 text-center text-sm font-medium text-ink hover:bg-mist"
+            >
+              See patient experience
             </Link>
           </div>
-          <Link href="/try" className="mt-2 block rounded-full bg-slash px-4 py-2 text-center text-sm text-paper hover:bg-oxide-deep">
-            Try the demo
-          </Link>
         </div>
       ) : null}
     </header>

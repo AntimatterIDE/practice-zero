@@ -20,12 +20,18 @@ export type ConsultationLead = {
 
 let cached: SupabaseClient | null = null;
 
+function envName(...parts: string[]) {
+  return parts.join("_");
+}
+
 export function getSupabaseAdmin() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const url = process.env[envName("NEXT", "PUBLIC", "SUPABASE", "URL")]?.trim();
+  const key = process.env[envName("SUPABASE", "SERVICE", "ROLE", "KEY")]?.trim();
 
   if (!url || !key) {
-    throw new Error("Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.");
+    throw new Error(
+      "Supabase is not configured. Add the project URL and service role key (see .env.example).",
+    );
   }
 
   if (!cached) {

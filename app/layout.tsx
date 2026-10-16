@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Instrument_Sans, JetBrains_Mono } from "next/font/google";
+import { SiteChat } from "@/components/marketing/site-chat";
 import { canonicalOrigin, isIndexingEnabled, product } from "@/lib/site";
 import "./globals.css";
 
@@ -103,6 +104,9 @@ const jsonLd = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} h-full antialiased`}>
+      <head>
+        <meta charSet="utf-8" />
+      </head>
       <body className="min-h-full bg-paper font-sans text-ink">
         <script
           dangerouslySetInnerHTML={{
@@ -114,6 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         {children}
+        <SiteChat />
       </body>
     </html>
   );

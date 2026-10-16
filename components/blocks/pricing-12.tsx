@@ -107,10 +107,10 @@ export default function Pricing12() {
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  href="/try"
+                  href="/portal"
                   className="text-sm font-medium text-paper/75 underline decoration-paper/30 underline-offset-4 transition-colors hover:text-paper"
                 >
-                  See a demo
+                  See patient experience
                 </Link>
               </div>
 

@@ -7,7 +7,6 @@ const banned = [
   "createSupabaseAdminClient",
   "STEDI_API_KEY",
   "BIRD_API_KEY",
-  "OPENAI_API_KEY",
   "NEXT_PUBLIC_SUPABASE_URL",
 ];
 

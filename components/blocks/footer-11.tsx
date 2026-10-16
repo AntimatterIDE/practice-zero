@@ -46,12 +46,23 @@ const columns: {
     ],
   },
   {
+    title: "Patient",
+    links: [
+      { label: "Patient profile", href: "/patient" },
+      { label: "See patient experience", href: "/portal" },
+      { label: "Portal login", href: "/portal/login" },
+      { label: "Messages & documents", href: "/portal/messages" },
+    ],
+  },
+  {
     title: "About",
     links: [
-      { label: "Features", href: "/features" },
+      { label: "AI", href: "/ai" },
+      { label: "Research", href: "/research" },
       { label: "Pricing", href: "/pricing" },
       { label: "Contact", href: "/contact" },
       { label: "Try the demo", href: "/try" },
+      { label: "See patient experience", href: "/portal" },
     ],
   },
 ];
@@ -60,7 +71,7 @@ export function Footer11() {
   return (
     <footer className="w-full bg-ink py-16 text-paper sm:py-20 lg:py-24">
       <div className="mx-auto w-full max-w-6xl px-6">
-        <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 lg:grid-cols-5 lg:gap-x-12">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 lg:grid-cols-6 lg:gap-x-10">
           {columns.map((column) => (
             <nav key={column.title} aria-label={column.title} className="min-w-0">
               <h3 className="mb-5 font-mono text-xs font-medium uppercase tracking-[0.16em] text-paper/80">
