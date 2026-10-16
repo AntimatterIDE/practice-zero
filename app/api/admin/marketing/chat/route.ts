@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { MARKETING_GOLIVE_KNOWLEDGE } from "@/lib/marketing/golive-knowledge";
+import { GOLIVE_TASKS } from "@/lib/marketing/golive-tasks";
 import { chatCompletion, getOpenAIApiKey } from "@/lib/openai";
 
 export const runtime = "nodejs";
@@ -17,69 +18,97 @@ const bodySchema = z.object({
     )
     .min(1)
     .max(24),
+  progress: z
+    .object({
+      completedSteps: z.number().int().min(0),
+      totalSteps: z.number().int().min(0),
+      nextTaskNumber: z.number().int().min(1).optional(),
+      nextTaskTitle: z.string().max(200).optional(),
+      nextStepTitle: z.string().max(200).optional(),
+    })
+    .optional(),
 });
 
+function taskCatalog() {
+  return GOLIVE_TASKS.map((task) => {
+    const steps = task.steps
+      .map((step, i) => `  ${task.number}.${i + 1} [${step.id}] ${step.title} — ${step.detail}`)
+      .join("\n");
+    return `Task ${task.number} [${task.id}] ${task.title}\n${task.summary}${
+      task.docs ? `\nDocs: ${task.docs}` : ""
+    }\nSteps:\n${steps}`;
+  }).join("\n\n");
+}
+
 const SYSTEM = `You are the Practice Zero marketing go-live assistant inside the admin panel.
-Your only job: help the operator complete analytics, Google Ads, Semrush, Instantly cold email, Supabase attribution, and env setup so acquisition is live.
+Your only job: help the operator complete the numbered tasks and their separate steps so acquisition is live.
 
 Rules:
-- Answer from the go-live brief below. Be concrete and ordered.
+- Refer to tasks by number and title (e.g. Task 3 — GA4, GTM & Search Console) and steps as N.M (e.g. 3.2).
+- Give the next concrete action for the incomplete step they ask about; one decision at a time when blocked.
 - Never invent secrets, Measurement IDs, or spend numbers.
 - Never request PHI or patient lists with clinical fields.
 - Cold email guidance must include CAN-SPAM basics when relevant.
-- When pointing at site pages, you may write paths like /admin/leads or /specialties/orthopedics.
-- If OPENAI is down, the API may return a fallback — still be useful.
+- Paths like /admin/leads or /specialties/orthopedics are fine.
+- When they say "what's next", use the progress snapshot if provided.
 
 GO-LIVE BRIEF:
-${MARKETING_GOLIVE_KNOWLEDGE}`;
+${MARKETING_GOLIVE_KNOWLEDGE}
 
-function fallbackAnswer(lastUser: string) {
+TASK CATALOG (source of truth for steps):
+${taskCatalog()}`;
+
+function fallbackAnswer(lastUser: string, progress?: z.infer<typeof bodySchema>["progress"]) {
   const q = lastUser.toLowerCase();
+  if (q.includes("next") || q.includes("what’s next") || q.includes("whats next")) {
+    if (progress?.nextTaskNumber && progress.nextStepTitle) {
+      return [
+        `Next up: Task ${progress.nextTaskNumber} — ${progress.nextTaskTitle}.`,
+        `Step: ${progress.nextStepTitle}`,
+        `You're ${progress.completedSteps}/${progress.totalSteps} steps done. Open that task on the left, or ask for a walkthrough of that step.`,
+      ].join("\n");
+    }
+    return "All tracked steps look complete. Re-check Task 10 QA if anything still feels unverified.";
+  }
   if (q.includes("supabase") || q.includes("migration") || q.includes("column")) {
     return [
-      "Run the attribution migration first:",
-      "1. Open Supabase → SQL editor",
-      "2. Paste and run supabase/migrations/002_consultation_leads_attribution.sql",
-      "3. Reload /admin/leads and confirm specialty / campaign show on new submissions",
+      "Task 1 — Supabase attribution migration:",
+      "1.1 Open Supabase SQL editor",
+      "1.2 Run supabase/migrations/002_consultation_leads_attribution.sql",
+      "1.3 Confirm specialty / campaign / utm_* columns",
+      "1.4 Reload /admin/leads",
     ].join("\n");
   }
   if (q.includes("ga4") || q.includes("analytics") || q.includes("posthog") || q.includes("gtm")) {
     return [
-      "Analytics go-live:",
-      "1. Create GA4 → set NEXT_PUBLIC_GA_MEASUREMENT_ID",
-      "2. Optional GTM → NEXT_PUBLIC_GTM_ID",
-      "3. PostHog project key → NEXT_PUBLIC_POSTHOG_KEY",
-      "4. Search Console HTML tag → NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION",
-      "5. Redeploy, then mark contact_submit and demo_open as conversions",
+      "Tasks 2–4 cover measurement:",
+      "Task 2: set NEXT_PUBLIC_GA_MEASUREMENT_ID, GTM, PostHog, Search Console token, Instantly secret → redeploy",
+      "Task 3: create GA4/GTM, verify Search Console, submit sitemap, mark contact_submit + demo_open",
+      "Task 4: PostHog funnel page_view → demo_open → contact_submit",
     ].join("\n");
   }
   if (q.includes("instantly") || q.includes("cold") || q.includes("email") || q.includes("domain")) {
     return [
-      "Cold email go-live:",
-      "1. Buy 2–3 sending domains (not practicezero.com for blasts)",
-      "2. Workspace mailboxes + SPF/DKIM/DMARC → Instantly warmup 2–3 weeks",
-      "3. Verify list ≥95% deliverable",
-      "4. Load marketing/cold-email/sequence.md",
-      "5. Webhook → /api/webhooks/instantly with INSTANTLY_WEBHOOK_SECRET",
+      "Tasks 7–9 — cold email:",
+      "7: sending domains, DNS, Instantly warmup 14–21 days",
+      "8: verify list, load sequence.md + specialty variants, UTMs, ramp",
+      "9: webhook POST /api/webhooks/instantly with Bearer INSTANTLY_WEBHOOK_SECRET",
     ].join("\n");
   }
   if (q.includes("ads") || q.includes("google")) {
     return [
-      "Google Ads go-live:",
-      "1. Link Ads ↔ GA4; import contact_submit (primary) and demo_open",
-      "2. Start Brand + Category Search only",
-      "3. Land on specialty or /pricing — see marketing/google-ads/campaigns.md",
-      "4. Expand specialty keywords after ~30 consultations",
+      "Task 5 — Google Ads Wave 1:",
+      "5.1 Account ready",
+      "5.2 Link GA4; import contact_submit + demo_open",
+      "5.3 Brand Search",
+      "5.4 Category Search",
+      "5.5 Hold specialty keywords until ~30 consultations",
+      "See marketing/google-ads/campaigns.md",
     ].join("\n");
   }
   return [
-    "I can walk you through making marketing live. Pick a lane:",
-    "A) Supabase migration",
-    "B) Env vars / analytics (GA4, GTM, PostHog, Search Console)",
-    "C) Google Ads",
-    "D) Instantly cold email",
-    "E) Semrush / SEO",
-    "Or say “what’s next” and I’ll start from A.",
+    "Ask about a task number (1–10), tap Help on a step, or say “what’s next”.",
+    "1 Supabase · 2 Env · 3 GA4/GSC · 4 PostHog · 5 Ads · 6 Semrush · 7 Domains · 8 List/sequence · 9 Webhook · 10 QA",
   ].join("\n");
 }
 
@@ -94,19 +123,27 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid messages." }, { status: 400 });
   }
 
-  const messages = parsed.data.messages;
+  const { messages, progress } = parsed.data;
   const lastUser = [...messages].reverse().find((m) => m.role === "user")?.content ?? "";
+
+  const progressBlock = progress
+    ? `\n\nOPERATOR PROGRESS SNAPSHOT:\n- Steps done: ${progress.completedSteps}/${progress.totalSteps}\n- Next: ${
+        progress.nextTaskNumber
+          ? `Task ${progress.nextTaskNumber} — ${progress.nextTaskTitle} / step “${progress.nextStepTitle}”`
+          : "all steps marked complete"
+      }`
+    : "";
 
   if (!getOpenAIApiKey()) {
     return NextResponse.json({
-      reply: fallbackAnswer(lastUser),
+      reply: fallbackAnswer(lastUser, progress),
       usedModel: false,
     });
   }
 
   try {
     const result = await chatCompletion({
-      system: SYSTEM,
+      system: SYSTEM + progressBlock,
       messages,
       temperature: 0.3,
       max_tokens: 700,
@@ -114,7 +151,7 @@ export async function POST(request: Request) {
 
     if (!result.ok || !result.content) {
       return NextResponse.json({
-        reply: fallbackAnswer(lastUser),
+        reply: fallbackAnswer(lastUser, progress),
         usedModel: false,
       });
     }
@@ -123,7 +160,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("admin marketing chat", error);
     return NextResponse.json({
-      reply: fallbackAnswer(lastUser),
+      reply: fallbackAnswer(lastUser, progress),
       usedModel: false,
     });
   }

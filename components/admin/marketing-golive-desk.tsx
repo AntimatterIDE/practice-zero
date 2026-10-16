@@ -1,102 +1,48 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { CheckCircle2, Circle, Loader2, Send } from "lucide-react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import {
+  CheckCircle2,
+  ChevronDown,
+  Circle,
+  Loader2,
+  MessageSquare,
+  Send,
+} from "lucide-react";
+import {
+  countGoliveSteps,
+  goliveStepKey,
+  GOLIVE_TASKS,
+  type GoliveTask,
+} from "@/lib/marketing/golive-tasks";
 import { cn } from "@/lib/utils";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-type ChecklistItem = {
-  id: string;
-  title: string;
-  detail: string;
-  docs?: string;
-};
-
-const CHECKLIST: ChecklistItem[] = [
-  {
-    id: "supabase",
-    title: "Supabase attribution migration",
-    detail:
-      "Run supabase/migrations/002_consultation_leads_attribution.sql so specialty, campaign, and UTM columns exist on consultation_leads.",
-  },
-  {
-    id: "env",
-    title: "Set production env vars & redeploy",
-    detail:
-      "NEXT_PUBLIC_GA_MEASUREMENT_ID, NEXT_PUBLIC_GTM_ID, NEXT_PUBLIC_POSTHOG_KEY, NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION, INSTANTLY_WEBHOOK_SECRET, OPENAI_API_KEY, Resend keys. See .env.example.",
-  },
-  {
-    id: "ga4",
-    title: "GA4 + GTM + Search Console",
-    detail:
-      "Create GA4 property, optional GTM, verify www.practicezero.com in Search Console, submit /sitemap.xml, mark contact_submit and demo_open as conversions.",
-  },
-  {
-    id: "posthog",
-    title: "PostHog funnels",
-    detail:
-      "Create project, set NEXT_PUBLIC_POSTHOG_KEY, build funnel specialty/home → demo_open → contact_submit. No marketing pixels on /portal.",
-  },
-  {
-    id: "ads",
-    title: "Google Ads Wave 1",
-    detail:
-      "Link Ads to GA4, import conversions, launch Brand + Category Search first. Land on specialty or /pricing. Full plan in marketing/google-ads/campaigns.md.",
-    docs: "marketing/google-ads/campaigns.md",
-  },
-  {
-    id: "semrush",
-    title: "Semrush tracking",
-    detail:
-      "Track practicezero.com vs Tebra/athena; seed Wave 1 specialty keywords from marketing/seo/semrush-keyword-map.md.",
-    docs: "marketing/seo/semrush-keyword-map.md",
-  },
-  {
-    id: "domains",
-    title: "Cold email domains + Instantly warmup",
-    detail:
-      "Buy 2–3 sending domains (not practicezero.com for blasts), Workspace mailboxes, SPF/DKIM/DMARC, Instantly warmup 14–21 days.",
-    docs: "marketing/cold-email/README.md",
-  },
-  {
-    id: "list",
-    title: "Verify list & load 4-touch sequence",
-    detail:
-      "NeverBounce/MillionVerifier ≥95% deliverable. Load sequence.md + specialty variants. UTMs on every link.",
-    docs: "marketing/cold-email/sequence.md",
-  },
-  {
-    id: "webhook",
-    title: "Instantly → leads webhook",
-    detail:
-      "POST https://www.practicezero.com/api/webhooks/instantly with Authorization: Bearer INSTANTLY_WEBHOOK_SECRET on interested/positive replies.",
-  },
-  {
-    id: "qa",
-    title: "End-to-end QA",
-    detail:
-      "Specialty page with UTMs → /contact → lead in /admin/leads. /try fires demo_open. /portal stays clean of marketing analytics.",
-  },
-];
-
 const STARTERS = [
-  "What’s the first thing I should do?",
-  "Walk me through GA4 and Search Console",
-  "How do I set up Instantly domains?",
-  "What Google Ads campaigns should I launch first?",
+  "What’s the next incomplete step?",
+  "Walk me through task 3 — GA4 and Search Console",
+  "Help me with Instantly domains (task 7)",
+  "What Google Ads campaigns first?",
   "How do I wire the Instantly webhook?",
 ];
 
-const STORAGE_KEY = "pz_marketing_golive_checks";
+const STORAGE_KEY = "pz_marketing_golive_steps_v2";
+
+function taskProgress(task: GoliveTask, done: Record<string, boolean>) {
+  const total = task.steps.length;
+  const completed = task.steps.filter((step) => done[goliveStepKey(task.id, step.id)]).length;
+  return { completed, total, allDone: completed === total && total > 0 };
+}
 
 export function MarketingGoliveDesk() {
   const [done, setDone] = useState<Record<string, boolean>>({});
+  const [openTaskId, setOpenTaskId] = useState<string>(GOLIVE_TASKS[0]?.id ?? "");
   const [messages, setMessages] = useState<Msg[]>([
     {
       role: "assistant",
       content:
-        "I’m your marketing go-live assistant. I know the analytics, Ads, Semrush, Instantly, and Supabase checklist. Ask “what’s next” or pick a starter — I’ll give ordered steps.",
+        "I’m your marketing go-live assistant. Each task on the left has separate steps — check them off as you go. Ask “what’s next,” or tap Help on any step.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -127,10 +73,35 @@ export function MarketingGoliveDesk() {
     el.scrollTop = el.scrollHeight;
   }, [messages, busy]);
 
-  const completed = CHECKLIST.filter((item) => done[item.id]).length;
+  const totalSteps = countGoliveSteps();
+  const completedSteps = useMemo(
+    () => Object.values(done).filter(Boolean).length,
+    [done],
+  );
 
-  function toggle(id: string) {
-    setDone((prev) => ({ ...prev, [id]: !prev[id] }));
+  const nextIncomplete = useMemo(() => {
+    for (const task of GOLIVE_TASKS) {
+      for (const step of task.steps) {
+        if (!done[goliveStepKey(task.id, step.id)]) {
+          return { task, step };
+        }
+      }
+    }
+    return null;
+  }, [done]);
+
+  function toggleStep(taskId: string, stepId: string) {
+    const key = goliveStepKey(taskId, stepId);
+    setDone((prev) => ({ ...prev, [key]: !prev[key] }));
+  }
+
+  function askAboutStep(task: GoliveTask, stepId: string) {
+    const step = task.steps.find((s) => s.id === stepId);
+    if (!step) return;
+    setOpenTaskId(task.id);
+    void send(
+      `Help me complete Task ${task.number} (“${task.title}”), step “${step.title}”: ${step.detail}`,
+    );
   }
 
   async function send(text: string) {
@@ -151,6 +122,13 @@ export function MarketingGoliveDesk() {
             .filter((m) => m.role === "user" || m.role === "assistant")
             .slice(-16)
             .map(({ role, content: c }) => ({ role, content: c })),
+          progress: {
+            completedSteps,
+            totalSteps,
+            nextTaskNumber: nextIncomplete?.task.number,
+            nextTaskTitle: nextIncomplete?.task.title,
+            nextStepTitle: nextIncomplete?.step.title,
+          },
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -190,71 +168,144 @@ export function MarketingGoliveDesk() {
           marketing go-live
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-graphite">
-          Checklist + AI assistant for analytics, Google Ads, Semrush, Instantly cold email, and
-          attribution. Uses the same{" "}
-          <span className="font-mono text-[12px] text-ink">OPENAI_API_KEY</span> as research drafts
-          and the site chat.
+          Ten tasks with separate steps for analytics, Ads, Semrush, Instantly, and attribution —
+          plus an AI assistant on the same{" "}
+          <span className="font-mono text-[12px] text-ink">OPENAI_API_KEY</span>.
         </p>
         <p className="mt-3 text-xs text-graphite">
-          Progress {completed}/{CHECKLIST.length}
-          {usedModel === false ? " · assistant on template fallback (set OPENAI_API_KEY)" : null}
+          Steps {completedSteps}/{totalSteps}
+          {nextIncomplete
+            ? ` · next: task ${nextIncomplete.task.number} — ${nextIncomplete.step.title}`
+            : " · all steps complete"}
+          {usedModel === false ? " · assistant on template fallback" : null}
           {usedModel === true ? " · assistant using OpenAI" : null}
         </p>
       </div>
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-        <section className="rounded-2xl border border-line bg-card">
-          <div className="border-b border-line px-5 py-4">
-            <h2 className="text-sm font-medium text-ink">Manual checklist</h2>
-            <p className="mt-1 text-xs text-graphite">
-              Checks save in this browser. Ask the assistant for help on any step.
-            </p>
-          </div>
-          <ul className="divide-y divide-line">
-            {CHECKLIST.map((item) => {
-              const checked = Boolean(done[item.id]);
-              return (
-                <li key={item.id} className="px-5 py-4">
-                  <button
-                    type="button"
-                    onClick={() => toggle(item.id)}
-                    className="flex w-full items-start gap-3 text-left"
-                  >
-                    {checked ? (
-                      <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-slash" />
-                    ) : (
-                      <Circle className="mt-0.5 size-5 shrink-0 text-graphite/50" />
+      <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+        <section className="space-y-3">
+          {GOLIVE_TASKS.map((task) => {
+            const { completed, total, allDone } = taskProgress(task, done);
+            const open = openTaskId === task.id;
+            return (
+              <article
+                key={task.id}
+                className={cn(
+                  "overflow-hidden rounded-2xl border bg-card",
+                  allDone ? "border-slash/30" : "border-line",
+                )}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenTaskId(open ? "" : task.id)}
+                  className="flex w-full items-start gap-3 px-5 py-4 text-left"
+                  aria-expanded={open}
+                >
+                  <span
+                    className={cn(
+                      "mt-0.5 grid size-7 shrink-0 place-items-center rounded-full font-mono text-[11px]",
+                      allDone
+                        ? "bg-slash/15 text-slash"
+                        : "bg-mist text-graphite",
                     )}
-                    <span className="min-w-0">
+                  >
+                    {task.number}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
                       <span
                         className={cn(
-                          "block text-sm font-medium text-ink",
-                          checked && "text-graphite line-through",
+                          "text-sm font-medium text-ink",
+                          allDone && "text-graphite",
                         )}
                       >
-                        {item.title}
+                        {task.title}
                       </span>
-                      <span className="mt-1 block text-xs leading-relaxed text-graphite">
-                        {item.detail}
+                      <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">
+                        {completed}/{total} steps
                       </span>
-                      {item.docs ? (
-                        <span className="mt-1 block font-mono text-[11px] text-slash/80">
-                          {item.docs}
-                        </span>
-                      ) : null}
                     </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+                    <span className="mt-1 block text-xs leading-relaxed text-graphite">
+                      {task.summary}
+                    </span>
+                    {task.docs ? (
+                      <span className="mt-1 block font-mono text-[11px] text-slash/80">
+                        {task.docs}
+                      </span>
+                    ) : null}
+                  </span>
+                  <ChevronDown
+                    className={cn(
+                      "mt-1 size-4 shrink-0 text-graphite transition-transform",
+                      open && "rotate-180",
+                    )}
+                  />
+                </button>
+
+                {open ? (
+                  <ul className="border-t border-line divide-y divide-line bg-paper/40">
+                    {task.steps.map((step, index) => {
+                      const key = goliveStepKey(task.id, step.id);
+                      const checked = Boolean(done[key]);
+                      return (
+                        <li key={step.id} className="flex items-start gap-2 px-4 py-3 sm:px-5">
+                          <button
+                            type="button"
+                            onClick={() => toggleStep(task.id, step.id)}
+                            className="mt-0.5 shrink-0"
+                            aria-pressed={checked}
+                            aria-label={
+                              checked
+                                ? `Mark incomplete: ${step.title}`
+                                : `Mark complete: ${step.title}`
+                            }
+                          >
+                            {checked ? (
+                              <CheckCircle2 className="size-5 text-slash" />
+                            ) : (
+                              <Circle className="size-5 text-graphite/45" />
+                            )}
+                          </button>
+                          <div className="min-w-0 flex-1">
+                            <p
+                              className={cn(
+                                "text-sm font-medium text-ink",
+                                checked && "text-graphite line-through",
+                              )}
+                            >
+                              <span className="mr-1.5 font-mono text-[10px] text-graphite">
+                                {task.number}.{index + 1}
+                              </span>
+                              {step.title}
+                            </p>
+                            <p className="mt-1 text-xs leading-relaxed text-graphite">
+                              {step.detail}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => askAboutStep(task, step.id)}
+                            disabled={busy}
+                            className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full border border-line px-2.5 py-1 text-[11px] text-graphite hover:border-slash/40 hover:text-ink disabled:opacity-50"
+                          >
+                            <MessageSquare className="size-3" />
+                            Help
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
+              </article>
+            );
+          })}
         </section>
 
-        <section className="flex min-h-[32rem] flex-col overflow-hidden rounded-2xl border border-line bg-ink text-paper">
+        <section className="flex min-h-[32rem] flex-col overflow-hidden rounded-2xl border border-line bg-ink text-paper lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)]">
           <div className="border-b border-paper/10 px-5 py-4">
             <h2 className="text-sm font-medium">Go-live assistant</h2>
             <p className="mt-1 text-xs text-paper/55">
-              Ask about env vars, Instantly, Ads, or “what’s next”.
+              Knows every task and step. Tap Help on a step or ask what’s next.
             </p>
           </div>
 
@@ -307,7 +358,7 @@ export function MarketingGoliveDesk() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask how to make marketing live…"
+              placeholder="Ask about a task or step…"
               disabled={busy}
               className="h-11 min-w-0 flex-1 rounded-full border border-paper/15 bg-ink px-4 text-sm text-paper placeholder:text-paper/40 focus:border-slash focus:outline-none focus:ring-2 focus:ring-slash/30 disabled:opacity-60"
             />
