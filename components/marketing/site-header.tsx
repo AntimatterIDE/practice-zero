@@ -260,7 +260,7 @@ export function SiteHeader() {
   const mobileNav = (
     <div
       id="mobile-nav"
-      className="fixed inset-0 z-[100] flex flex-col bg-paper lg:hidden"
+      className="fixed inset-0 z-[100] flex flex-col bg-paper xl:hidden"
       role="dialog"
       aria-modal="true"
       aria-label="Menu"
@@ -393,7 +393,8 @@ export function SiteHeader() {
           <span onMouseEnter={closeMega} onFocus={closeMega} className="inline-flex">
             <BrandMark size="md" />
           </span>
-          <nav className="hidden items-center gap-0.5 lg:flex" aria-label="practice zero">
+          {/* Full nav only from xl (1280px) up — below that, hamburger so CTA labels never wrap. */}
+          <nav className="hidden items-center gap-0.5 xl:flex" aria-label="practice zero">
             {menus.map((menu) => {
               const active =
                 pathname === menu.href ||
@@ -414,14 +415,14 @@ export function SiteHeader() {
                     aria-expanded={shown}
                     aria-haspopup="true"
                     className={cn(
-                      "inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm text-graphite transition-colors hover:text-ink",
+                      "inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-2 text-sm text-graphite transition-colors hover:text-ink",
                       (shown || active) && "text-ink",
                     )}
                   >
                     {menu.label}
                     <ChevronDown
                       className={cn(
-                        "size-3.5 text-graphite/70 transition-transform duration-200",
+                        "size-3.5 shrink-0 text-graphite/70 transition-transform duration-200",
                         shown && "rotate-180 text-slash",
                       )}
                       aria-hidden
@@ -438,7 +439,7 @@ export function SiteHeader() {
                 onMouseEnter={closeMega}
                 onFocus={closeMega}
                 className={cn(
-                  "rounded-full px-3 py-2 text-sm text-graphite hover:text-ink",
+                  "shrink-0 whitespace-nowrap rounded-full px-2.5 py-2 text-sm text-graphite hover:text-ink",
                   pathname === link.href && "text-ink",
                 )}
               >
@@ -450,7 +451,7 @@ export function SiteHeader() {
               prefetch={false}
               onMouseEnter={closeMega}
               onFocus={closeMega}
-              className="ml-2 rounded-full bg-slash px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
+              className="ml-2 shrink-0 whitespace-nowrap rounded-full bg-slash px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
             >
               Try the demo
             </Link>
@@ -459,7 +460,7 @@ export function SiteHeader() {
               prefetch={false}
               onMouseEnter={closeMega}
               onFocus={closeMega}
-              className="rounded-full px-3 py-2 text-sm font-medium text-graphite hover:text-ink"
+              className="shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium text-graphite hover:text-ink"
             >
               See patient experience
             </Link>
@@ -467,7 +468,7 @@ export function SiteHeader() {
 
           <button
             type="button"
-            className="inline-flex h-9 items-center rounded-full border border-line px-3.5 text-sm font-medium text-ink lg:hidden"
+            className="inline-flex h-9 shrink-0 items-center rounded-full border border-line px-3.5 text-sm font-medium text-ink xl:hidden"
             aria-expanded={mobile}
             aria-controls="mobile-nav"
             onClick={() => setMobile((value) => !value)}
