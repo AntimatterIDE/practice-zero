@@ -11,7 +11,7 @@ export function PatientProfile() {
   }
 
   const pharmacy =
-    patient.intakeAnswers.find((answer) => answer.label === "Pharmacy")?.value || "Hope Street Pharmacy";
+    patient.intakeAnswers?.find((answer) => answer.label === "Pharmacy")?.value || "Hope Street Pharmacy";
   const initials = `${patient.firstName.slice(0, 1)}${patient.lastName.slice(0, 1)}`.toUpperCase();
   const fields = [
     ["Full name", patientName(patient)],
