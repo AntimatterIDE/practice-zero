@@ -10,7 +10,7 @@ const SLASH = "#2D4BF0";
 
 /**
  * 1200×630 OG / iMessage card.
- * Paper field, centered mark over a massive wordmark — nothing else.
+ * Paper field, centered mark over the letters PZ — nothing else.
  */
 export function OgPreviewScene() {
   return (
@@ -65,13 +65,13 @@ export function OgPreviewScene() {
         </motion.svg>
 
         <motion.p
-          className="mt-9 font-semibold lowercase leading-none tracking-[-0.065em]"
-          style={{ fontSize: 118 }}
+          className="mt-8 font-semibold leading-none tracking-[-0.06em]"
+          style={{ fontSize: 200 }}
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.28, ease }}
         >
-          practice zero
+          PZ
         </motion.p>
       </div>
     </div>

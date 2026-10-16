@@ -17,11 +17,12 @@ import {
   countComplianceSteps,
   type ComplianceTrack,
 } from "@/lib/compliance/tasks";
+import { COMPLIANCE_CHECKLIST_KEY } from "@/lib/status/brief";
 import { cn } from "@/lib/utils";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const STORAGE_KEY = "practice-zero-compliance-checklist";
+const STORAGE_KEY = COMPLIANCE_CHECKLIST_KEY;
 
 const STARTERS = [
   "What’s the next free step?",

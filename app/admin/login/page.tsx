@@ -24,7 +24,7 @@ export default function AdminLoginPage() {
         const payload = (await response.json().catch(() => ({}))) as { error?: string };
         throw new Error(payload.error || "Could not sign in.");
       }
-      router.replace("/admin/leads");
+      router.replace("/admin/status");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not sign in.");
