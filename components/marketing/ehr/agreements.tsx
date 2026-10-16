@@ -17,7 +17,7 @@ export function AgreementsSection() {
             <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Consent to evaluate and treat</p>
             <p className="mt-4 font-display text-3xl text-ink">Paul Wallace</p>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-graphite">
-              Signed for the 9:00 visit with Dr. Shah. The chart can be opened.
+              Signed for the 9:00 visit with Dr. Francois. The chart can be opened.
             </p>
             <svg viewBox="0 0 280 90" className="mt-6 h-20 w-full text-ink" aria-hidden="true">
               <motion.path

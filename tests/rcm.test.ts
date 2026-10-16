@@ -24,7 +24,7 @@ describe("practice desk fixture", () => {
   it("starts from the connected sample morning", () => {
     const state = createSeedState();
     expect(state.practice.legalName).toBe("Northline Medical");
-    expect(state.practice.physicianName).toBe("Amina Shah, MD");
+    expect(state.practice.physicianName).toBe("Elvis Francois, MD");
     expect(state.patients.map((patient) => patient.id)).toEqual(["pt-hale", "pt-voss", "pt-adelman"]);
     expect(state.appointments).toHaveLength(3);
     expect(state.tasks.filter((task) => task.status === "open")).toHaveLength(2);

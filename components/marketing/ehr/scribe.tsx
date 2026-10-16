@@ -4,9 +4,9 @@ import { motion, useReducedMotion } from "motion/react";
 import { CategorySection } from "@/components/marketing/depth";
 
 const lines = [
-  ["Dr. Shah", "What brought you in?"],
+  ["Dr. Francois", "What brought you in?"],
   ["Paul", "The pharmacy machine has been reading my pressure high."],
-  ["Dr. Shah", "We will keep the lisinopril and look again in a month."],
+  ["Dr. Francois", "We will keep the lisinopril and look again in a month."],
 ];
 
 export function ScribeSection() {

@@ -5,7 +5,7 @@ export const STORAGE_KEY = "practice-zero-demo";
 
 export const samplePractice = {
   legalName: "Northline Medical",
-  physicianName: "Amina Shah, MD",
+  physicianName: "Elvis Francois, MD",
   npi: "1999999984",
   taxId: "39-1842201",
   taxonomy: "207R00000X",
@@ -16,7 +16,7 @@ export const samplePractice = {
 } as const;
 
 export const sampleStaff = [
-  { id: "staff-shah", name: "Amina Shah, MD", role: "Physician" },
+  { id: "staff-shah", name: "Elvis Francois, MD", role: "Physician" },
   { id: "staff-pell", name: "Noah Pell", role: "Front desk" },
 ] as const;
 
@@ -352,7 +352,7 @@ export function createSeedState(): RcmState {
         id: "out-email",
         kind: "email",
         to: "paul.wallace@example.com",
-        body: "Your intake is on file for the 9:00 visit with Dr. Shah.",
+        body: "Your intake is on file for the 9:00 visit with Dr. Francois.",
         createdAt: "2026-10-13T21:00:00",
       },
       {
@@ -400,13 +400,13 @@ export function createSeedState(): RcmState {
         appointmentId: "appt-hale",
         revealed: false,
         transcript: [
-          "Dr. Shah: Good morning, Paul. What brought you in?",
+          "Dr. Francois: Good morning, Paul. What brought you in?",
           "Paul Wallace: A checkup. The pharmacy machine has been reading my blood pressure high.",
-          "Dr. Shah: Are you taking the lisinopril every day?",
+          "Dr. Francois: Are you taking the lisinopril every day?",
           "Paul Wallace: Yes. I started it last month.",
-          "Dr. Shah: Any chest pain, shortness of breath, or headache that is new?",
+          "Dr. Francois: Any chest pain, shortness of breath, or headache that is new?",
           "Paul Wallace: No. I feel fine otherwise.",
-          "Dr. Shah: We will recheck the pressure here, keep the lisinopril, and look at the numbers again in a month.",
+          "Dr. Francois: We will recheck the pressure here, keep the lisinopril, and look at the numbers again in a month.",
         ].join("\n"),
         note: [
           "Subjective: New patient checkup. Pharmacy blood pressures have been high. Takes lisinopril 10 mg daily. No chest pain, dyspnea, or new headache. Penicillin causes a rash.",
