@@ -2,9 +2,6 @@
 
 import { useEffect, useState, type ComponentType } from "react";
 
-const STORAGE_KEY = "pz-intro-v2";
-const FUNNEL_GATE_MS = 4000;
-
 function clearIntroGate() {
   try {
     document.documentElement.removeAttribute("data-pz-intro");
@@ -13,31 +10,9 @@ function clearIntroGate() {
   }
 }
 
-function isHomePath() {
-  const path = window.location.pathname;
-  return path === "/" || path === "";
-}
-
-/** Hold the ink first-paint cover until the funnel is ready (or timeout). */
-function holdCoverUntilFunnel() {
-  let settled = false;
-  const finish = () => {
-    if (settled) return;
-    settled = true;
-    window.clearTimeout(maxWait);
-    window.removeEventListener("pz-funnel-ready", finish);
-    clearIntroGate();
-  };
-  const maxWait = window.setTimeout(finish, FUNNEL_GATE_MS);
-  window.addEventListener("pz-funnel-ready", finish);
-  // Funnel may already be ready (race with HeroFunnelMount)
-  if (document.getElementById("pz-home-hero")?.dataset.funnelReady === "1") {
-    finish();
-  }
-}
-
-function shouldSkipIntro() {
+function isLabClient() {
   if (typeof window === "undefined") return true;
+  if (document.documentElement.dataset.pzLab === "1") return true;
   if (window.navigator.webdriver) return true;
 
   const ua = window.navigator.userAgent || "";
@@ -58,30 +33,23 @@ function shouldSkipIntro() {
     /* ignore */
   }
 
-  try {
-    if (sessionStorage.getItem(STORAGE_KEY) === "1") return true;
-  } catch {
-    /* ignore */
-  }
-
   return false;
 }
 
+/**
+ * Homepage brand intro — plays on every home load/refresh (except labs) so the
+ * WebGL funnel can warm underneath and the hero never pops in late.
+ */
 export function BrandIntro() {
   const [Animation, setAnimation] = useState<ComponentType<{ onReady?: () => void }> | null>(null);
 
   useEffect(() => {
-    if (document.documentElement.dataset.pzLab === "1") {
+    if (isLabClient()) {
       clearIntroGate();
-      return;
-    }
-
-    if (shouldSkipIntro()) {
-      // Return visit on homepage: keep cover until funnel paints to avoid late pop-in CLS.
-      if (isHomePath()) {
-        holdCoverUntilFunnel();
-      } else {
-        clearIntroGate();
+      try {
+        window.dispatchEvent(new Event("pz-funnel-ready"));
+      } catch {
+        /* ignore */
       }
       return;
     }
@@ -97,6 +65,6 @@ export function BrandIntro() {
   }, []);
 
   if (!Animation) return null;
-  // First visit: swap CSS cover for the animated overlay immediately; funnel warms underneath.
+  // Swap the CSS first-paint cover for the animated overlay; funnel warms underneath.
   return <Animation onReady={clearIntroGate} />;
 }

@@ -6,7 +6,7 @@ import { ResearchArticleView } from "@/components/marketing/research/research-ar
 import { demoPublishedArticles, findDemoArticle } from "@/lib/research/demo";
 import { getResearchBySlug, listPublishedResearch } from "@/lib/research/store";
 import type { ResearchArticle } from "@/lib/research/types";
-import { ogMedia } from "@/lib/open-graph";
+import { product } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -36,19 +36,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await loadArticle(slug);
   if (!article) return { title: "Research" };
-  const media = ogMedia();
+
+  // Blog shares use the article cover only — never the site-wide OG video loop.
+  const cover = article.cover_image_url
+    ? [{ url: article.cover_image_url, alt: article.title }]
+    : [{ url: "/og.png", width: 1200, height: 630, alt: article.title }];
+
   return {
     title: article.search_title || article.title,
     description: article.search_description || article.excerpt,
     alternates: { canonical: `/research/${article.slug}` },
     openGraph: {
+      type: "article",
+      siteName: product.name,
       title: article.title,
       description: article.excerpt,
       url: `/research/${article.slug}`,
-      videos: media.videos,
-      images: article.cover_image_url
-        ? [{ url: article.cover_image_url }]
-        : media.images,
+      images: cover,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.excerpt,
+      images: cover.map((img) => img.url),
     },
   };
 }

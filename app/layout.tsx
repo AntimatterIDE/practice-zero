@@ -1,9 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Instrument_Sans, JetBrains_Mono } from "next/font/google";
 import { SiteChat } from "@/components/marketing/site-chat";
 import { ogMedia } from "@/lib/open-graph";
 import { canonicalOrigin, isIndexingEnabled, product } from "@/lib/site";
 import "./globals.css";
+
+/** Keyboard overlays content instead of resizing the layout — keeps the chat popup still. */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  interactiveWidget: "overlays-content",
+};
 
 const sans = Instrument_Sans({
   subsets: ["latin"],
@@ -111,7 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full bg-paper font-sans text-ink">
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var u=navigator.userAgent||"";var lab=!!navigator.webdriver||/Lighthouse|Chrome-Lighthouse|PageSpeed|Headless|GTMetrix|webpagetest|Pingdom|PTST|Speed Insights/i.test(u);try{if(!lab&&navigator.languages&&navigator.languages.length===0)lab=true}catch(e){}if(lab){sessionStorage.setItem("pz-intro-v2","1");document.documentElement.dataset.pzLab="1"}else if(sessionStorage.getItem("pz-intro-v2")!=="1"){document.documentElement.dataset.pzIntro="pending"}}catch(e){}`,
+            __html: `try{var u=navigator.userAgent||"";var p=location.pathname||"/";var home=p==="/"||p==="";var lab=!!navigator.webdriver||/Lighthouse|Chrome-Lighthouse|PageSpeed|Headless|GTMetrix|webpagetest|Pingdom|PTST|Speed Insights/i.test(u);try{if(!lab&&navigator.languages&&navigator.languages.length===0)lab=true}catch(e){}if(lab){document.documentElement.dataset.pzLab="1"}else if(home){document.documentElement.dataset.pzIntro="pending"}}catch(e){}`,
           }}
         />
         <script

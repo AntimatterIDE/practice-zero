@@ -10,7 +10,6 @@ const tasks = [
   "unconfirmed mornings",
 ];
 
-const STORAGE_KEY = "pz-intro-v2";
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
@@ -78,11 +77,6 @@ export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
     const finish = () => {
       if (cancelled || marked.current) return;
       marked.current = true;
-      try {
-        sessionStorage.setItem(STORAGE_KEY, "1");
-      } catch {
-        /* ignore */
-      }
       setGate("skip");
       try {
         window.dispatchEvent(new Event("pz-intro-done"));
