@@ -23,8 +23,8 @@ const pngOut = path.join(root, "public", "og.png");
 
 const WIDTH = 1200;
 const HEIGHT = 630;
-const SETTLE_MS = 1200;
-const DURATION_MS = 4000;
+const SETTLE_MS = 1400;
+const DURATION_MS = 3600;
 const ORIGIN = (process.env.OG_ORIGIN || process.env.BASE_URL || "http://127.0.0.1:3000").replace(
   /\/$/,
   "",

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
  */
 export default function OgScenePage() {
   return (
-    <div className="h-[630px] w-[1200px] overflow-hidden bg-[#111418]">
+    <div className="h-[630px] w-[1200px] overflow-hidden bg-[#F5F4EF]">
       <OgPreviewScene />
     </div>
   );
