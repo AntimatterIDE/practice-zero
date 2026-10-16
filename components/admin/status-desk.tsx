@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, Circle, Loader2, Send } from "lucide-react";
 import { AdminPageHeader } from "@/components/admin/admin-page";
+import { formatUsd, taskCostTotals } from "@/lib/admin/task-catalog";
 import type { GoliveStatusReport } from "@/lib/marketing/golive-status-types";
 import {
   COMPLIANCE_CHECKLIST_KEY,
@@ -143,6 +144,7 @@ export function StatusDesk() {
     return [marketing, complianceLane(checked), fundingLane(funding.raw, funding.saved)];
   }, [checked, funding, marketingError, marketingReport]);
 
+  const costs = useMemo(() => taskCostTotals(), []);
   const sentence = companySentence(lanes.filter((lane) => lane.checks.length > 0));
 
   useEffect(() => {
@@ -204,7 +206,7 @@ export function StatusDesk() {
 
       <p className="mt-6 max-w-3xl text-xl font-medium leading-snug tracking-[-0.02em] text-ink">{sentence}</p>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {lanes.map((lane) => {
           const progress = laneProgress(lane);
           return (
@@ -226,6 +228,21 @@ export function StatusDesk() {
             </Link>
           );
         })}
+        <Link
+          href="/admin/tasks"
+          className="rounded-2xl border border-line bg-card px-4 py-4 hover:border-slash/40"
+        >
+          <span className="flex items-baseline justify-between gap-3">
+            <span className="text-sm font-medium text-ink">Task cost</span>
+            <span className="font-mono text-[11px] tabular-nums text-graphite">{costs.taskCount} tasks</span>
+          </span>
+          <span className="mt-3 block text-2xl font-semibold tabular-nums tracking-[-0.03em] text-ink">
+            {formatUsd(costs.once)}
+          </span>
+          <span className="mt-1 block text-xs leading-relaxed text-graphite">
+            one-time · {formatUsd(costs.monthly)}/mo after
+          </span>
+        </Link>
       </div>
 
       <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
