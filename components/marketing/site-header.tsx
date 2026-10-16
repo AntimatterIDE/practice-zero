@@ -7,6 +7,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   ArrowRight,
   Bell,
+  BookOpen,
   Building2,
   Calendar,
   CalendarClock,
@@ -24,6 +25,7 @@ import {
   MessageSquare,
   Mic,
   Mic2,
+  Newspaper,
   Search,
   Share2,
   ShieldCheck,
@@ -34,6 +36,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { BrandMark } from "@/components/marketing/brand-mark";
+import { demoPublishedArticles } from "@/lib/research/demo";
 import { cn } from "@/lib/utils";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -47,7 +50,7 @@ type MegaMenu = {
   kicker: string;
   blurb: string;
   items: Item[];
-  feature: "scribe" | "claims" | "outreach" | "portal" | "agents" | "onboarding";
+  feature: "scribe" | "claims" | "outreach" | "portal" | "agents" | "onboarding" | "research";
 };
 
 const menus: MegaMenu[] = [
@@ -164,10 +167,32 @@ const menus: MegaMenu[] = [
       { title: "24/7 support", body: "Uptime and maintenance for the life of the contract", icon: ShieldCheck },
     ],
   },
+  {
+    id: "research",
+    label: "Research",
+    href: "/research",
+    kicker: "Journal",
+    blurb: "Notes on agentic EHR, room hardware, and how independent practices run.",
+    feature: "research",
+    items: [
+      {
+        title: "All research",
+        body: "Browse published journals and product notes",
+        icon: Newspaper,
+        href: "/research",
+      },
+      ...demoPublishedArticles.slice(0, 4).map((article) => ({
+        title: article.search_title || article.title,
+        body: article.topic ? `Latest · ${article.topic}` : article.excerpt.slice(0, 72),
+        icon: BookOpen,
+        href: `/research/${article.slug}`,
+      })),
+    ],
+  },
 ];
 
+/** Links without mega panels — hovering these must close any open dropdown. */
 const flatLinks = [
-  { href: "/research", label: "Research" },
   { href: "/pricing", label: "Pricing" },
   { href: "/contact", label: "Contact" },
 ] as const;
@@ -216,12 +241,20 @@ export function SiteHeader() {
     closeTimer.current = window.setTimeout(() => setOpen(null), 160);
   };
 
+  /** Immediate close so Pricing / Contact / CTAs are clickable with no panel in the way. */
+  const closeMega = () => {
+    clearClose();
+    setOpen(null);
+  };
+
   const activeMenu = menus.find((m) => m.id === open) ?? null;
 
   return (
     <header className="relative z-50" onMouseLeave={scheduleClose}>
       <div className="flex items-center justify-between gap-4">
-        <BrandMark size="md" />
+        <span onMouseEnter={closeMega} onFocus={closeMega} className="inline-flex">
+          <BrandMark size="md" />
+        </span>
         <nav className="hidden items-center gap-0.5 lg:flex" aria-label="practice zero">
           {menus.map((menu) => {
             const active =
@@ -264,11 +297,11 @@ export function SiteHeader() {
               key={link.href}
               href={link.href}
               prefetch={false}
+              onMouseEnter={closeMega}
+              onFocus={closeMega}
               className={cn(
                 "rounded-full px-3 py-2 text-sm text-graphite hover:text-ink",
-                (link.href === "/research"
-                  ? pathname.startsWith("/research")
-                  : pathname === link.href) && "text-ink",
+                pathname === link.href && "text-ink",
               )}
             >
               {link.label}
@@ -277,6 +310,8 @@ export function SiteHeader() {
           <Link
             href="/try"
             prefetch={false}
+            onMouseEnter={closeMega}
+            onFocus={closeMega}
             className="ml-2 rounded-full bg-slash px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
           >
             Try the demo
@@ -284,6 +319,8 @@ export function SiteHeader() {
           <Link
             href="/portal"
             prefetch={false}
+            onMouseEnter={closeMega}
+            onFocus={closeMega}
             className="rounded-full px-3 py-2 text-sm font-medium text-graphite hover:text-ink"
           >
             See patient experience
@@ -692,6 +729,39 @@ function FeaturePreview({
             </motion.li>
           ))}
         </ul>
+      </div>
+    );
+  }
+
+  if (kind === "research") {
+    const latest = demoPublishedArticles[0];
+    return (
+      <div className="rounded-2xl border border-paper/10 bg-paper/5 p-3">
+        <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-paper/45">
+          Latest journal
+        </p>
+        <motion.p
+          className="mt-3 text-sm font-medium leading-snug tracking-[-0.02em]"
+          initial={reduce ? false : { opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: EASE }}
+        >
+          {latest?.search_title || latest?.title || "Practice Zero research"}
+        </motion.p>
+        <motion.div
+          className="mt-3 h-1 overflow-hidden rounded-full bg-paper/10"
+          aria-hidden
+        >
+          <motion.div
+            className="h-full rounded-full bg-slash"
+            animate={reduce ? undefined : { x: ["-100%", "100%"] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+            style={{ width: "40%" }}
+          />
+        </motion.div>
+        <p className="mt-2 text-[11px] text-paper/50">
+          {latest?.read_minutes ?? 3} min read
+        </p>
       </div>
     );
   }
