@@ -23,7 +23,7 @@ const pillars = [
   {
     title: "Intelligence",
     body: "Insights & practice analytics",
-    href: "/try/analytics",
+    href: "/ai",
     icon: BarChart3,
   },
 ];
