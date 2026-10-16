@@ -190,7 +190,7 @@ export function complianceLane(checkedKeys: Iterable<string>): StatusLane {
 }
 
 export function fundingLane(raw: Partial<FundingAssumptions> | null, saved: boolean): StatusLane {
-  const plan = buildFundingPlan(raw ?? undefined);
+  const plan = buildFundingPlan(raw ?? {});
   const { totals, assumptions } = plan;
   const checks: StatusCheck[] = [
     {
