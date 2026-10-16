@@ -99,11 +99,12 @@ function MobileSection({
 export function AdminMobileBar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [section, setSection] = useState<SectionId | null>("clinic");
+  const [section, setSection] = useState<SectionId | null>(null);
   const label = currentDeskLabel(pathname);
 
   useEffect(() => {
     setOpen(false);
+    setSection(null);
   }, [pathname]);
 
   useEffect(() => {
@@ -115,7 +116,10 @@ export function AdminMobileBar() {
     };
   }, [open]);
 
-  const close = () => setOpen(false);
+  const close = () => {
+    setOpen(false);
+    setSection(null);
+  };
 
   return (
     <div className="sticky top-0 z-30 border-b border-line bg-paper lg:hidden">
@@ -130,7 +134,16 @@ export function AdminMobileBar() {
           className="inline-flex h-9 items-center rounded-full border border-line px-3.5 text-sm font-medium text-ink"
           aria-expanded={open}
           aria-controls="demo-mobile-nav"
-          onClick={() => setOpen((current) => !current)}
+          onClick={() =>
+            setOpen((current) => {
+              if (current) {
+                setSection(null);
+                return false;
+              }
+              setSection(null);
+              return true;
+            })
+          }
         >
           {open ? "Close" : "Menu"}
         </button>
