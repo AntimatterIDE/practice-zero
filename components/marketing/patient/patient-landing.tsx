@@ -52,7 +52,7 @@ const capabilities = [
 
 const messages = [
   {
-    from: "Northline Family Medicine",
+    from: "Southeast Medical",
     when: "Today · 8:14 AM",
     preview: "Your Thursday 9:00 AM visit is confirmed. Intake is ready when you are.",
     unread: true,

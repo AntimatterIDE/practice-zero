@@ -120,7 +120,7 @@ export function AgreementDetail({ id }: { id: string }) {
               <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-slash" aria-hidden />
               <span>
                 <span className="block text-ink">Packet created</span>
-                <span className="text-muted">Demo seed · Northline Medical</span>
+                <span className="text-muted">Demo seed · Southeast Medical</span>
               </span>
             </li>
             {packet.status === "signed" && packet.signedAt ? (

@@ -12,26 +12,26 @@ export const starterAgreements: StarterAgreement[] = [
   {
     id: "starter-consent",
     title: "Consent to evaluate and treat",
-    body: `Northline Medical
+    body: `Southeast Medical
 
 Consent to evaluate and treat
 
-I agree that Northline Medical may examine me and provide office care. That includes a history, a physical examination, and the tests and treatments the physician discusses with me. I can ask questions, and I can refuse a test or a treatment.
+I agree that Southeast Medical may examine me and provide office care. That includes a history, a physical examination, and the tests and treatments the physician discusses with me. I can ask questions, and I can refuse a test or a treatment.
 
 This consent covers office evaluation and care. It is not a consent for an operation. If an operation, an injection, or another procedure is recommended, the practice will discuss that procedure with me, including why it is recommended and what the alternatives are. I will be asked to agree to that procedure separately.
 
 I understand that no result is guaranteed.
 
-Northline Medical does not provide emergency care through this form or through the website. If I think I have an emergency, I will call 911.`,
+Southeast Medical does not provide emergency care through this form or through the website. If I think I have an emergency, I will call 911.`,
   },
   {
     id: "starter-privacy",
     title: "Privacy notice acknowledgment",
-    body: `Northline Medical
+    body: `Southeast Medical
 
 Privacy notice acknowledgment
 
-Northline Medical keeps a notice of how it uses and shares health information. I can ask for that notice at the office, and I can ask what is in my record.
+Southeast Medical keeps a notice of how it uses and shares health information. I can ask for that notice at the office, and I can ask what is in my record.
 
 The practice uses and shares my health information to treat me, to be paid, and to run the practice. That includes sending a claim to my health plan. Those uses do not need a separate permission.
 
@@ -42,11 +42,11 @@ This is not permission to use my information for marketing.`,
   {
     id: "starter-benefits",
     title: "Assignment of benefits and financial responsibility",
-    body: `Northline Medical
+    body: `Southeast Medical
 
 Assignment of benefits and financial responsibility
 
-I assign the benefits payable for my care at Northline Medical to the practice, and I ask my health plan to pay the practice directly. I allow the practice to send my health plan the information it needs to process a claim. This assignment applies to Medicare and to other health plans.
+I assign the benefits payable for my care at Southeast Medical to the practice, and I ask my health plan to pay the practice directly. I allow the practice to send my health plan the information it needs to process a claim. This assignment applies to Medicare and to other health plans.
 
 I am responsible for charges my plan does not pay. That can include a deductible, a copay, coinsurance, and a service the plan does not cover. The practice will tell me the amount I am expected to pay at a visit before or when I am seen.
 
@@ -61,11 +61,11 @@ This form does not set a price. Charges are the ones the practice quotes to me o
   {
     id: "starter-messages",
     title: "Permission to email and text",
-    body: `Northline Medical
+    body: `Southeast Medical
 
 Permission to email and text
 
-I allow Northline Medical to email and text me about appointments, paperwork, and the business of my care, at the email address and mobile number I give the practice.
+I allow Southeast Medical to email and text me about appointments, paperwork, and the business of my care, at the email address and mobile number I give the practice.
 
 These messages can include a reminder or a link to a document. I will not send symptoms, photographs of a medical problem, or insurance numbers by text, or by replying to those emails.
 
@@ -76,11 +76,11 @@ I can tell the practice to stop texting or emailing me, and the practice will st
   {
     id: "starter-records",
     title: "Permission to obtain and send records",
-    body: `Northline Medical
+    body: `Southeast Medical
 
 Permission to obtain and send records
 
-I allow Northline Medical to request my records and images from other physicians, hospitals, and imaging centers so the practice can treat me. I allow those offices to send that information to Northline Medical.
+I allow Southeast Medical to request my records and images from other physicians, hospitals, and imaging centers so the practice can treat me. I allow those offices to send that information to Southeast Medical.
 
 I allow the practice to send my records and images to a physician or facility that is treating me, and to my health plan so the practice can be paid.
 

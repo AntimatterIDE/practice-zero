@@ -171,7 +171,7 @@ function PlatformPreview() {
           <div className="flex items-center gap-2">
             <span className="font-mono text-[1.05rem] leading-none text-foam">Ø</span>
             <div>
-              <p className="text-[11px] font-semibold text-paper">Northline Family Medicine</p>
+              <p className="text-[11px] font-semibold text-paper">Southeast Medical</p>
               <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-paper/40">Wednesday · practice desk</p>
             </div>
           </div>

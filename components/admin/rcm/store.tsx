@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useMemo, useSyncExternalStore } from "react";
 import { applyPrimaryCoverage, emptyVitals, normalizeAppointment, normalizeLine, normalizePatient, normalizeState, withChart } from "@/lib/rcm/chart";
-import { STORAGE_KEY, createSeedState, refreshSamplePatientName } from "@/lib/rcm/seed";
+import { STORAGE_KEY, createSeedState, refreshSamplePatientName, refreshSamplePracticeName } from "@/lib/rcm/seed";
 import { nextLocalClaimStatus } from "@/lib/rcm/submit-input";
 import type {
   Appointment,
@@ -88,7 +88,7 @@ function ensureClient() {
     clientState = serverState;
   } else {
     const normalized = normalizeState(stored);
-    const migrated = refreshSamplePatientName(normalized);
+    const migrated = refreshSamplePracticeName(refreshSamplePatientName(normalized));
     clientState = migrated;
     if (migrated !== normalized) localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
   }

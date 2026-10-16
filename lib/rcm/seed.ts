@@ -73,15 +73,29 @@ export function refreshSamplePatientName(state: RcmState): RcmState {
   };
 }
 
+/** Saved demos still name the sample hospital Northline or Northside. */
+export function refreshSamplePracticeName(state: RcmState): RcmState {
+  const raw = JSON.stringify(state);
+  if (!/Northline|Northside/i.test(raw)) return state;
+  return JSON.parse(
+    raw
+      .replaceAll("Northline Family Medicine", "Southeast Medical")
+      .replaceAll("Northside Medical", "Southeast Medical")
+      .replaceAll("Northline Medical", "Southeast Medical")
+      .replaceAll("northline.example", "southeast.example")
+      .replaceAll("northside.example", "southeast.example"),
+  ) as RcmState;
+}
+
 export const samplePractice = {
-  legalName: "Northline Medical",
+  legalName: "Southeast Medical",
   physicianName: "Elvis Francois, MD",
   npi: "1999999984",
   taxId: "39-1842201",
   taxonomy: "207R00000X",
   phone: "401-555-0198",
   address: "410 Market Street, Suite 200, Providence, RI 02903",
-  email: "office@northline.example",
+  email: "office@southeast.example",
   posCode: "11",
 } as const;
 
@@ -90,21 +104,21 @@ export const sampleStaff = [
   { id: "staff-pell", name: "Noah Pell", role: "Front desk" },
 ] as const;
 
-const consentBody = `Northline Medical
+const consentBody = `Southeast Medical
 
 Consent to evaluate and treat
 
-I agree that Northline Medical may examine me and provide office care. That includes a history, a physical examination, and the tests and treatments the physician discusses with me. I can ask questions, and I can refuse a test or a treatment.
+I agree that Southeast Medical may examine me and provide office care. That includes a history, a physical examination, and the tests and treatments the physician discusses with me. I can ask questions, and I can refuse a test or a treatment.
 
 This consent covers office evaluation and care. It is not a consent for a procedure. If a procedure is recommended, the practice will discuss it separately.
 
 I understand that no result is guaranteed.`;
 
-const recordsBody = `Northline Medical
+const recordsBody = `Southeast Medical
 
 Permission to obtain records
 
-I allow Northline Medical to request my records from other physicians and hospitals so the practice can treat me. I allow those offices to send that information to Northline Medical.`;
+I allow Southeast Medical to request my records from other physicians and hospitals so the practice can treat me. I allow those offices to send that information to Southeast Medical.`;
 
 function documents(signedConsent: boolean): ChartDocument[] {
   const slots = defaultDocuments().map((item) => {
@@ -715,7 +729,7 @@ export function createSeedState(): RcmState {
         patientName: "Paul Wallace",
         email: "paul.wallace@example.com",
         title: "Privacy notice acknowledgment",
-        body: `${consentBody.split("\n\n")[0]}\n\nPrivacy notice acknowledgment\n\nI was offered Northline Medical’s notice of privacy practices. I can ask for a copy at the front desk.`,
+        body: `${consentBody.split("\n\n")[0]}\n\nPrivacy notice acknowledgment\n\nI was offered Southeast Medical’s notice of privacy practices. I can ask for a copy at the front desk.`,
         status: "signed",
         signerName: "Paul Wallace",
         signedAt: "2026-10-13T16:06:00",
@@ -727,7 +741,7 @@ export function createSeedState(): RcmState {
         patientName: "Paul Wallace",
         email: "paul.wallace@example.com",
         title: "Permission to email and text",
-        body: `Northline Medical\n\nPermission to email and text\n\nI allow Northline Medical to email and text me about appointments and paperwork at the contact details on my chart. This is not marketing permission.`,
+        body: `Southeast Medical\n\nPermission to email and text\n\nI allow Southeast Medical to email and text me about appointments and paperwork at the contact details on my chart. This is not marketing permission.`,
         status: "signed",
         signerName: "Paul Wallace",
         signedAt: "2026-10-13T16:07:00",
@@ -739,7 +753,7 @@ export function createSeedState(): RcmState {
         patientName: "Paul Wallace",
         email: "paul.wallace@example.com",
         title: "Assignment of benefits",
-        body: `Northline Medical\n\nAssignment of benefits and financial responsibility\n\nI assign benefits payable for my care to Northline Medical and ask my plan to pay the practice directly. I am responsible for amounts my plan does not pay.`,
+        body: `Southeast Medical\n\nAssignment of benefits and financial responsibility\n\nI assign benefits payable for my care to Southeast Medical and ask my plan to pay the practice directly. I am responsible for amounts my plan does not pay.`,
         status: "open",
         signerName: "",
         signedAt: "",
@@ -775,7 +789,7 @@ export function createSeedState(): RcmState {
         patientName: "Anas Khan",
         email: "anas.khan@example.com",
         title: "Assignment of benefits",
-        body: `Northline Medical\n\nAssignment of benefits and financial responsibility\n\nI assign benefits payable for my care to Northline Medical and ask my plan to pay the practice directly. I am responsible for amounts my plan does not pay.`,
+        body: `Southeast Medical\n\nAssignment of benefits and financial responsibility\n\nI assign benefits payable for my care to Southeast Medical and ask my plan to pay the practice directly. I am responsible for amounts my plan does not pay.`,
         status: "open",
         signerName: "",
         signedAt: "",

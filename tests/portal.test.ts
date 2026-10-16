@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createSeedState, refreshSamplePatientName } from "@/lib/rcm/seed";
+import { createSeedState, refreshSamplePatientName, refreshSamplePracticeName } from "@/lib/rcm/seed";
 
 describe("sample portal chart", () => {
   it("opens Paul Wallace without a password", () => {
@@ -47,5 +47,17 @@ describe("sample portal chart", () => {
       "Dr. Shah: Good morning, Paul.\nPaul Wallace: A checkup.",
     );
     expect(refreshSamplePatientName(next)).toBe(next);
+  });
+
+  it("renames a saved Northline or Northside hospital to Southeast Medical", () => {
+    const state = createSeedState();
+    const saved = {
+      ...state,
+      practice: { ...state.practice, legalName: "Northside Medical", email: "office@northside.example" },
+    };
+    const next = refreshSamplePracticeName(saved);
+    expect(next.practice.legalName).toBe("Southeast Medical");
+    expect(next.practice.email).toBe("office@southeast.example");
+    expect(refreshSamplePracticeName(next)).toBe(next);
   });
 });
