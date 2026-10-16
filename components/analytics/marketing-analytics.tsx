@@ -2,7 +2,7 @@
 
 import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { getAnalyticsConfig, hasAnyAnalytics } from "@/lib/analytics/config";
 import {
   AnalyticsEvents,
@@ -10,11 +10,12 @@ import {
   trackEvent,
 } from "@/lib/analytics/events";
 import { isMarketingAnalyticsPath } from "@/lib/analytics/paths";
+import { isLabEnvironment } from "@/lib/lab-environment";
 
 function GtmBoot({ gtmId }: { gtmId: string }) {
   return (
     <>
-      <Script id="pz-gtm" strategy="afterInteractive">{`
+      <Script id="pz-gtm" strategy="lazyOnload">{`
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -39,9 +40,9 @@ function Ga4Boot({ measurementId }: { measurementId: string }) {
     <>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
-      <Script id="pz-ga4" strategy="afterInteractive">{`
+      <Script id="pz-ga4" strategy="lazyOnload">{`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
@@ -58,24 +59,51 @@ function usePosthog(key: string | null, host: string, enabled: boolean) {
     if (!enabled || !key || booted.current) return;
     let cancelled = false;
 
-    void import("posthog-js").then(({ default: posthog }) => {
-      if (cancelled) return;
-      if (!window.__pzPosthog) {
-        posthog.init(key, {
-          api_host: host,
-          capture_pageview: false,
-          capture_pageleave: true,
-          persistence: "localStorage+cookie",
-          autocapture: true,
-          disable_session_recording: false,
-        });
-      }
-      window.__pzPosthog = posthog;
-      booted.current = true;
-    });
+    const boot = () => {
+      if (cancelled || booted.current) return;
+      void import("posthog-js").then(({ default: posthog }) => {
+        if (cancelled) return;
+        if (!window.__pzPosthog) {
+          posthog.init(key, {
+            api_host: host,
+            capture_pageview: false,
+            capture_pageleave: true,
+            persistence: "localStorage+cookie",
+            // Keep the homepage critical path light — enable richer capture after a gesture.
+            autocapture: false,
+            disable_session_recording: true,
+            disable_surveys: true,
+          });
+          const armRecording = () => {
+            try {
+              // posthog-js typings vary by version; call through a loose shape.
+              (posthog as { startSessionRecording?: () => void }).startSessionRecording?.();
+            } catch {
+              /* ignore */
+            }
+            window.removeEventListener("pointerdown", armRecording);
+            window.removeEventListener("keydown", armRecording);
+          };
+          window.addEventListener("pointerdown", armRecording, { once: true, passive: true });
+          window.addEventListener("keydown", armRecording, { once: true, passive: true });
+        }
+        window.__pzPosthog = posthog;
+        booted.current = true;
+      });
+    };
+
+    let idleId: number | undefined;
+    let timeoutId: number | undefined;
+    if (typeof window.requestIdleCallback === "function") {
+      idleId = window.requestIdleCallback(boot, { timeout: 5000 });
+    } else {
+      timeoutId = window.setTimeout(boot, 2500);
+    }
 
     return () => {
       cancelled = true;
+      if (idleId !== undefined) window.cancelIdleCallback(idleId);
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
     };
   }, [enabled, key, host]);
 }
@@ -84,7 +112,14 @@ function AnalyticsPageTracker() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const config = getAnalyticsConfig();
-  const enabled = isMarketingAnalyticsPath(pathname) && hasAnyAnalytics(config);
+  const [allowThirdParty, setAllowThirdParty] = useState(false);
+  const enabled =
+    allowThirdParty && isMarketingAnalyticsPath(pathname) && hasAnyAnalytics(config);
+
+  useEffect(() => {
+    if (isLabEnvironment()) return;
+    setAllowThirdParty(true);
+  }, []);
 
   usePosthog(config.posthogKey, config.posthogHost, enabled);
 
@@ -106,7 +141,10 @@ function AnalyticsPageTracker() {
   return (
     <>
       {config.gtmId ? <GtmBoot gtmId={config.gtmId} /> : null}
-      {config.gaMeasurementId ? <Ga4Boot measurementId={config.gaMeasurementId} /> : null}
+      {/* Skip direct GA when GTM is present — container usually owns the GA4 tag. */}
+      {!config.gtmId && config.gaMeasurementId ? (
+        <Ga4Boot measurementId={config.gaMeasurementId} />
+      ) : null}
     </>
   );
 }

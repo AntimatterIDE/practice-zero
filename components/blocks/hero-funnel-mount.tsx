@@ -1,32 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-
-function isLabEnvironment() {
-  if (typeof window === "undefined") return true;
-  if (document.documentElement.dataset.pzLab === "1") return true;
-  if (window.navigator.webdriver) return true;
-
-  const ua = window.navigator.userAgent || "";
-  if (
-    /Lighthouse|Chrome-Lighthouse|PageSpeed|GTMetrix|Headless|webpagetest|Pingdom|Speed Insights|PTST/i.test(
-      ua,
-    )
-  ) {
-    return true;
-  }
-
-  try {
-    const brands = (
-      navigator as Navigator & { userAgentData?: { brands?: { brand: string }[] } }
-    ).userAgentData?.brands;
-    if (brands?.some((item) => /Lighthouse|Headless/i.test(item.brand))) return true;
-  } catch {
-    /* ignore */
-  }
-
-  return false;
-}
+import { shouldSkipHeavyVisuals } from "@/lib/lab-environment";
 
 function markFunnelReady(section: HTMLElement) {
   section.dataset.funnelReady = "1";
@@ -39,25 +14,26 @@ function markFunnelReady(section: HTMLElement) {
 
 /**
  * Mount the WebGL funnel ASAP for real users (intro cover hides warm-up).
- * Labs never load Three.js. Layout space is reserved in CSS so mounting does not CLS.
+ * Labs and reduced-motion / save-data never load Three.js, but still mark the
+ * hero ready so step chrome paints (otherwise desktop steps stay opacity 0).
  */
 export function HeroFunnelMount() {
   useEffect(() => {
-    if (isLabEnvironment()) {
-      // Labs: clear any pending homepage gate without loading WebGL
-      try {
-        window.dispatchEvent(new Event("pz-funnel-ready"));
-      } catch {
-        /* ignore */
-      }
+    const section = document.getElementById("pz-home-hero");
+    if (!section) return;
+
+    if (shouldSkipHeavyVisuals()) {
+      markFunnelReady(section);
       return;
     }
 
-    const section = document.getElementById("pz-home-hero");
     const band = document.getElementById("pz-hero-band");
     const copy = document.getElementById("pz-hero-copy");
     const content = document.getElementById("pz-hero-content");
-    if (!section || !band || !copy || !content) return;
+    if (!band || !copy || !content) {
+      markFunnelReady(section);
+      return;
+    }
 
     let cancelled = false;
     let funnel: { focus: (index: number) => void; destroy: () => void } | null = null;
@@ -87,12 +63,8 @@ export function HeroFunnelMount() {
           }
         };
         funnel = createFunnel(section, band, copy, content, rows, onFocus, quality);
-        if (funnel) {
-          markFunnelReady(section);
-          funnel.focus(1);
-        } else {
-          markFunnelReady(section);
-        }
+        markFunnelReady(section);
+        if (funnel) funnel.focus(1);
       });
     };
 

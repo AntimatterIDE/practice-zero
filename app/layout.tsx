@@ -123,7 +123,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full bg-paper font-sans text-ink">
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var u=navigator.userAgent||"";var p=location.pathname||"/";var home=p==="/"||p==="";var lab=!!navigator.webdriver||/Lighthouse|Chrome-Lighthouse|PageSpeed|Headless|GTMetrix|webpagetest|Pingdom|PTST|Speed Insights/i.test(u);try{if(!lab&&navigator.languages&&navigator.languages.length===0)lab=true}catch(e){}if(lab){document.documentElement.dataset.pzLab="1"}else if(home){document.documentElement.dataset.pzIntro="pending"}}catch(e){}`,
+            __html: `try{var u=navigator.userAgent||"";var p=location.pathname||"/";var home=p==="/"||p==="";var lab=!!navigator.webdriver||/Lighthouse|Chrome-Lighthouse|PageSpeed|Headless|GTMetrix|webpagetest|Pingdom|PTST|Speed Insights/i.test(u);try{if(!lab&&navigator.languages&&navigator.languages.length===0)lab=true}catch(e){}var reduce=false;try{reduce=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)}catch(e){}var seen=false;try{seen=sessionStorage.getItem("pz-intro-v2")==="1"}catch(e){}if(lab){document.documentElement.dataset.pzLab="1"}else if(home&&!seen&&!reduce){document.documentElement.dataset.pzIntro="pending"}}catch(e){}`,
           }}
         />
         <script

@@ -59,6 +59,7 @@ function useChatViewport() {
 
 export function SiteChat() {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -79,6 +80,31 @@ export function SiteChat() {
     pathname.startsWith("/portal") ||
     pathname.startsWith("/og");
 
+  // Keep chat off the homepage critical path (labs never mount it).
+  useEffect(() => {
+    if (hidden) return;
+    if (document.documentElement.dataset.pzLab === "1") return;
+    if (window.navigator.webdriver) return;
+
+    let cancelled = false;
+    const show = () => {
+      if (!cancelled) setMounted(true);
+    };
+    let idleId: number | undefined;
+    let timeoutId: number | undefined;
+    if (typeof window.requestIdleCallback === "function") {
+      idleId = window.requestIdleCallback(show, { timeout: 4000 });
+    } else {
+      timeoutId = window.setTimeout(show, 2000);
+    }
+
+    return () => {
+      cancelled = true;
+      if (idleId !== undefined) window.cancelIdleCallback(idleId);
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+    };
+  }, [hidden]);
+
   useEffect(() => {
     if (!open) return;
     const el = scrollerRef.current;
@@ -86,7 +112,7 @@ export function SiteChat() {
     el.scrollTop = el.scrollHeight;
   }, [open, messages, busy]);
 
-  if (hidden) return null;
+  if (hidden || !mounted) return null;
 
   async function send(text: string) {
     const content = text.trim();

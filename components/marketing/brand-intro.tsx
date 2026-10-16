@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ComponentType } from "react";
+import { INTRO_SESSION_KEY, shouldSkipHeavyVisuals } from "@/lib/lab-environment";
 
 function clearIntroGate() {
   try {
@@ -10,48 +11,40 @@ function clearIntroGate() {
   }
 }
 
-function isLabClient() {
-  if (typeof window === "undefined") return true;
-  if (document.documentElement.dataset.pzLab === "1") return true;
-  if (window.navigator.webdriver) return true;
-
-  const ua = window.navigator.userAgent || "";
-  if (
-    /Lighthouse|Chrome-Lighthouse|PageSpeed|GTMetrix|Headless|webpagetest|Pingdom|Speed Insights|PTST/i.test(
-      ua,
-    )
-  ) {
-    return true;
-  }
-
+function markIntroSeen() {
   try {
-    const brands = (
-      navigator as Navigator & { userAgentData?: { brands?: { brand: string }[] } }
-    ).userAgentData?.brands;
-    if (brands?.some((item) => /Lighthouse|Headless/i.test(item.brand))) return true;
+    window.sessionStorage.setItem(INTRO_SESSION_KEY, "1");
   } catch {
     /* ignore */
   }
-
-  return false;
 }
 
 /**
- * Homepage brand intro — plays on every home load/refresh (except labs).
- * The WebGL funnel warms as the intro exits so the countdown stays light.
+ * Homepage brand intro — plays on first home load in a session (except labs /
+ * reduced-motion / save-data). The WebGL funnel warms as the intro exits.
  */
 export function BrandIntro() {
   const [Animation, setAnimation] = useState<ComponentType<{ onReady?: () => void }> | null>(null);
 
   useEffect(() => {
-    if (isLabClient()) {
+    if (shouldSkipHeavyVisuals()) {
       clearIntroGate();
+      markIntroSeen();
       try {
         window.dispatchEvent(new Event("pz-funnel-ready"));
       } catch {
         /* ignore */
       }
       return;
+    }
+
+    try {
+      if (window.sessionStorage.getItem(INTRO_SESSION_KEY) === "1") {
+        clearIntroGate();
+        return;
+      }
+    } catch {
+      /* ignore */
     }
 
     let cancelled = false;
@@ -66,5 +59,12 @@ export function BrandIntro() {
 
   if (!Animation) return null;
   // Swap the CSS first-paint cover for the animated overlay; funnel warms underneath.
-  return <Animation onReady={clearIntroGate} />;
+  return (
+    <Animation
+      onReady={() => {
+        clearIntroGate();
+        markIntroSeen();
+      }}
+    />
+  );
 }
