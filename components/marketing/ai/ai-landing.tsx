@@ -31,12 +31,12 @@ const pillars = [
   {
     icon: FileText,
     title: "Claims without the chase",
-    body: "Eligibility, clean claim prep, and denial follow-through run as agent work—so clinical time stays clinical.",
+    body: "Eligibility, prior auth, clean claim prep, and denial follow-through run as agent work—so clinical time stays clinical.",
   },
   {
     icon: Wallet,
     title: "Payment tracking that is already open",
-    body: "Balances, remits, and patient responsibility stay visible without another spreadsheet owner.",
+    body: "Patient pay, balances, remits, and statements stay visible without another spreadsheet owner.",
   },
   {
     icon: ShieldCheck,

@@ -34,12 +34,12 @@ const pillars = [
   {
     icon: Layers,
     title: "Practice-specific components",
-    body: "Bring the pieces you already rely on — specialty forms, checklists, reporting, or stacked operational components. We wire them in so nothing you trust gets left behind.",
+    body: "Bring the pieces you already rely on — specialty forms, e-prescribing, labs, checklists, reporting, or stacked operational components. We wire them in so nothing you trust gets left behind.",
   },
   {
     icon: Globe,
     title: "Custom practice website, included",
-    body: "A custom website for the practice is included at no extra charge — patient-facing pages that match your brand and point into intake, portal, and scheduling.",
+    body: "A custom website for the practice is included at no extra charge — patient-facing pages, reputation, and reviews that match your brand and point into intake, portal, and scheduling.",
   },
   {
     icon: Headphones,

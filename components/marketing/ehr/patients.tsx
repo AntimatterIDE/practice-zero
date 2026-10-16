@@ -7,7 +7,7 @@ export function PatientsSection() {
     <CategorySection
       eyebrow="Patients"
       title="Paul Wallace is already on the chart."
-      body="Demographics, coverage, and the problem list are in the room before anyone asks for them. MRN 100481. March 14, 1988."
+      body="Demographics, coverage, medications for e-prescribing, and the problem list are in the room before anyone asks for them. MRN 100481. March 14, 1988."
     >
       <TiltFrame className="relative mx-auto h-[28rem] w-full max-w-md">
         <Drift dx={22} dy={12} className="absolute inset-x-10 top-10">

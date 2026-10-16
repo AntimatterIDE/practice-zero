@@ -26,22 +26,22 @@ const capabilities = [
   {
     icon: MessageSquare,
     title: "Talk with the practice",
-    body: "Secure messages for refills, questions, and follow-ups — without phone tag.",
+    body: "Secure messages for refill requests, questions, and follow-ups — without phone tag.",
   },
   {
     icon: Bell,
     title: "Updates as they happen",
-    body: "Appointment reminders, results ready notices, and balance alerts land in the portal and on your phone.",
+    body: "Appointment reminders, lab results ready, and patient-pay balance alerts land in the portal and on your phone.",
   },
   {
     icon: FolderOpen,
     title: "Records you can reach",
-    body: "Visit summaries, labs, imaging, and statements stay available whenever you need them.",
+    body: "Visit summaries, labs, imaging, and statements stay available whenever you need them — including online patient pay.",
   },
   {
     icon: Upload,
     title: "Upload what the office needs",
-    body: "Insurance cards, ID, referral letters, and forms go straight to your chart before the visit.",
+    body: "Insurance cards, ID, referral letters, and forms go straight to your chart before the visit — no fax chase.",
   },
   {
     icon: ShieldCheck,

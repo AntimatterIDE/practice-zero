@@ -4,19 +4,19 @@ import { BarChart3, FileText, Stethoscope, Users } from "lucide-react";
 const pillars = [
   {
     title: "Clinical",
-    body: "AI documentation & coding",
+    body: "Scribe, e-prescribing & labs",
     href: "/ehr",
     icon: Stethoscope,
   },
   {
     title: "Revenue",
-    body: "Claims, collections & payer work",
+    body: "Eligibility, prior auth & patient pay",
     href: "/billing",
     icon: FileText,
   },
   {
     title: "Operations",
-    body: "Scheduling, outreach & engagement",
+    body: "Scheduling, outreach & reviews",
     href: "/marketing",
     icon: Users,
   },

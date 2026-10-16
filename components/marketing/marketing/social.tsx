@@ -9,7 +9,7 @@ export function SocialSection() {
     <CategorySection
       eyebrow="Social"
       title="The practice, in public."
-      body="Two notes the practice can post: mornings are open, and new patients are welcome. Counts stay off the page."
+      body="Two notes the practice can post: mornings are open, and new patients are welcome. Reputation and reviews stay part of how the practice shows up — counts stay off the page."
     >
       <TiltFrame className="relative h-80">
         <Drift dx={14} dy={8} className="absolute left-0 top-8 w-64">

@@ -25,7 +25,7 @@ const features = [
   {
     icon: FileText,
     title: "Enterprise EHR included",
-    body: "Charting, scribe, scheduling, intake, and the patient portal — free with the agreement.",
+    body: "Charting, scribe, e-prescribing, labs, scheduling, intake, and the patient portal — free with the agreement.",
   },
   {
     icon: ShieldCheck,
@@ -35,12 +35,12 @@ const features = [
   {
     icon: Settings2,
     title: "Automate & reduce manual work",
-    body: "Agents clear after-hours charting, phone tag with payers, and unconfirmed mornings.",
+    body: "Agents clear after-hours charting, prior auth loops, phone tag with payers, and unconfirmed mornings.",
   },
   {
     icon: BarChart3,
     title: "Real-time insights",
-    body: "See collections, open tasks, and the morning board without exporting another spreadsheet.",
+    body: "See collections, patient pay, open tasks, and the morning board without exporting another spreadsheet.",
   },
   {
     icon: Users,

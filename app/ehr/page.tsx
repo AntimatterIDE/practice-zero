@@ -13,11 +13,13 @@ import { pageOpenGraph } from "@/lib/open-graph";
 
 export const metadata: Metadata = {
   title: "EHR",
-  description: "Patients, visits, the scribe, intake, agreements, tasks, and requests.",
+  description:
+    "Patients, visits, the scribe, e-prescribing, labs and results, intake, agreements, tasks, and requests.",
   alternates: { canonical: "/ehr" },
   openGraph: pageOpenGraph({
     title: "EHR · practice zero",
-    description: "Patients, visits, the scribe, intake, agreements, tasks, and requests.",
+    description:
+      "Patients, visits, the scribe, e-prescribing, labs and results, intake, agreements, tasks, and requests.",
     url: "/ehr",
   }),
 };
@@ -31,7 +33,7 @@ export default function EhrPage() {
       <CategoryIntro
         kicker="EHR"
         title="the chart is already in the room."
-        lede="Patients, visits, the scribe, intake, agreements, tasks, and requests. Wednesday morning is already underway."
+        lede="Patients, visits, the scribe, e-prescribing, labs and results, intake, agreements, tasks, and requests. Wednesday morning is already underway."
       />
       <PatientsSection />
       <VisitsSection />

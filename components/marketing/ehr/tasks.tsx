@@ -5,7 +5,7 @@ import { CategorySection } from "@/components/marketing/depth";
 
 const tasks = [
   { title: "Records release is unsigned", detail: "Garrett Holliday still needs to sign before 10:30.", from: -28 },
-  { title: "Denial follow-up", detail: "Anas Khan has an August claim denied for medical necessity.", from: 28 },
+  { title: "Prior auth follow-up", detail: "Anas Khan’s imaging auth is still pending payer response.", from: 28 },
 ];
 
 export function TasksSection() {
@@ -15,7 +15,7 @@ export function TasksSection() {
       flip
       eyebrow="Tasks"
       title="Two things are still open."
-      body="The morning has a records release waiting on Garrett, and a denial follow-up waiting on Anas. Both are due today."
+      body="The morning has a records release waiting on Garrett, and a prior auth follow-up waiting on Anas. Both are due today."
     >
       <div className="grid gap-4">
         {tasks.map((task, index) => (

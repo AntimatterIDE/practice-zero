@@ -15,7 +15,7 @@ export function ScribeSection() {
     <CategorySection
       eyebrow="Scribe"
       title="The visit becomes the note."
-      body="The 9:00 transcript stays with the chart. The assessment is essential hypertension, and the note stays hidden until someone asks to see it."
+      body="The 9:00 transcript stays with the chart. The assessment is essential hypertension — note, labs, and e-prescribe stay with the visit until someone asks to see them."
     >
       <div className="grid gap-3">
         {lines.map(([who, line], index) => (

@@ -48,15 +48,15 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "eligibility before the patient is dilated",
-        body: "coverage checks land early enough to protect injections, lasers, and workups — not after the claim comes back unpaid.",
+        body: "coverage and prior auth status land early enough to protect injections, lasers, and workups — not after the claim comes back unpaid.",
       },
       {
         title: "claims attached to the visit",
-        body: "documentation, claim drafts, and remittance status stay connected so denial rework doesn’t restart from a fax pile.",
+        body: "documentation, claim drafts, patient pay, and remittance status stay connected so denial rework doesn’t restart from a fax pile.",
       },
       {
         title: "recall and confirm without a second stack",
-        body: "outreach for overdue exams, postop checks, and open slots runs from the same practice surface as chart and billing.",
+        body: "outreach for overdue exams, postop checks, and open slots runs from the same practice surface as chart and billing — including reputation and reviews.",
       },
       {
         title: "specialty forms in onboarding",
@@ -246,7 +246,7 @@ export const specialties: SpecialtyContent[] = [
     howWeHelp: [
       {
         title: "notes drafted in the visit",
-        body: "documentation support keeps panels from spilling into nights — the note moves while the patient is still in the room.",
+        body: "documentation support keeps panels from spilling into nights — the note, e-prescribe, and labs move while the patient is still in the room.",
       },
       {
         title: "eligibility before the waiting room fills",
@@ -254,7 +254,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "claims and denials on the same board",
-        body: "unpaid work stays prioritized instead of becoming a Friday catch-up project for whoever has time.",
+        body: "unpaid work and patient pay stay prioritized instead of becoming a Friday catch-up project for whoever has time.",
       },
       {
         title: "outreach that matches the chart",
@@ -272,7 +272,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "coverage checks",
-        body: "eligibility status before check-in so the desk isn’t troubleshooting at the window.",
+        body: "eligibility and prior auth status before check-in so the desk isn’t troubleshooting at the window.",
       },
       {
         title: "revenue follow-through",
@@ -347,11 +347,11 @@ export const specialties: SpecialtyContent[] = [
     howWeHelp: [
       {
         title: "one patient across clinical and billing",
-        body: "chart, claim, and balance stay attached so medical and cash-pay workflows don’t fork into conflicting systems.",
+        body: "chart, e-prescribe, claim, and patient pay stay attached so medical and cash-pay workflows don’t fork into conflicting systems.",
       },
       {
         title: "claims that restart less often",
-        body: "codes and claim drafts stay with the visit so denials don’t send someone back to square one.",
+        body: "codes and claim drafts stay with the visit — including pathology follow-up — so denials don’t send someone back to square one.",
       },
       {
         title: "recall without a bolt-on CRM",
@@ -359,7 +359,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "optional ads, included platform",
-        body: "advertising spend stays optional and on your terms. the platform itself has no extra license fee under the billing agreement.",
+        body: "advertising spend stays optional and on your terms. reputation and reviews sit with the same growth surface. the platform itself has no extra license fee under the billing agreement.",
       },
       {
         title: "forms and flows tailored in onboarding",
@@ -373,7 +373,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "eligibility & balances",
-        body: "coverage and patient responsibility visible early — not at checkout surprises.",
+        body: "coverage and patient pay visible early — not at checkout surprises.",
       },
       {
         title: "claims & remits",
@@ -381,7 +381,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "recall & outreach",
-        body: "overdue visits and open chairs filled from the same surface as care.",
+        body: "overdue visits, reviews, and open chairs filled from the same surface as care.",
       },
     ],
     zeroOut: [
@@ -452,19 +452,19 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "eligibility before check-in",
-        body: "coverage is checked early enough to protect the visit — not turned into a waiting-room negotiation.",
+        body: "coverage and prior auth status are checked early enough to protect the visit — not turned into a waiting-room negotiation.",
       },
       {
         title: "specialty intake in the build",
-        body: "white-glove onboarding brings your specialty forms and agreements into the practice so go-live matches how you work.",
+        body: "white-glove onboarding brings your specialty forms, e-prescribing, labs, and agreements into the practice so go-live matches how you work.",
       },
       {
         title: "chart and claim prep that don’t wait for night",
-        body: "agents keep documentation and claim work moving so evenings aren’t the default admin shift.",
+        body: "agents keep documentation, e-prescribe, labs, and claim work moving so evenings aren’t the default admin shift.",
       },
       {
         title: "follow-up without a second system",
-        body: "recalls, reminders, and balance outreach stay on the same board as clinical and billing work.",
+        body: "recalls, reminders, patient pay, and balance outreach stay on the same board as clinical and billing work.",
       },
     ],
     board: [
@@ -474,11 +474,11 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "coverage early",
-        body: "eligibility status tied to today’s visits so check-in stays calm.",
+        body: "eligibility and prior auth status tied to today’s visits so check-in stays calm.",
       },
       {
         title: "claims & balances",
-        body: "action-needed revenue work prioritized for the people who can clear it.",
+        body: "action-needed revenue work and patient pay prioritized for the people who can clear it.",
       },
       {
         title: "patient outreach",

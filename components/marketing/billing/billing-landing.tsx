@@ -18,7 +18,7 @@ const pillars = [
   {
     icon: CalendarCheck2,
     title: "Protect revenue early.",
-    body: "Verify eligibility and resolve coverage issues before the visit.",
+    body: "Verify eligibility and move prior authorization before the visit stalls.",
   },
   {
     icon: FileText,
@@ -28,12 +28,12 @@ const pillars = [
   {
     icon: PieChart,
     title: "Act on unpaid revenue.",
-    body: "Prioritize denials and outstanding claims so follow-up stays focused.",
+    body: "Prioritize denials, outstanding claims, and patient pay so follow-up stays focused.",
   },
   {
     icon: BarChart3,
     title: "See cash flow clearly.",
-    body: "Track collections, balances, and payer activity without another export.",
+    body: "Track collections, statements, balances, and payer activity without another export.",
   },
 ];
 
@@ -202,8 +202,8 @@ export function BillingLanding() {
               care delivered. revenue collected.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-graphite">
-              Connect care to collections. Reduce billing friction, keep claims moving, and gain a clearer view of cash
-              flow.
+              Connect care to collections — eligibility, prior auth, claims, patient pay, and remits — without another
+              chase.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
               <Link

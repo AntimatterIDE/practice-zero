@@ -9,7 +9,7 @@ export function EftSection() {
     <CategorySection
       eyebrow="Collect from payers"
       title="The June visit came back paid."
-      body="Pinetree Health paid $140 on Anas Khan’s June visit. Enrollment for EFTs is how that money finds the practice."
+      body="Pinetree Health paid $140 on Anas Khan’s June visit. Enrollment for EFTs is how that money finds the practice — beside patient pay, statements, and balances on the same board."
     >
       <div className="rounded-3xl border border-line bg-white p-6 shadow-xl shadow-ink/10">
         <div className="flex items-end justify-between text-sm">

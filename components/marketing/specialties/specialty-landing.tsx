@@ -13,9 +13,9 @@ import {
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const pillars = [
-  { href: "/ehr", label: "Clinical", body: "AI documentation & coding" },
-  { href: "/billing", label: "Revenue", body: "Claims, collections & payer work" },
-  { href: "/marketing", label: "Operations", body: "Scheduling, outreach & engagement" },
+  { href: "/ehr", label: "Clinical", body: "Scribe, e-prescribing & labs" },
+  { href: "/billing", label: "Revenue", body: "Eligibility, prior auth & patient pay" },
+  { href: "/marketing", label: "Operations", body: "Scheduling, outreach & reviews" },
 ] as const;
 
 function FadeIn({

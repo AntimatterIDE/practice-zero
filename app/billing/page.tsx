@@ -7,12 +7,12 @@ import { pageOpenGraph } from "@/lib/open-graph";
 export const metadata: Metadata = {
   title: "Billing",
   description:
-    "Connect care to collections. Reduce billing friction, keep claims moving, and gain a clearer view of cash flow.",
+    "Connect care to collections — eligibility, prior auth, claims, patient pay, and remits — without another chase.",
   alternates: { canonical: "/billing" },
   openGraph: pageOpenGraph({
     title: "Billing · practice zero",
     description:
-      "Connect care to collections. Reduce billing friction, keep claims moving, and gain a clearer view of cash flow.",
+      "Connect care to collections — eligibility, prior auth, claims, patient pay, and remits — without another chase.",
     url: "/billing",
   }),
 };

@@ -11,11 +11,13 @@ import { pageOpenGraph } from "@/lib/open-graph";
 
 export const metadata: Metadata = {
   title: "Marketing",
-  description: "Outreach, follow-up, scheduling, search, and social for an independent practice.",
+  description:
+    "Outreach, follow-up, scheduling, search, social, and reputation for an independent practice.",
   alternates: { canonical: "/marketing" },
   openGraph: pageOpenGraph({
     title: "Marketing · practice zero",
-    description: "Outreach, follow-up, scheduling, search, and social for an independent practice.",
+    description:
+      "Outreach, follow-up, scheduling, search, social, and reputation for an independent practice.",
     url: "/marketing",
   }),
 };
@@ -29,7 +31,7 @@ export default function MarketingPage() {
       <CategoryIntro
         kicker="Marketing"
         title="the practice reaches out."
-        lede="A text waiting to be sent, the follow-up after a visit, a schedule still missing a confirmation, and pages a new patient can find."
+        lede="A text waiting to be sent, the follow-up after a visit, a schedule still missing a confirmation, and pages — plus reviews — a new patient can find."
       />
       <OutreachSection />
       <FollowUpSection />
