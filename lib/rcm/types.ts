@@ -81,12 +81,28 @@ export type Allergy = {
   severity: "mild" | "moderate" | "severe" | "unknown";
 };
 
+export type ERxStatus = "not_sent" | "sent";
+
 export type Medication = {
   id: string;
   name: string;
   dose: string;
   frequency: string;
   status: "active" | "stopped";
+  /** Demo-only e-prescribe status — nothing leaves the browser. */
+  eRxStatus?: ERxStatus;
+  eRxSentAt?: string;
+};
+
+export type LabResultStatus = "ordered" | "resulted";
+
+export type LabResult = {
+  id: string;
+  name: string;
+  status: LabResultStatus;
+  orderedAt: string;
+  resultedAt?: string;
+  summary: string;
 };
 
 export type ChartDocument = {
@@ -140,6 +156,7 @@ export type Patient = PatientRegistration & {
   problems: Problem[];
   allergies: Allergy[];
   medications: Medication[];
+  labs: LabResult[];
   documents: ChartDocument[];
   cases: InjuryCase[];
   intakeAnswers?: { label: string; value: string }[];

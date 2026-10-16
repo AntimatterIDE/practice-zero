@@ -18,8 +18,8 @@ const updates = [
     tone: "info" as const,
   },
   {
-    title: "Balance update",
-    detail: "$25 copay posted · receipt in Messages",
+    title: "Patient pay update",
+    detail: "$25 copay posted · statement receipt in Messages",
     when: "Mon",
     icon: DollarSign,
     tone: "ok" as const,
@@ -42,7 +42,8 @@ export function PatientUpdates() {
           what changed.
         </h1>
         <p className="mt-3 max-w-xl text-base text-graphite">
-          Appointments, results, and balances as they move — so you are not waiting on a callback for status.
+          Appointments, lab results, and patient pay balances as they move — so you are not waiting on a callback for
+          status.
         </p>
       </div>
 

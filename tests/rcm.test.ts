@@ -37,6 +37,7 @@ describe("practice desk fixture", () => {
     ]);
     expect(state.appointments).toHaveLength(8);
     expect(state.tasks.filter((task) => task.status === "open")).toHaveLength(2);
+    expect(state.tasks.find((task) => task.id === "task-voss")?.title).toMatch(/prior auth/i);
     expect(state.packets.filter((packet) => packet.status === "open")).toHaveLength(4);
     expect(state.claims.find((claim) => claim.id === "clm-hale")?.status).toBe("draft");
     expect(state.claims.find((claim) => claim.id === "clm-voss-denial")?.status).toBe("denied");
@@ -48,6 +49,10 @@ describe("practice desk fixture", () => {
       "/try/claims/clm-hale",
       "/try/patients/pt-voss",
     ]);
+    expect(state.agentRuns.find((run) => run.id === "run-text")?.title).toMatch(/patient pay/i);
+    const hale = state.patients.find((patient) => patient.id === "pt-hale");
+    expect(hale?.medications[0]?.eRxStatus).toBe("sent");
+    expect(hale?.labs.some((lab) => lab.status === "resulted")).toBe(true);
     expect(state.visitNotes[0]?.revealed).toBe(false);
   });
 

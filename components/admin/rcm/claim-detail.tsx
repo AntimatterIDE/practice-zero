@@ -105,7 +105,9 @@ export function ClaimDetail({ id }: { id: string }) {
         </Button>
       </div>
       {message ? <p className="mt-4 max-w-2xl text-sm text-muted">{message}</p> : null}
-      <p className="mt-3 max-w-2xl text-sm text-muted">Statement balance on this preview: {money(balance)}. It has not been mailed.</p>
+      <p className="mt-3 max-w-2xl text-sm text-muted">
+        Patient pay / statement balance on this preview: {money(balance)}. It has not been mailed.
+      </p>
       {claim.events.length ? (
         <ol className="mt-6 grid gap-2">
           {claim.events.map((event) => (

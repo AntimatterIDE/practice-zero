@@ -30,7 +30,7 @@ export function EligibilityDesk() {
       <PageHeader
         kicker="Billing"
         title="Eligibility"
-        lede="A result is already on file for the 9:00 patient. Running a check adds another canned result. Nothing leaves this browser."
+        lede="Coverage and prior auth status for this morning. Running a check adds another canned result. Nothing leaves this browser."
       />
       <div className="mt-8 grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
         <form
@@ -62,7 +62,8 @@ export function EligibilityDesk() {
               </p>
               <p className="mt-3 text-sm">{check.summary}</p>
               <p className="mt-2 text-sm text-muted">
-                Copay {benefit(check.copay)} · Deductible remaining {benefit(check.deductibleRemaining)}
+                Copay {benefit(check.copay)} · Deductible remaining {benefit(check.deductibleRemaining)} · Prior
+                auth {check.priorAuthRequired ? "required" : "not required"}
               </p>
               <Link href={`/try/patients/${check.patientId}`} className="mt-3 inline-block text-sm underline">
                 Open chart

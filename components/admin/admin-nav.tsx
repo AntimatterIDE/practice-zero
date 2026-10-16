@@ -34,7 +34,7 @@ export type DeskLink = {
 
 export const practiceLinks: DeskLink[] = [
   { href: "/try", title: "Today", body: "Morning board and open work", icon: CalendarDays },
-  { href: "/try/patients", title: "Patients", body: "Charts, coverage, and history", icon: Users },
+  { href: "/try/patients", title: "Patients", body: "Charts, e-prescribe, labs, and history", icon: Users },
   { href: "/try/scheduling", title: "Schedule", body: "Day view and booking", icon: Calendar },
   { href: "/try/visits", title: "Visits", body: "Rooms, status, and notes", icon: Stethoscope },
   { href: "/try/consultations", title: "Requests", body: "New patients and questions", icon: Inbox },
@@ -47,9 +47,9 @@ export const practiceLinks: DeskLink[] = [
 
 export const billingLinks: DeskLink[] = [
   { href: "/try/claims", title: "Claims", body: "Coding through remittance", icon: Receipt },
-  { href: "/try/eligibility", title: "Eligibility", body: "Coverage before checkout", icon: ShieldCheck },
+  { href: "/try/eligibility", title: "Eligibility", body: "Coverage and prior auth", icon: ShieldCheck },
   { href: "/try/denials", title: "Denials", body: "Rework and appeals", icon: AlertCircle },
-  { href: "/try/payments", title: "Payments", body: "Posting and balances", icon: Wallet },
+  { href: "/try/payments", title: "Payments", body: "Patient pay, posting, and balances", icon: Wallet },
   { href: "/try/claims/drafts", title: "Drafts", body: "Claims not yet submitted", icon: FileEdit },
   { href: "/try/upload", title: "Upload", body: "Import remits and files", icon: Upload },
   { href: "/try/analytics", title: "Analytics", body: "Collections and backlog", icon: BarChart3 },

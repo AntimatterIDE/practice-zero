@@ -13,6 +13,7 @@ import type {
   ContactPreference,
   Coverage,
   InjuryCase,
+  LabResult,
   Medication,
   Patient,
   PortalStatus,
@@ -261,12 +262,28 @@ function Overview({
           </span>
         </p>
         <p className="mt-3 text-sm">
-          <span className="block font-semibold">Medications</span>
+          <span className="block font-semibold">Medications · e-prescribe</span>
           <span className="text-muted">
             {patient.medications
               .filter((medication) => medication.status === "active")
-              .map((medication) => `${medication.name} ${medication.dose}`)
+              .map((medication) => {
+                const erx =
+                  medication.eRxStatus === "sent"
+                    ? " · e-prescribed"
+                    : medication.eRxStatus === "not_sent"
+                      ? " · ready to e-prescribe"
+                      : "";
+                return `${medication.name} ${medication.dose}${erx}`.trim();
+              })
               .join(", ") || "None recorded"}
+          </span>
+        </p>
+        <p className="mt-3 text-sm">
+          <span className="block font-semibold">Labs</span>
+          <span className="text-muted">
+            {patient.labs.length
+              ? patient.labs.map((lab) => `${lab.name} (${lab.status === "resulted" ? "resulted" : "ordered"})`).join(", ")
+              : "None recorded"}
           </span>
         </p>
         <button type="button" className="mt-3 text-sm underline" onClick={() => onOpen("clinical")}>
@@ -868,11 +885,15 @@ function Clinical({ patient, onSave }: { patient: Patient; onSave: (id: string, 
         </form>
       </section>
       <section className={panelClass}>
-        <h2 className="font-display text-2xl">Medications</h2>
+        <h2 className="font-display text-2xl">Medications · e-prescribe</h2>
+        <p className="mt-2 text-sm text-muted">
+          Pharmacy on file: {patient.pharmacyName || "None"}{" "}
+          {patient.pharmacyPhone ? `· ${patient.pharmacyPhone}` : ""}. E-prescribe stays in this browser.
+        </p>
         {patient.medications.length === 0 ? <p className="mt-3 text-sm text-muted">No medications recorded.</p> : null}
         <ul className="mt-4 grid gap-3">
           {patient.medications.map((item) => (
-            <li key={item.id} className="grid gap-2 sm:grid-cols-[minmax(0,1.2fr)_7rem_8rem_8rem_auto] sm:items-end">
+            <li key={item.id} className="grid gap-2 rounded-xl border border-line p-3 sm:grid-cols-[minmax(0,1.2fr)_7rem_8rem_8rem_auto] sm:items-end">
               <Field label="Medication">
                 <input
                   className={fieldClass}
@@ -926,9 +947,33 @@ function Clinical({ patient, onSave }: { patient: Patient; onSave: (id: string, 
                   <option value="stopped">Stopped</option>
                 </select>
               </Field>
-              <Button type="button" variant="secondary" onClick={() => save({ medications: patient.medications.filter((row) => row.id !== item.id) })}>
-                Remove
-              </Button>
+              <div className="flex flex-wrap gap-2 sm:col-span-5">
+                {item.eRxStatus === "sent" ? (
+                  <p className="text-sm text-muted">
+                    E-prescribed to {patient.pharmacyName || "pharmacy"}
+                    {item.eRxSentAt ? ` · ${formatWhen(item.eRxSentAt)}` : ""}. Nothing left this browser.
+                  </p>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() =>
+                      save({
+                        medications: patient.medications.map((row) =>
+                          row.id === item.id
+                            ? { ...row, eRxStatus: "sent", eRxSentAt: new Date().toISOString() }
+                            : row,
+                        ),
+                      })
+                    }
+                  >
+                    E-prescribe
+                  </Button>
+                )}
+                <Button type="button" variant="secondary" onClick={() => save({ medications: patient.medications.filter((row) => row.id !== item.id) })}>
+                  Remove
+                </Button>
+              </div>
             </li>
           ))}
         </ul>
@@ -943,6 +988,7 @@ function Clinical({ patient, onSave }: { patient: Patient; onSave: (id: string, 
               dose: dose.trim(),
               frequency: "",
               status: "active",
+              eRxStatus: "not_sent",
             };
             save({ medications: [...patient.medications, next] });
             setMedication("");
@@ -953,6 +999,52 @@ function Clinical({ patient, onSave }: { patient: Patient; onSave: (id: string, 
           <input className={`${fieldClass} max-w-40`} value={dose} onChange={(event) => setDose(event.target.value)} placeholder="Dose" aria-label="Dose" />
           <Button type="submit" variant="secondary">
             Add medication
+          </Button>
+        </form>
+      </section>
+      <section className={panelClass}>
+        <h2 className="font-display text-2xl">Labs</h2>
+        <p className="mt-2 text-sm text-muted">Orders and results on this chart. Nothing is sent to a lab network.</p>
+        {patient.labs.length === 0 ? <p className="mt-3 text-sm text-muted">No labs recorded.</p> : null}
+        <ul className="mt-4 grid gap-3">
+          {patient.labs.map((lab) => (
+            <li key={lab.id} className="rounded-xl border border-line px-4 py-3">
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <div>
+                  <p className="font-semibold">{lab.name}</p>
+                  <p className="mt-1 text-sm text-muted">
+                    {lab.status === "resulted" ? "Resulted" : "Ordered"}
+                    {lab.resultedAt ? ` · ${formatWhen(lab.resultedAt)}` : lab.orderedAt ? ` · ordered ${formatWhen(lab.orderedAt)}` : ""}
+                  </p>
+                </div>
+                <StatusPill status={lab.status === "resulted" ? "accepted" : "ready"} label={lab.status === "resulted" ? "Resulted" : "Ordered"} />
+              </div>
+              {lab.summary ? <p className="mt-2 text-sm">{lab.summary}</p> : null}
+            </li>
+          ))}
+        </ul>
+        <form
+          className="mt-4 flex flex-wrap gap-2"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const input = form.elements.namedItem("lab-name") as HTMLInputElement | null;
+            const name = input?.value.trim() ?? "";
+            if (!name) return;
+            const next: LabResult = {
+              id: nid("lab"),
+              name,
+              status: "ordered",
+              orderedAt: new Date().toISOString(),
+              summary: "Ordered in this browser. Awaiting result.",
+            };
+            save({ labs: [next, ...patient.labs] });
+            form.reset();
+          }}
+        >
+          <input className={`${fieldClass} max-w-72`} name="lab-name" placeholder="Lab order" aria-label="Lab order" />
+          <Button type="submit" variant="secondary">
+            Order lab
           </Button>
         </form>
       </section>

@@ -4,6 +4,8 @@ import type {
   Claim,
   Coverage,
   InjuryCase,
+  LabResult,
+  Medication,
   Patient,
   PatientInput,
   RcmState,
@@ -107,10 +109,41 @@ export function withChart(input: PatientInput, extra: Partial<Patient> = {}): Pa
     problems: [],
     allergies: [],
     medications: [],
+    labs: [],
     documents: defaultDocuments(),
     cases: [],
     accountNotes: [],
     ...extra,
+  };
+}
+
+function normalizeMedication(item: Partial<Medication> | null | undefined, index: number): Medication | null {
+  if (!item || typeof item !== "object") return null;
+  const name = typeof item.name === "string" ? item.name : "";
+  const id = typeof item.id === "string" && item.id.trim() ? item.id : `med_${index}`;
+  return {
+    id,
+    name,
+    dose: typeof item.dose === "string" ? item.dose : "",
+    frequency: typeof item.frequency === "string" ? item.frequency : "",
+    status: item.status === "stopped" ? "stopped" : "active",
+    eRxStatus: item.eRxStatus === "sent" ? "sent" : item.eRxStatus === "not_sent" ? "not_sent" : undefined,
+    eRxSentAt: typeof item.eRxSentAt === "string" ? item.eRxSentAt : undefined,
+  };
+}
+
+function normalizeLab(item: Partial<LabResult> | null | undefined, index: number): LabResult | null {
+  if (!item || typeof item !== "object") return null;
+  const name = typeof item.name === "string" ? item.name.trim() : "";
+  if (!name) return null;
+  const id = typeof item.id === "string" && item.id.trim() ? item.id : `lab_${index}`;
+  return {
+    id,
+    name,
+    status: item.status === "ordered" ? "ordered" : "resulted",
+    orderedAt: typeof item.orderedAt === "string" ? item.orderedAt : "",
+    resultedAt: typeof item.resultedAt === "string" ? item.resultedAt : undefined,
+    summary: typeof item.summary === "string" ? item.summary : "",
   };
 }
 
@@ -151,7 +184,10 @@ export function normalizePatient(patient: Patient): Patient {
     coverages: next.coverages ?? [],
     problems: next.problems ?? [],
     allergies: next.allergies ?? [],
-    medications: next.medications ?? [],
+    medications: (Array.isArray(next.medications) ? next.medications : [])
+      .map(normalizeMedication)
+      .filter((item): item is Medication => item !== null),
+    labs: (Array.isArray(next.labs) ? next.labs : []).map(normalizeLab).filter((item): item is LabResult => item !== null),
     documents: withDocumentSlots(next.documents),
     cases: (Array.isArray(next.cases) ? next.cases : []).map(normalizeCase).filter((item): item is InjuryCase => item !== null),
     intakeAnswers: next.intakeAnswers ?? [],

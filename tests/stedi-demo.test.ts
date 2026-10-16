@@ -8,6 +8,9 @@ describe("local claim and eligibility fixture", () => {
     const check = state.eligibility.find((item) => item.patientId === "pt-hale");
     expect(check?.active).toBe(true);
     expect(check?.copay).toBe(25);
+    expect(check?.priorAuthRequired).toBe(false);
+    const auth = state.eligibility.find((item) => item.patientId === "pt-voss");
+    expect(auth?.priorAuthRequired).toBe(true);
   });
 
   it("moves a draft claim to accepted locally", () => {

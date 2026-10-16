@@ -15,8 +15,8 @@ export function PaymentsDesk() {
     <main>
       <PageHeader
         kicker="Billing"
-        title="Payments"
-        lede="Payments already on file for this sample morning. Nothing is sent to a bank."
+        title="Patient pay & payments"
+        lede="Payer remits and patient pay balances on file for this sample morning. Nothing is sent to a bank."
       />
       <ul className="mt-8 grid gap-3">
         {paid.length === 0 ? <li className="text-sm text-muted">No payments are on file.</li> : null}

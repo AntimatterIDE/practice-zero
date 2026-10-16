@@ -11,7 +11,7 @@ const shortcuts = [
   { href: "/portal/profile", label: "Profile", body: "Coverage, contacts, preferences", icon: UserRound },
   { href: "/portal/messages", label: "Messages", body: "Talk with the practice", icon: MessageSquare },
   { href: "/portal/documents", label: "Documents", body: "Cards, IDs, and forms", icon: FolderOpen },
-  { href: "/portal/updates", label: "Updates", body: "Visits, results, balances", icon: Bell },
+  { href: "/portal/updates", label: "Updates", body: "Visits, labs, patient pay", icon: Bell },
 ] as const;
 
 export function PatientHome() {

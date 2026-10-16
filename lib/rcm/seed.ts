@@ -225,8 +225,30 @@ const hale = patient(
   {
     preferredName: "Paul",
     preferredContact: "text",
+    pharmacyName: "Hope Street Pharmacy",
+    pharmacyPhone: "401-555-0199",
     medicalHistory: "Blood pressure has been high at the pharmacy.",
-    medications: [{ id: "med-hale", name: "Lisinopril", dose: "10 mg", frequency: "daily", status: "active" }],
+    medications: [
+      {
+        id: "med-hale",
+        name: "Lisinopril",
+        dose: "10 mg",
+        frequency: "daily",
+        status: "active",
+        eRxStatus: "sent",
+        eRxSentAt: "2026-10-14T09:22:00",
+      },
+    ],
+    labs: [
+      {
+        id: "lab-hale-bmp",
+        name: "Basic metabolic panel",
+        status: "resulted",
+        orderedAt: "2026-10-13T10:00:00",
+        resultedAt: "2026-10-13T16:30:00",
+        summary: "Within reference range. Creatinine 0.9 mg/dL.",
+      },
+    ],
     allergies: [{ id: "alg-hale", substance: "Penicillin", reaction: "Rash", severity: "moderate" }],
     problems: [{ id: "pr-hale", name: "Essential hypertension", icd: "I10", status: "active", onset: "2026-09-01" }],
     intakeAnswers: [
@@ -261,11 +283,20 @@ const voss = patient(
     preferredName: "Anas",
     preferredContact: "phone",
     problems: [{ id: "pr-voss", name: "Type 2 diabetes mellitus", icd: "E11.9", status: "active", onset: "2024-04-01" }],
-    documents: documents(true),
+    documents: documents(true).map((item) =>
+      item.id === "referral"
+        ? {
+            ...item,
+            name: "Referral or authorization",
+            status: "received" as const,
+            note: "MRI prior auth submitted · awaiting payer response.",
+          }
+        : item,
+    ),
     accountNotes: [
       {
         id: "note-voss",
-        body: "June visit was paid. August visit was denied. A balance text is waiting in the outbox.",
+        body: "June visit was paid. August visit was denied. Patient pay text is waiting in the outbox. Imaging prior auth is still open.",
         audience: "billing",
         createdAt: "2026-10-14T08:50:00",
         resolved: false,
@@ -548,8 +579,8 @@ export function createSeedState(): RcmState {
       {
         id: "task-voss",
         patientId: "pt-voss",
-        title: "Denial follow-up",
-        detail: "Anas Khan has an August claim denied for medical necessity.",
+        title: "Prior auth follow-up",
+        detail: "Anas Khan’s imaging prior auth is still pending payer response.",
         due: "2026-10-14",
         status: "open",
       },
@@ -620,7 +651,20 @@ export function createSeedState(): RcmState {
         coinsurance: null,
         deductibleRemaining: 650,
         priorAuthRequired: false,
-        summary: "Active coverage on file. Office copay $25. Deductible remaining $650.",
+        summary:
+          "Active coverage on file. Office copay $25. Deductible remaining $650. No prior authorization on this visit.",
+      },
+      {
+        id: "elig-voss",
+        patientId: "pt-voss",
+        payerName: "Pinetree Health",
+        createdAt: "2026-10-14T08:12:00",
+        active: true,
+        copay: 40,
+        coinsurance: null,
+        deductibleRemaining: 900,
+        priorAuthRequired: true,
+        summary: "Active coverage. Imaging prior authorization is required before the study.",
       },
     ],
     outbox: [
@@ -628,14 +672,14 @@ export function createSeedState(): RcmState {
         id: "out-email",
         kind: "email",
         to: "paul.wallace@example.com",
-        body: "Your intake is on file for the 9:00 visit with Dr. Francois.",
+        body: "Your intake is on file for the 9:00 visit with Dr. Francois. Lab results are in your portal.",
         createdAt: "2026-10-13T21:00:00",
       },
       {
         id: "out-text",
         kind: "text",
         to: "401-555-0174",
-        body: "Anas, a balance from the June visit is waiting. Reply if you want a statement.",
+        body: "Anas, a patient pay balance from the June visit is waiting. Reply if you want a statement.",
         createdAt: "2026-10-14T08:55:00",
       },
     ],
@@ -643,14 +687,14 @@ export function createSeedState(): RcmState {
       {
         id: "run-eligibility",
         title: "Eligibility checked",
-        detail: "Paul Wallace is active with Pinetree Health.",
+        detail: "Paul Wallace is active — no prior auth on this visit.",
         href: "/try/eligibility",
         at: "2026-10-14T08:10:00",
       },
       {
         id: "run-note",
         title: "Note drafted",
-        detail: "The 9:00 visit has a transcript, a note, and codes.",
+        detail: "The 9:00 visit has a transcript, a note, codes, and e-prescribe.",
         href: "/try/visits",
         at: "2026-10-14T09:20:00",
       },
@@ -663,8 +707,8 @@ export function createSeedState(): RcmState {
       },
       {
         id: "run-text",
-        title: "Balance text waiting",
-        detail: "A text to Anas Khan is in the outbox.",
+        title: "Patient pay text waiting",
+        detail: "A patient pay text to Anas Khan is in the outbox.",
         href: "/try/patients/pt-voss",
         at: "2026-10-14T08:55:00",
       },
