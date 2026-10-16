@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useHideOnScroll } from "@/lib/use-hide-on-scroll";
@@ -206,6 +207,11 @@ export function SiteHeader() {
   const closeTimer = useRef<number | null>(null);
   const reduce = useReducedMotion();
   const hideChrome = useHideOnScroll(mobile || !!open);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setOpen(null);
@@ -251,235 +257,239 @@ export function SiteHeader() {
 
   const activeMenu = menus.find((m) => m.id === open) ?? null;
 
-  return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 -mx-4 bg-paper/95 px-4 backdrop-blur transition-transform duration-300 ease-out sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8",
-        hideChrome && "-translate-y-full",
-      )}
-      onMouseLeave={scheduleClose}
+  const mobileNav = (
+    <div
+      id="mobile-nav"
+      className="fixed inset-0 z-[100] flex flex-col bg-paper lg:hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu"
     >
-      <div className="flex items-center justify-between gap-4 py-3">
-        <span onMouseEnter={closeMega} onFocus={closeMega} className="inline-flex">
-          <BrandMark size="md" />
-        </span>
-        <nav className="hidden items-center gap-0.5 lg:flex" aria-label="practice zero">
-          {menus.map((menu) => {
-            const active =
-              pathname === menu.href ||
-              (menu.href !== "/" && pathname.startsWith(`${menu.href}/`));
-            const shown = open === menu.id;
-            return (
-              <div
-                key={menu.id}
-                className="relative"
-                onMouseEnter={() => {
-                  clearClose();
-                  setOpen(menu.id);
-                }}
-              >
-                <Link
-                  href={menu.href}
-                  prefetch={false}
-                  aria-expanded={shown}
-                  aria-haspopup="true"
-                  className={cn(
-                    "inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm text-graphite transition-colors hover:text-ink",
-                    (shown || active) && "text-ink",
-                  )}
-                >
-                  {menu.label}
-                  <ChevronDown
-                    className={cn(
-                      "size-3.5 text-graphite/70 transition-transform duration-200",
-                      shown && "rotate-180 text-slash",
-                    )}
-                    aria-hidden
-                  />
-                </Link>
-              </div>
-            );
-          })}
-          {flatLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              prefetch={false}
-              onMouseEnter={closeMega}
-              onFocus={closeMega}
-              className={cn(
-                "rounded-full px-3 py-2 text-sm text-graphite hover:text-ink",
-                pathname === link.href && "text-ink",
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Link
-            href="/try"
-            prefetch={false}
-            onMouseEnter={closeMega}
-            onFocus={closeMega}
-            className="ml-2 rounded-full bg-slash px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
-          >
-            Try the demo
-          </Link>
-          <Link
-            href="/portal"
-            prefetch={false}
-            onMouseEnter={closeMega}
-            onFocus={closeMega}
-            className="rounded-full px-3 py-2 text-sm font-medium text-graphite hover:text-ink"
-          >
-            See patient experience
-          </Link>
-        </nav>
-
+      <div className="flex items-center justify-between gap-4 border-b border-line px-4 py-3">
+        <BrandMark size="md" />
         <button
           type="button"
-          className="inline-flex h-9 items-center rounded-full border border-line px-3.5 text-sm font-medium text-ink lg:hidden"
-          aria-expanded={mobile}
-          aria-controls="mobile-nav"
-          onClick={() => setMobile((value) => !value)}
+          className="inline-flex h-9 items-center rounded-full border border-line px-3.5 text-sm font-medium text-ink"
+          onClick={() => setMobile(false)}
         >
-          {mobile ? "Close" : "Menu"}
+          Close
         </button>
       </div>
 
-      <AnimatePresence>
-        {activeMenu ? (
-          <MegaPanel
-            key={activeMenu.id}
-            menu={activeMenu}
-            reduce={!!reduce}
-            onEnter={clearClose}
-          />
-        ) : null}
-      </AnimatePresence>
-
-      {mobile ? (
-        <div
-          id="mobile-nav"
-          className="fixed inset-0 z-50 flex flex-col bg-paper lg:hidden"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Menu"
-        >
-          <div className="flex items-center justify-between gap-4 border-b border-line px-4 py-3">
-            <BrandMark size="md" />
-            <button
-              type="button"
-              className="inline-flex h-9 items-center rounded-full border border-line px-3.5 text-sm font-medium text-ink"
-              onClick={() => setMobile(false)}
-            >
-              Close
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4">
-            <nav aria-label="Mobile" className="mx-auto w-full max-w-lg">
-              <ul className="divide-y divide-line rounded-2xl border border-line bg-card">
-                {menus.map((menu) => {
-                  const expanded = mobileSection === menu.id;
-                  return (
-                    <li key={menu.id}>
-                      <div className="flex items-stretch">
-                        <Link
-                          href={menu.href}
-                          prefetch={false}
-                          className="flex min-w-0 flex-1 items-center px-4 py-3.5 text-[15px] font-medium text-ink"
-                          onClick={() => setMobile(false)}
-                        >
-                          {menu.label}
-                        </Link>
-                        <button
-                          type="button"
-                          aria-expanded={expanded}
-                          aria-label={`${menu.label} submenu`}
-                          onClick={() => setMobileSection(expanded ? null : menu.id)}
-                          className="grid w-12 place-items-center text-graphite"
-                        >
-                          <ChevronDown
-                            className={cn(
-                              "size-4 transition-transform duration-200",
-                              expanded && "rotate-180",
-                            )}
-                            aria-hidden
-                          />
-                        </button>
-                      </div>
-                      {expanded ? (
-                        <ul className="space-y-0.5 border-t border-line bg-mist/50 px-2 py-2">
-                          {menu.items.map((item) => {
-                            const Icon = item.icon;
-                            return (
-                              <li key={item.title}>
-                                <Link
-                                  href={item.href ?? menu.href}
-                                  prefetch={false}
-                                  onClick={() => setMobile(false)}
-                                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-paper"
-                                >
-                                  <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-slash/10 text-slash">
-                                    <Icon className="size-3.5" />
-                                  </span>
-                                  <span className="min-w-0">
-                                    <span className="block text-sm font-medium text-ink">
-                                      {item.title}
-                                    </span>
-                                    <span className="block truncate text-xs text-graphite">
-                                      {item.body}
-                                    </span>
-                                  </span>
-                                </Link>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      ) : null}
-                    </li>
-                  );
-                })}
-              </ul>
-
-              <ul className="mt-3 divide-y divide-line rounded-2xl border border-line bg-card">
-                {flatLinks.map((link) => (
-                  <li key={link.href}>
+      <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4">
+        <nav aria-label="Mobile" className="mx-auto w-full max-w-lg">
+          <ul className="divide-y divide-line rounded-2xl border border-line bg-card">
+            {menus.map((menu) => {
+              const expanded = mobileSection === menu.id;
+              return (
+                <li key={menu.id}>
+                  <div className="flex items-stretch">
                     <Link
-                      href={link.href}
+                      href={menu.href}
                       prefetch={false}
+                      className="flex min-w-0 flex-1 items-center px-4 py-3.5 text-[15px] font-medium text-ink"
                       onClick={() => setMobile(false)}
-                      className="block px-4 py-3.5 text-[15px] font-medium text-ink"
                     >
-                      {link.label}
+                      {menu.label}
                     </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
+                    <button
+                      type="button"
+                      aria-expanded={expanded}
+                      aria-label={`${menu.label} submenu`}
+                      onClick={() => setMobileSection(expanded ? null : menu.id)}
+                      className="grid w-12 place-items-center text-graphite"
+                    >
+                      <ChevronDown
+                        className={cn(
+                          "size-4 transition-transform duration-200",
+                          expanded && "rotate-180",
+                        )}
+                        aria-hidden
+                      />
+                    </button>
+                  </div>
+                  {expanded ? (
+                    <ul className="space-y-0.5 border-t border-line bg-mist/50 px-2 py-2">
+                      {menu.items.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                          <li key={item.title}>
+                            <Link
+                              href={item.href ?? menu.href}
+                              prefetch={false}
+                              onClick={() => setMobile(false)}
+                              className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-paper"
+                            >
+                              <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-slash/10 text-slash">
+                                <Icon className="size-3.5" />
+                              </span>
+                              <span className="min-w-0">
+                                <span className="block text-sm font-medium text-ink">
+                                  {item.title}
+                                </span>
+                                <span className="block truncate text-xs text-graphite">
+                                  {item.body}
+                                </span>
+                              </span>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
 
-          <div className="shrink-0 space-y-2 border-t border-line bg-paper px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <ul className="mt-3 divide-y divide-line rounded-2xl border border-line bg-card">
+            {flatLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  prefetch={false}
+                  onClick={() => setMobile(false)}
+                  className="block px-4 py-3.5 text-[15px] font-medium text-ink"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+
+      <div className="shrink-0 space-y-2 border-t border-line bg-paper px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+        <Link
+          href="/try"
+          prefetch={false}
+          onClick={() => setMobile(false)}
+          className="block rounded-full bg-slash px-4 py-3 text-center text-sm font-medium text-paper hover:bg-oxide-deep"
+        >
+          Try the demo
+        </Link>
+        <Link
+          href="/portal"
+          prefetch={false}
+          onClick={() => setMobile(false)}
+          className="block rounded-full border border-line px-4 py-3 text-center text-sm font-medium text-ink hover:bg-mist"
+        >
+          See patient experience
+        </Link>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      <header
+        className={cn(
+          "sticky top-0 z-50 -mx-4 bg-paper/95 px-4 backdrop-blur transition-transform duration-300 ease-out sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8",
+          hideChrome && "-translate-y-full pointer-events-none",
+        )}
+        onMouseLeave={scheduleClose}
+      >
+        <div className="flex items-center justify-between gap-4 py-3">
+          <span onMouseEnter={closeMega} onFocus={closeMega} className="inline-flex">
+            <BrandMark size="md" />
+          </span>
+          <nav className="hidden items-center gap-0.5 lg:flex" aria-label="practice zero">
+            {menus.map((menu) => {
+              const active =
+                pathname === menu.href ||
+                (menu.href !== "/" && pathname.startsWith(`${menu.href}/`));
+              const shown = open === menu.id;
+              return (
+                <div
+                  key={menu.id}
+                  className="relative"
+                  onMouseEnter={() => {
+                    clearClose();
+                    setOpen(menu.id);
+                  }}
+                >
+                  <Link
+                    href={menu.href}
+                    prefetch={false}
+                    aria-expanded={shown}
+                    aria-haspopup="true"
+                    className={cn(
+                      "inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm text-graphite transition-colors hover:text-ink",
+                      (shown || active) && "text-ink",
+                    )}
+                  >
+                    {menu.label}
+                    <ChevronDown
+                      className={cn(
+                        "size-3.5 text-graphite/70 transition-transform duration-200",
+                        shown && "rotate-180 text-slash",
+                      )}
+                      aria-hidden
+                    />
+                  </Link>
+                </div>
+              );
+            })}
+            {flatLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                prefetch={false}
+                onMouseEnter={closeMega}
+                onFocus={closeMega}
+                className={cn(
+                  "rounded-full px-3 py-2 text-sm text-graphite hover:text-ink",
+                  pathname === link.href && "text-ink",
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
             <Link
               href="/try"
               prefetch={false}
-              onClick={() => setMobile(false)}
-              className="block rounded-full bg-slash px-4 py-3 text-center text-sm font-medium text-paper hover:bg-oxide-deep"
+              onMouseEnter={closeMega}
+              onFocus={closeMega}
+              className="ml-2 rounded-full bg-slash px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
             >
               Try the demo
             </Link>
             <Link
               href="/portal"
               prefetch={false}
-              onClick={() => setMobile(false)}
-              className="block rounded-full border border-line px-4 py-3 text-center text-sm font-medium text-ink hover:bg-mist"
+              onMouseEnter={closeMega}
+              onFocus={closeMega}
+              className="rounded-full px-3 py-2 text-sm font-medium text-graphite hover:text-ink"
             >
               See patient experience
             </Link>
-          </div>
+          </nav>
+
+          <button
+            type="button"
+            className="inline-flex h-9 items-center rounded-full border border-line px-3.5 text-sm font-medium text-ink lg:hidden"
+            aria-expanded={mobile}
+            aria-controls="mobile-nav"
+            onClick={() => setMobile((value) => !value)}
+          >
+            {mobile ? "Close" : "Menu"}
+          </button>
         </div>
-      ) : null}
-    </header>
+
+        <AnimatePresence>
+          {activeMenu ? (
+            <MegaPanel
+              key={activeMenu.id}
+              menu={activeMenu}
+              reduce={!!reduce}
+              onEnter={clearClose}
+            />
+          ) : null}
+        </AnimatePresence>
+      </header>
+
+      {mounted && mobile ? createPortal(mobileNav, document.body) : null}
+    </>
   );
 }
 

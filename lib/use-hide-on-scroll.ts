@@ -22,15 +22,17 @@ export function useHideOnScroll(locked = false) {
       if (ticking) return;
       ticking = true;
       window.requestAnimationFrame(() => {
-        const y = window.scrollY;
+        const y = Math.max(0, window.scrollY);
         const delta = y - lastY;
-        if (y < 24) {
+
+        if (y < 48) {
           setHidden(false);
-        } else if (delta > 6) {
+        } else if (delta > 4) {
           setHidden(true);
-        } else if (delta < -6) {
+        } else if (delta < -4) {
           setHidden(false);
         }
+
         lastY = y;
         ticking = false;
       });

@@ -9,8 +9,9 @@ export function HomeTop() {
   return (
     <section
       id="pz-home-hero"
-      className="relative isolate flex min-h-screen w-full flex-col overflow-x-clip bg-paper px-4 pb-10 pt-6 text-ink sm:px-6 lg:px-8 lg:pb-12"
+      className="relative isolate flex min-h-screen w-full flex-col bg-paper px-4 pb-10 pt-6 text-ink sm:px-6 lg:px-8 lg:pb-12"
     >
+      {/* No overflow-x-clip on this section — it breaks sticky hide-on-scroll for the header. */}
       <div className="relative z-50 mx-auto w-full max-w-[1400px]">
         <SiteHeader />
       </div>

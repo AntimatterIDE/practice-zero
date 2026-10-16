@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
@@ -102,7 +103,12 @@ export function AdminMobileBar() {
   const [open, setOpen] = useState(false);
   const [section, setSection] = useState<SectionId | null>(null);
   const hideChrome = useHideOnScroll(open);
+  const [mounted, setMounted] = useState(false);
   const label = currentDeskLabel(pathname);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setOpen(false);
@@ -123,133 +129,137 @@ export function AdminMobileBar() {
     setSection(null);
   };
 
-  return (
+  const mobileNav = (
     <div
-      className={cn(
-        "sticky top-0 z-30 border-b border-line bg-paper/95 backdrop-blur transition-transform duration-300 ease-out lg:hidden",
-        hideChrome && "-translate-y-full",
-      )}
+      id="demo-mobile-nav"
+      className="fixed inset-0 z-[100] flex flex-col bg-paper lg:hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Demo menu"
     >
-      <div className="flex h-14 items-center gap-2 px-3">
-        <ExitToHome />
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-xs text-graphite">{samplePractice.legalName}</p>
-          <p className="truncate text-[13px] font-medium text-ink">{label}</p>
-        </div>
+      <div className="flex items-center justify-between gap-4 border-b border-line px-4 py-3">
+        <BrandMark href={null} size="md" />
         <button
           type="button"
           className="inline-flex h-9 items-center rounded-full border border-line px-3.5 text-sm font-medium text-ink"
-          aria-expanded={open}
-          aria-controls="demo-mobile-nav"
-          onClick={() =>
-            setOpen((current) => {
-              if (current) {
-                setSection(null);
-                return false;
-              }
-              setSection(null);
-              return true;
-            })
-          }
+          onClick={close}
         >
-          {open ? "Close" : "Menu"}
+          Close
         </button>
       </div>
 
-      {open ? (
-        <div
-          id="demo-mobile-nav"
-          className="fixed inset-0 z-50 flex flex-col bg-paper"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Demo menu"
+      <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4">
+        <nav aria-label="Demo desks" className="mx-auto w-full max-w-lg">
+          <p className="mb-3 px-1 text-xs text-graphite">
+            {samplePractice.legalName} · practice desk demo
+          </p>
+          <ul className="divide-y divide-line rounded-2xl border border-line bg-card">
+            <MobileSection
+              id="clinic"
+              label="Clinic"
+              links={practiceLinks}
+              expanded={section === "clinic"}
+              onToggle={() => setSection((s) => (s === "clinic" ? null : "clinic"))}
+              onNavigate={close}
+              pathname={pathname}
+            />
+            <MobileSection
+              id="billing"
+              label="Billing"
+              links={billingLinks}
+              expanded={section === "billing"}
+              onToggle={() => setSection((s) => (s === "billing" ? null : "billing"))}
+              onNavigate={close}
+              pathname={pathname}
+            />
+          </ul>
+
+          <ul className="mt-3 divide-y divide-line rounded-2xl border border-line bg-card">
+            <li>
+              <Link
+                href="/"
+                prefetch={false}
+                onClick={close}
+                className="block px-4 py-3.5 text-[15px] font-medium text-ink"
+              >
+                Back to practice zero
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/portal"
+                prefetch={false}
+                onClick={close}
+                className="block px-4 py-3.5 text-[15px] font-medium text-ink"
+              >
+                See patient experience
+              </Link>
+            </li>
+          </ul>
+
+          <div className="mt-4 px-1">
+            <ResetDemoButton />
+          </div>
+        </nav>
+      </div>
+
+      <div className="shrink-0 space-y-2 border-t border-line bg-paper px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+        <Link
+          href="/try"
+          prefetch={false}
+          onClick={close}
+          className="block rounded-full bg-slash px-4 py-3 text-center text-sm font-medium text-paper hover:bg-oxide-deep"
         >
-          <div className="flex items-center justify-between gap-4 border-b border-line px-4 py-3">
-            <BrandMark href={null} size="md" />
-            <button
-              type="button"
-              className="inline-flex h-9 items-center rounded-full border border-line px-3.5 text-sm font-medium text-ink"
-              onClick={close}
-            >
-              Close
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4">
-            <nav aria-label="Demo desks" className="mx-auto w-full max-w-lg">
-              <p className="mb-3 px-1 text-xs text-graphite">
-                {samplePractice.legalName} · practice desk demo
-              </p>
-              <ul className="divide-y divide-line rounded-2xl border border-line bg-card">
-                <MobileSection
-                  id="clinic"
-                  label="Clinic"
-                  links={practiceLinks}
-                  expanded={section === "clinic"}
-                  onToggle={() => setSection((s) => (s === "clinic" ? null : "clinic"))}
-                  onNavigate={close}
-                  pathname={pathname}
-                />
-                <MobileSection
-                  id="billing"
-                  label="Billing"
-                  links={billingLinks}
-                  expanded={section === "billing"}
-                  onToggle={() => setSection((s) => (s === "billing" ? null : "billing"))}
-                  onNavigate={close}
-                  pathname={pathname}
-                />
-              </ul>
-
-              <ul className="mt-3 divide-y divide-line rounded-2xl border border-line bg-card">
-                <li>
-                  <Link
-                    href="/"
-                    prefetch={false}
-                    onClick={close}
-                    className="block px-4 py-3.5 text-[15px] font-medium text-ink"
-                  >
-                    Back to practice zero
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/portal"
-                    prefetch={false}
-                    onClick={close}
-                    className="block px-4 py-3.5 text-[15px] font-medium text-ink"
-                  >
-                    See patient experience
-                  </Link>
-                </li>
-              </ul>
-
-              <div className="mt-4 px-1">
-                <ResetDemoButton />
-              </div>
-            </nav>
-          </div>
-
-          <div className="shrink-0 space-y-2 border-t border-line bg-paper px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-            <Link
-              href="/try"
-              prefetch={false}
-              onClick={close}
-              className="block rounded-full bg-slash px-4 py-3 text-center text-sm font-medium text-paper hover:bg-oxide-deep"
-            >
-              Morning board
-            </Link>
-            <Link
-              href="/contact"
-              prefetch={false}
-              onClick={close}
-              className="block rounded-full border border-line px-4 py-3 text-center text-sm font-medium text-ink hover:bg-mist"
-            >
-              Request a consultation
-            </Link>
-          </div>
-        </div>
-      ) : null}
+          Morning board
+        </Link>
+        <Link
+          href="/contact"
+          prefetch={false}
+          onClick={close}
+          className="block rounded-full border border-line px-4 py-3 text-center text-sm font-medium text-ink hover:bg-mist"
+        >
+          Request a consultation
+        </Link>
+      </div>
     </div>
+  );
+
+  return (
+    <>
+      <div
+        className={cn(
+          "sticky top-0 z-30 border-b border-line bg-paper/95 backdrop-blur transition-transform duration-300 ease-out lg:hidden",
+          hideChrome && "-translate-y-full pointer-events-none",
+        )}
+      >
+        <div className="flex h-14 items-center gap-2 px-3">
+          <ExitToHome />
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs text-graphite">{samplePractice.legalName}</p>
+            <p className="truncate text-[13px] font-medium text-ink">{label}</p>
+          </div>
+          <button
+            type="button"
+            className="inline-flex h-9 items-center rounded-full border border-line px-3.5 text-sm font-medium text-ink"
+            aria-expanded={open}
+            aria-controls="demo-mobile-nav"
+            onClick={() =>
+              setOpen((current) => {
+                if (current) {
+                  setSection(null);
+                  return false;
+                }
+                setSection(null);
+                return true;
+              })
+            }
+          >
+            {open ? "Close" : "Menu"}
+          </button>
+        </div>
+      </div>
+
+      {mounted && open ? createPortal(mobileNav, document.body) : null}
+    </>
   );
 }
