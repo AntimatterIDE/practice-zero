@@ -37,8 +37,8 @@ function isLabClient() {
 }
 
 /**
- * Homepage brand intro — plays on every home load/refresh (except labs) so the
- * WebGL funnel can warm underneath and the hero never pops in late.
+ * Homepage brand intro — plays on every home load/refresh (except labs).
+ * The WebGL funnel warms as the intro exits so the countdown stays light.
  */
 export function BrandIntro() {
   const [Animation, setAnimation] = useState<ComponentType<{ onReady?: () => void }> | null>(null);

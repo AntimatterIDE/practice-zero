@@ -590,9 +590,10 @@ export type FunnelQuality = "high" | "low";
 
 function qualitySettings(quality: FunnelQuality) {
   if (quality === "low") {
-    return { strands: 28, dust: 700, maxDpr: 1.25, bloomLevelsCap: 4 };
+    return { strands: 24, dust: 520, maxDpr: 1.15, bloomLevelsCap: 3 };
   }
-  return { strands: 48, dust: 1600, maxDpr: 1.75, bloomLevelsCap: 6 };
+  // Desktop stays rich but a bit lighter so the homepage stays responsive after the intro.
+  return { strands: 40, dust: 1100, maxDpr: 1.5, bloomLevelsCap: 5 };
 }
 
 export function createFunnel(

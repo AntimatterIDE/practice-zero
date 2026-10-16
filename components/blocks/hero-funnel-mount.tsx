@@ -106,19 +106,20 @@ export function HeroFunnelMount() {
       window.removeEventListener("pointerdown", start);
       window.removeEventListener("keydown", start);
       window.removeEventListener("touchstart", start);
+      window.removeEventListener("pz-intro-exit", start);
       window.removeEventListener("pz-intro-done", start);
       window.clearTimeout(warmTimer);
     };
 
-    // Warm immediately — brand intro / ink cover hides the load for first visits;
-    // return visits no longer wait ~3s before the funnel appears.
-    const warmTimer = window.setTimeout(start, 32);
+    // Wait for the intro to start exiting before loading Three.js so the
+    // countdown stays smooth. Intent + timeouts remain as backups.
+    const warmTimer = window.setTimeout(start, 4500);
 
-    // Intent + intro-done remain as backups if the immediate warm is cancelled somehow.
     window.addEventListener("pointerdown", start, { once: true, passive: true });
     window.addEventListener("keydown", start, { once: true, passive: true });
     window.addEventListener("touchstart", start, { once: true, passive: true });
-    window.addEventListener("pz-intro-done", start);
+    window.addEventListener("pz-intro-exit", start, { once: true });
+    window.addEventListener("pz-intro-done", start, { once: true });
 
     return () => {
       cancelled = true;
