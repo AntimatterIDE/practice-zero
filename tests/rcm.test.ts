@@ -31,8 +31,11 @@ describe("practice desk fixture", () => {
       "pt-adelman",
       "pt-gulri",
       "pt-charania",
+      "pt-spinelli",
+      "pt-dawn",
+      "pt-brand",
     ]);
-    expect(state.appointments).toHaveLength(5);
+    expect(state.appointments).toHaveLength(8);
     expect(state.tasks.filter((task) => task.status === "open")).toHaveLength(2);
     expect(state.packets.filter((packet) => packet.status === "open")).toHaveLength(4);
     expect(state.claims.find((claim) => claim.id === "clm-hale")?.status).toBe("draft");

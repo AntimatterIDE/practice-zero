@@ -264,10 +264,85 @@ const charania = patient(
   },
 );
 
+const spinelli = patient(
+  {
+    id: "pt-spinelli",
+    mrn: "100831",
+    firstName: "Christina",
+    lastName: "Spinelli",
+    dateOfBirth: "1985-09-03",
+    sex: "female",
+    memberId: "PT-83122",
+    payerName: "Pinetree Health",
+    phone: "401-555-0133",
+    email: "christina.spinelli@example.com",
+    address: "15 Meeting Street",
+    city: "Providence",
+    state: "RI",
+    postalCode: "02903",
+  },
+  {
+    preferredName: "Christina",
+    preferredContact: "text",
+    problems: [{ id: "pr-spinelli", name: "Migraine", icd: "G43.909", status: "active", onset: "2023-06-01" }],
+    documents: documents(true),
+  },
+);
+
+const dawn = patient(
+  {
+    id: "pt-dawn",
+    mrn: "100842",
+    firstName: "Dawn",
+    lastName: "Wallace",
+    dateOfBirth: "1972-02-18",
+    sex: "female",
+    memberId: "PT-84208",
+    payerName: "Pinetree Health",
+    phone: "401-555-0121",
+    email: "dawn.wallace@example.com",
+    address: "18 Hope Street",
+    city: "Providence",
+    state: "RI",
+    postalCode: "02906",
+  },
+  {
+    preferredName: "Dawn",
+    preferredContact: "phone",
+    problems: [{ id: "pr-dawn", name: "Hypothyroidism", icd: "E03.9", status: "active", onset: "2019-01-10" }],
+    documents: documents(true),
+  },
+);
+
+const brand = patient(
+  {
+    id: "pt-brand",
+    mrn: "100853",
+    firstName: "Alex",
+    lastName: "Brand",
+    dateOfBirth: "1996-08-27",
+    sex: "other",
+    memberId: "PT-85341",
+    payerName: "Pinetree Health",
+    phone: "401-555-0199",
+    email: "alex.brand@example.com",
+    address: "310 Thayer Street",
+    city: "Providence",
+    state: "RI",
+    postalCode: "02906",
+  },
+  {
+    preferredName: "Alex",
+    preferredContact: "email",
+    problems: [{ id: "pr-brand", name: "Anxiety disorder", icd: "F41.9", status: "active", onset: "2024-11-01" }],
+    documents: documents(true),
+  },
+);
+
 export function createSeedState(): RcmState {
   return {
     practice: { ...samplePractice },
-    patients: [hale, voss, adelman, gulri, charania],
+    patients: [hale, voss, adelman, gulri, charania, spinelli, dawn, brand],
     appointments: [
       visit({
         id: "appt-voss",
@@ -336,6 +411,45 @@ export function createSeedState(): RcmState {
         room: "Room 1",
         confirmation: "confirmed",
         chiefComplaint: "Seasonal allergies",
+      }),
+      visit({
+        id: "appt-spinelli",
+        patientId: "pt-spinelli",
+        providerName: samplePractice.physicianName,
+        start: "2026-10-14T14:00:00",
+        durationMinutes: 20,
+        reason: "Migraine follow-up",
+        status: "scheduled",
+        visitType: "follow_up",
+        room: "Room 2",
+        confirmation: "confirmed",
+        chiefComplaint: "Migraine check-in",
+      }),
+      visit({
+        id: "appt-dawn",
+        patientId: "pt-dawn",
+        providerName: samplePractice.physicianName,
+        start: "2026-10-14T14:30:00",
+        durationMinutes: 20,
+        reason: "Thyroid follow-up",
+        status: "scheduled",
+        visitType: "follow_up",
+        room: "Room 1",
+        confirmation: "confirmed",
+        chiefComplaint: "Hypothyroid medication review",
+      }),
+      visit({
+        id: "appt-brand",
+        patientId: "pt-brand",
+        providerName: samplePractice.physicianName,
+        start: "2026-10-14T15:00:00",
+        durationMinutes: 30,
+        reason: "New patient visit",
+        status: "scheduled",
+        visitType: "new",
+        room: "Room 2",
+        confirmation: "unconfirmed",
+        chiefComplaint: "Anxiety — new patient",
       }),
     ],
     tasks: [
