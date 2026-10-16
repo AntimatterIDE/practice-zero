@@ -1,22 +1,10 @@
 import type { Metadata } from "next";
-import { canonicalOrigin, product } from "@/lib/site";
+import { product } from "@/lib/site";
 
-const origin = () => canonicalOrigin();
-
-/** Shared iMessage / social media assets — always re-apply on page openGraph overrides. */
+/** Shared iMessage / social media assets — static image only (no video → no play button). */
 export function ogMedia(): NonNullable<Metadata["openGraph"]> {
-  const base = origin();
   return {
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "practice zero" }],
-    videos: [
-      {
-        url: `${base}/og/preview.mp4`,
-        secureUrl: `${base}/og/preview.mp4`,
-        type: "video/mp4",
-        width: 1200,
-        height: 630,
-      },
-    ],
   };
 }
 

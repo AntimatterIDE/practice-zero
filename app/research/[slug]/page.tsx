@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = await loadArticle(slug);
   if (!article) return { title: "Research" };
 
-  // Blog shares use the article cover only — never the site-wide OG video loop.
+  // Blog shares use the article cover only — never the site-wide OG image.
   const cover = article.cover_image_url
     ? [{ url: article.cover_image_url, alt: article.title }]
     : [{ url: "/og.png", width: 1200, height: 630, alt: article.title }];
