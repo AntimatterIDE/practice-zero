@@ -10,16 +10,19 @@ export function PatientProfile() {
     return <p className="text-sm text-graphite">Loading profile…</p>;
   }
 
+  const pharmacy =
+    patient.intakeAnswers.find((answer) => answer.label === "Pharmacy")?.value || "Hope Street Pharmacy";
+  const initials = `${patient.firstName.slice(0, 1)}${patient.lastName.slice(0, 1)}`.toUpperCase();
   const fields = [
     ["Full name", patientName(patient)],
     ["Preferred name", patient.preferredName || patient.firstName],
     ["Date of birth", patient.dateOfBirth],
     ["Phone", patient.phone],
-    ["Email", "paul.wallace@email.com"],
+    ["Email", patient.email],
     ["Record number", patient.mrn],
     ["Coverage", `${patient.payerName} · Active`],
-    ["Member ID", "PNH-882014"],
-    ["Preferred pharmacy", "Northline Rx"],
+    ["Member ID", patient.memberId],
+    ["Preferred pharmacy", pharmacy],
     ["Emergency contact", "Alex Wallace · (555) 014-2290"],
   ];
 
@@ -39,7 +42,7 @@ export function PatientProfile() {
       <section className="rounded-2xl border border-line bg-card p-5 shadow-[var(--shadow-card)] sm:p-6">
         <div className="flex items-center gap-3 border-b border-line pb-4">
           <span className="flex h-12 w-12 items-center justify-center rounded-full bg-slash/10 font-mono text-sm font-semibold text-slash">
-            JH
+            {initials}
           </span>
           <div>
             <p className="text-base font-semibold text-ink">{patientName(patient)}</p>

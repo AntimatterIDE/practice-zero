@@ -40,7 +40,7 @@ export default function PortalLoginPage() {
             <input
               name="email"
               type="email"
-              defaultValue="paul.wallace@email.com"
+              defaultValue="paul.wallace@example.com"
               className="w-full rounded-xl border border-line bg-paper px-3 py-2.5 text-sm text-ink outline-none focus:border-slash"
             />
           </label>

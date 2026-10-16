@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useMemo, useSyncExternalStore } from "react";
 import { applyPrimaryCoverage, emptyVitals, normalizeAppointment, normalizeLine, normalizePatient, normalizeState, withChart } from "@/lib/rcm/chart";
-import { STORAGE_KEY, createSeedState } from "@/lib/rcm/seed";
+import { STORAGE_KEY, createSeedState, refreshSamplePatientName } from "@/lib/rcm/seed";
 import { nextLocalClaimStatus } from "@/lib/rcm/submit-input";
 import type {
   Appointment,
@@ -84,7 +84,14 @@ function readStored() {
 function ensureClient() {
   if (clientState) return;
   const stored = readStored();
-  clientState = stored ? normalizeState(stored) : serverState;
+  if (!stored) {
+    clientState = serverState;
+  } else {
+    const normalized = normalizeState(stored);
+    const migrated = refreshSamplePatientName(normalized);
+    clientState = migrated;
+    if (migrated !== normalized) localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+  }
   published = { ...clientState, rosterReady, syncError };
 }
 

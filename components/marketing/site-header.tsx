@@ -698,7 +698,7 @@ function FeaturePreview({
       <div className="rounded-2xl border border-paper/10 bg-paper/5 p-3">
         <div className="flex items-center gap-2">
           <span className="grid size-8 place-items-center rounded-full bg-slash/25 text-xs font-semibold">
-            JH
+            PW
           </span>
           <div>
             <p className="text-xs font-medium">Paul Wallace</p>

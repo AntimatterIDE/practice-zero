@@ -3,6 +3,76 @@ import type { Appointment, ChartDocument, Claim, Coverage, Patient, PatientInput
 
 export const STORAGE_KEY = "practice-zero-demo";
 
+const SAMPLE_PATIENT_ID = "pt-hale";
+
+function swapSampleName(value: string) {
+  return value
+    .replaceAll("Jordan Hale", "Paul Wallace")
+    .replaceAll("jordan.hale@example.com", "paul.wallace@example.com")
+    .replaceAll("Good morning, Jordan", "Good morning, Paul");
+}
+
+/** Browsers that saved the demo before the rename still have Jordan Hale on the sample chart. */
+export function refreshSamplePatientName(state: RcmState): RcmState {
+  const patient = state.patients.find((item) => item.id === SAMPLE_PATIENT_ID);
+  if (!patient) return state;
+  const stale =
+    patient.firstName === "Jordan" ||
+    patient.lastName === "Hale" ||
+    patient.preferredName === "Jordan" ||
+    patient.email.toLowerCase().includes("jordan.hale") ||
+    state.packets.some((packet) => packet.patientId === SAMPLE_PATIENT_ID && /jordan hale/i.test(packet.patientName)) ||
+    state.visitNotes.some((note) => note.patientId === SAMPLE_PATIENT_ID && note.transcript.includes("Jordan"));
+  if (!stale) return state;
+
+  return {
+    ...state,
+    patients: state.patients.map((item) => {
+      if (item.id !== SAMPLE_PATIENT_ID) return item;
+      return {
+        ...item,
+        firstName: "Paul",
+        lastName: "Wallace",
+        preferredName: item.preferredName === "Jordan" || item.preferredName === "" ? "Paul" : item.preferredName,
+        email: item.email.toLowerCase().includes("jordan") ? "paul.wallace@example.com" : item.email,
+        coverages: item.coverages.map((coverage) => ({
+          ...coverage,
+          subscriberName: swapSampleName(coverage.subscriberName),
+        })),
+      };
+    }),
+    packets: state.packets.map((packet) => {
+      if (packet.patientId !== SAMPLE_PATIENT_ID) return packet;
+      return {
+        ...packet,
+        patientName: swapSampleName(packet.patientName),
+        email: packet.email.toLowerCase().includes("jordan") ? "paul.wallace@example.com" : packet.email,
+        signerName: swapSampleName(packet.signerName),
+      };
+    }),
+    visitNotes: state.visitNotes.map((note) =>
+      note.patientId === SAMPLE_PATIENT_ID
+        ? { ...note, transcript: swapSampleName(note.transcript), note: swapSampleName(note.note) }
+        : note,
+    ),
+    tasks: state.tasks.map((task) =>
+      task.patientId === SAMPLE_PATIENT_ID
+        ? { ...task, title: swapSampleName(task.title), detail: swapSampleName(task.detail) }
+        : task,
+    ),
+    outbox: state.outbox.map((item) => ({
+      ...item,
+      to: item.to.toLowerCase().includes("jordan.hale") ? "paul.wallace@example.com" : item.to,
+      body: swapSampleName(item.body),
+    })),
+    agentRuns: state.agentRuns.map((run) => ({
+      ...run,
+      title: swapSampleName(run.title),
+      detail: swapSampleName(run.detail),
+    })),
+  };
+}
+
 export const samplePractice = {
   legalName: "Northline Medical",
   physicianName: "Elvis Francois, MD",

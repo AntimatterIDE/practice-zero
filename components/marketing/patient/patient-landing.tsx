@@ -135,7 +135,7 @@ function PortalLoginCard() {
             <label className="block">
               <span className="mb-1.5 block text-xs font-medium text-graphite">Email</span>
               <div className="rounded-xl border border-line bg-mist px-3 py-2.5 text-sm text-ink">
-                paul.wallace@email.com
+                paul.wallace@example.com
               </div>
             </label>
             <label className="block">
@@ -172,20 +172,20 @@ function ProfileCard() {
     <div className="rounded-[1.5rem] border border-line bg-card p-5 shadow-[var(--shadow-card)]">
       <div className="flex items-center gap-3">
         <span className="flex h-12 w-12 items-center justify-center rounded-full bg-slash/10 font-mono text-sm font-semibold text-slash">
-          JH
+          PW
         </span>
         <div>
           <p className="text-base font-semibold text-ink">Paul Wallace</p>
           <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">
-            MRN · 10482 · DOB 04/18/1989
+            MRN · 100481 · DOB 03/14/1988
           </p>
         </div>
       </div>
       <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
         {[
-          ["Phone", "(555) 014-2281"],
+          ["Phone", "401-555-0144"],
           ["Coverage", "Pinetree Health · Active"],
-          ["Preferred pharmacy", "Northline Rx"],
+          ["Preferred pharmacy", "Hope Street Pharmacy"],
           ["Next visit", "Thu · 9:00 AM"],
         ].map(([label, value]) => (
           <div key={label} className="rounded-xl bg-mist px-3 py-2.5">
