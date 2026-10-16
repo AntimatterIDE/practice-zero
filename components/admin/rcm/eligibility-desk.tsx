@@ -32,7 +32,7 @@ export function EligibilityDesk() {
         title="Eligibility"
         lede="A result is already on file for the 9:00 patient. Running a check adds another canned result. Nothing leaves this browser."
       />
-      <div className="mt-8 grid items-start gap-6 xl:grid-cols-[22rem_minmax(0,1fr)]">
+      <div className="mt-8 grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
         <form
           className="grid gap-4 rounded-2xl border border-line bg-card p-5"
           onSubmit={(event) => {

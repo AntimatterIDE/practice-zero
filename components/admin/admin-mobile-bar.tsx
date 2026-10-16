@@ -15,6 +15,7 @@ import { ResetDemoButton } from "@/components/admin/reset-demo";
 import { BrandMark } from "@/components/marketing/brand-mark";
 import { ExitToHome } from "@/components/marketing/exit-to-home";
 import { samplePractice } from "@/lib/rcm/seed";
+import { useHideOnScroll } from "@/lib/use-hide-on-scroll";
 import { cn } from "@/lib/utils";
 
 type SectionId = "clinic" | "billing";
@@ -100,6 +101,7 @@ export function AdminMobileBar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [section, setSection] = useState<SectionId | null>(null);
+  const hideChrome = useHideOnScroll(open);
   const label = currentDeskLabel(pathname);
 
   useEffect(() => {
@@ -122,7 +124,12 @@ export function AdminMobileBar() {
   };
 
   return (
-    <div className="sticky top-0 z-30 border-b border-line bg-paper lg:hidden">
+    <div
+      className={cn(
+        "sticky top-0 z-30 border-b border-line bg-paper/95 backdrop-blur transition-transform duration-300 ease-out lg:hidden",
+        hideChrome && "-translate-y-full",
+      )}
+    >
       <div className="flex h-14 items-center gap-2 px-3">
         <ExitToHome />
         <div className="min-w-0 flex-1">

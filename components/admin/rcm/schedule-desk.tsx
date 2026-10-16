@@ -61,8 +61,8 @@ export function ScheduleDesk() {
           </button>
         ))}
       </div>
-      <div className="mt-6 grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
-        <section>
+      <div className="mt-6 grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
+        <section className="min-w-0 max-w-full">
           <DaySheet
             visits={rows}
             names={names}
@@ -75,14 +75,14 @@ export function ScheduleDesk() {
                     <Button
                       type="button"
                       variant="secondary"
-                      className="min-h-8 w-full px-2 py-1 text-xs"
+                      className="min-h-8 w-full max-w-full px-2 py-1 text-xs"
                       onClick={() => updateAppointment(appointment.id, { confirmation: "confirmed" satisfies ConfirmationStatus })}
                     >
                       Confirm
                     </Button>
                   ) : null}
                   <select
-                    className={`${fieldClass} w-full min-w-0 max-w-none py-1.5`}
+                    className={`${fieldClass} py-1.5`}
                     value={appointment.status}
                     aria-label={`Status for ${names.get(appointment.patientId)}`}
                     onChange={(event) => updateAppointment(appointment.id, { status: event.target.value as AppointmentStatus })}
@@ -101,7 +101,7 @@ export function ScheduleDesk() {
           />
         </section>
         <form
-          className="grid h-fit gap-4 rounded-2xl border border-line bg-card p-5 shadow-[0_16px_36px_-28px_rgb(7_30_54_/_0.45)] xl:sticky xl:top-6"
+          className="grid h-fit min-w-0 w-full max-w-full gap-4 overflow-hidden rounded-2xl border border-line bg-card p-4 shadow-[0_16px_36px_-28px_rgb(7_30_54_/_0.45)] sm:p-5 xl:sticky xl:top-6"
           onSubmit={(event) => {
             event.preventDefault();
             if (!resolvedPatient || !reason.trim()) return;
@@ -160,7 +160,9 @@ export function ScheduleDesk() {
           <Field label="Reason">
             <input className={fieldClass} value={reason} onChange={(event) => setReason(event.target.value)} required />
           </Field>
-          <Button type="submit">Save visit</Button>
+          <Button type="submit" className="w-full max-w-full">
+            Save visit
+          </Button>
         </form>
       </div>
     </main>

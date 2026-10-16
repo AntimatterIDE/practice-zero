@@ -103,7 +103,7 @@ export function PatientsDesk() {
           {syncError}
         </p>
       ) : null}
-      <div className="mt-8 grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
+      <div className="mt-8 grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
         <section>
           <input
             value={query}

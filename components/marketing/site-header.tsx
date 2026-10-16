@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useHideOnScroll } from "@/lib/use-hide-on-scroll";
 import {
   ArrowRight,
   Bell,
@@ -204,6 +205,7 @@ export function SiteHeader() {
   const [mobileSection, setMobileSection] = useState<string | null>(null);
   const closeTimer = useRef<number | null>(null);
   const reduce = useReducedMotion();
+  const hideChrome = useHideOnScroll(mobile || !!open);
 
   useEffect(() => {
     setOpen(null);
@@ -250,8 +252,14 @@ export function SiteHeader() {
   const activeMenu = menus.find((m) => m.id === open) ?? null;
 
   return (
-    <header className="relative z-50" onMouseLeave={scheduleClose}>
-      <div className="flex items-center justify-between gap-4">
+    <header
+      className={cn(
+        "sticky top-0 z-50 -mx-4 bg-paper/95 px-4 backdrop-blur transition-transform duration-300 ease-out sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8",
+        hideChrome && "-translate-y-full",
+      )}
+      onMouseLeave={scheduleClose}
+    >
+      <div className="flex items-center justify-between gap-4 py-3">
         <span onMouseEnter={closeMega} onFocus={closeMega} className="inline-flex">
           <BrandMark size="md" />
         </span>

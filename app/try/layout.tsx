@@ -33,10 +33,10 @@ export default function TryLayout({ children }: { children: React.ReactNode }) {
           <ResetDemoButton />
         </div>
       </aside>
-      <div className="admin-canvas min-w-0">
+      <div className="admin-canvas min-w-0 max-w-full overflow-x-clip">
         <AdminMobileBar />
         <RcmProvider>
-          <div className="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">{children}</div>
+          <div className="min-w-0 max-w-full px-4 py-6 sm:px-6 lg:px-8 lg:py-8">{children}</div>
         </RcmProvider>
       </div>
     </div>

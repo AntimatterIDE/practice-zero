@@ -270,6 +270,20 @@ body {
   }
 }
 
+/* Keep wide desks (day sheet, tables) from blowing out mobile width. */
+:where(.admin-canvas) {
+  max-width: 100%;
+}
+
+:where(.admin-canvas) :where(main, section, form, article, .grid) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+:where(.admin-canvas) :where(input, select, textarea, button) {
+  max-width: 100%;
+}
+
 :where(.admin-canvas) :where(.border-line.bg-card),
 :where(.admin-canvas) :where(.rounded-2xl.border),
 :where(.admin-canvas) :where(.rounded-3xl.border) {

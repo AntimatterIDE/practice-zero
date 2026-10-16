@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { ExitToHome } from "@/components/marketing/exit-to-home";
 import { samplePractice } from "@/lib/rcm/seed";
+import { useHideOnScroll } from "@/lib/use-hide-on-scroll";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -23,6 +24,7 @@ const nav = [
 
 export function PatientPortalShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const hideChrome = useHideOnScroll();
 
   if (pathname === "/portal/login") {
     return <div className="min-h-full bg-paper text-ink">{children}</div>;
@@ -67,8 +69,13 @@ export function PatientPortalShell({ children }: { children: React.ReactNode }) 
         </div>
       </aside>
 
-      <div className="min-w-0">
-        <header className="sticky top-0 z-20 border-b border-line bg-paper/95 backdrop-blur lg:hidden">
+      <div className="min-w-0 max-w-full overflow-x-clip">
+        <header
+          className={cn(
+            "sticky top-0 z-20 border-b border-line bg-paper/95 backdrop-blur transition-transform duration-300 ease-out lg:hidden",
+            hideChrome && "-translate-y-full",
+          )}
+        >
           <div className="flex items-center justify-between gap-3 px-4 py-3">
             <ExitToHome />
             <div className="min-w-0 text-right">
@@ -94,7 +101,7 @@ export function PatientPortalShell({ children }: { children: React.ReactNode }) 
             })}
           </nav>
         </header>
-        <main className="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">{children}</main>
+        <main className="min-w-0 max-w-full px-4 py-6 sm:px-6 lg:px-8 lg:py-8">{children}</main>
       </div>
     </div>
   );

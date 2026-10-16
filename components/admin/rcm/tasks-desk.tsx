@@ -106,7 +106,7 @@ export function TasksDesk() {
           </div>
         }
       />
-      <div className="mt-8 grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
+      <div className="mt-8 grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
         <section className="grid gap-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <label className="relative min-w-0 flex-1 sm:max-w-md">

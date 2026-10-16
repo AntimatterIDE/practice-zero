@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Instrument_Sans, JetBrains_Mono } from "next/font/google";
 import { SiteChat } from "@/components/marketing/site-chat";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { ogMedia } from "@/lib/open-graph";
 import { canonicalOrigin, isIndexingEnabled, product } from "@/lib/site";
 import "./globals.css";
@@ -125,6 +126,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <ScrollToTop />
         {children}
         <SiteChat />
       </body>

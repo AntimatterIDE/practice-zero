@@ -58,7 +58,7 @@ export function DenialsDesk() {
           </ul>
         </section>
       ) : null}
-      <div className="mt-8 grid items-start gap-6 xl:grid-cols-[18rem_minmax(0,1fr)]">
+      <div className="mt-8 grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,18rem)_minmax(0,1fr)]">
         <ul className="grid gap-2">
           {denied.map((claim) => (
             <li key={claim.id}>

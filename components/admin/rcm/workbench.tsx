@@ -108,9 +108,11 @@ export function Workbench() {
           </div>
         ))}
       </section>
-      <div className="mt-6 grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
-        <DaySheet visits={dayVisits} names={names} empty="The schedule is clear." recordHref={recordVisitHref} />
-        <aside className="overflow-hidden rounded-[var(--rb-r-2xl,14px)] border border-neutral-200/80 bg-white">
+      <div className="mt-6 grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
+        <div className="min-w-0 max-w-full">
+          <DaySheet visits={dayVisits} names={names} empty="The schedule is clear." recordHref={recordVisitHref} />
+        </div>
+        <aside className="min-w-0 max-w-full overflow-hidden rounded-[var(--rb-r-2xl,14px)] border border-neutral-200/80 bg-white">
           <div className="flex items-end justify-between gap-3 border-b border-neutral-200 px-5 py-4">
             <div>
               <p className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">Front desk</p>
