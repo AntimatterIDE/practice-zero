@@ -71,14 +71,17 @@ export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
 
   useEffect(() => {
     if (!exiting) return;
-    const timer = window.setTimeout(() => {
-      if (!marked.current) {
-        marked.current = true;
-        try {
-          sessionStorage.setItem(STORAGE_KEY, "1");
-        } catch {
-          /* ignore */
-        }
+
+    let cancelled = false;
+    let fallback = 0;
+
+    const finish = () => {
+      if (cancelled || marked.current) return;
+      marked.current = true;
+      try {
+        sessionStorage.setItem(STORAGE_KEY, "1");
+      } catch {
+        /* ignore */
       }
       setGate("skip");
       try {
@@ -86,8 +89,32 @@ export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
       } catch {
         /* ignore */
       }
+    };
+
+    // Prefer revealing once the funnel is painted so the hero does not jump.
+    const onFunnel = () => {
+      window.clearTimeout(fallback);
+      window.setTimeout(finish, 320);
+    };
+
+    const timer = window.setTimeout(() => {
+      const ready =
+        document.getElementById("pz-home-hero")?.dataset.funnelReady === "1";
+      if (ready) {
+        finish();
+        return;
+      }
+      window.addEventListener("pz-funnel-ready", onFunnel, { once: true });
+      // Cap wait so a slow GPU never traps the user on the intro.
+      fallback = window.setTimeout(finish, 2800);
     }, 750);
-    return () => window.clearTimeout(timer);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      window.clearTimeout(fallback);
+      window.removeEventListener("pz-funnel-ready", onFunnel);
+    };
   }, [exiting]);
 
   return (

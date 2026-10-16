@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AdminNav, currentDeskLabel } from "@/components/admin/admin-nav";
 import { ResetDemoButton } from "@/components/admin/reset-demo";
+import { ExitToHome } from "@/components/marketing/exit-to-home";
 import { samplePractice } from "@/lib/rcm/seed";
 
 export function AdminMobileBar() {
@@ -17,8 +18,8 @@ export function AdminMobileBar() {
 
   return (
     <div className="sticky top-0 z-30 border-b border-neutral-200 bg-white lg:hidden">
-      <div className="flex h-14 items-center gap-3 px-3">
-        <span className="grid size-8 place-items-center rounded-md bg-neutral-900 text-[11px] font-semibold text-white">PZ</span>
+      <div className="flex h-14 items-center gap-2 px-3">
+        <ExitToHome />
         <div className="min-w-0 flex-1">
           <p className="truncate text-xs text-neutral-500">{samplePractice.legalName}</p>
           <p className="truncate text-[13px] font-medium text-neutral-900">{label}</p>

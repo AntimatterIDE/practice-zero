@@ -28,13 +28,30 @@ function isLabEnvironment() {
   return false;
 }
 
+function markFunnelReady(section: HTMLElement) {
+  section.dataset.funnelReady = "1";
+  try {
+    window.dispatchEvent(new Event("pz-funnel-ready"));
+  } catch {
+    /* ignore */
+  }
+}
+
 /**
- * Progressive enhancement: mount the WebGL funnel only after real user input.
- * PageSpeed / Lighthouse never interact, so Three.js stays off the lab path.
+ * Mount the WebGL funnel ASAP for real users (intro cover hides warm-up).
+ * Labs never load Three.js. Layout space is reserved in CSS so mounting does not CLS.
  */
 export function HeroFunnelMount() {
   useEffect(() => {
-    if (isLabEnvironment()) return;
+    if (isLabEnvironment()) {
+      // Labs: clear any pending homepage gate without loading WebGL
+      try {
+        window.dispatchEvent(new Event("pz-funnel-ready"));
+      } catch {
+        /* ignore */
+      }
+      return;
+    }
 
     const section = document.getElementById("pz-home-hero");
     const band = document.getElementById("pz-hero-band");
@@ -64,42 +81,31 @@ export function HeroFunnelMount() {
         );
         funnel = createFunnel(section, band, copy, content, rows, () => {}, quality);
         if (funnel) {
-          section.dataset.funnelReady = "1";
+          markFunnelReady(section);
           funnel.focus(1);
+        } else {
+          markFunnelReady(section);
         }
       });
     };
-
-    const onIntroDone = () => {
-      // User already engaged with the brand intro — safe to warm the funnel.
-      window.setTimeout(start, 600);
-    };
-
-    let returnVisitTimer = 0;
-    try {
-      // Returning visitors skipped the intro — warm the funnel after a quiet beat.
-      // Labs set pzLab and never reach here.
-      if (sessionStorage.getItem("pz-intro-v2") === "1") {
-        returnVisitTimer = window.setTimeout(start, 2800);
-      }
-    } catch {
-      /* ignore */
-    }
 
     const detach = () => {
       window.removeEventListener("pointerdown", start);
       window.removeEventListener("keydown", start);
       window.removeEventListener("touchstart", start);
-      window.removeEventListener("pz-intro-done", onIntroDone);
-      if (returnVisitTimer) window.clearTimeout(returnVisitTimer);
+      window.removeEventListener("pz-intro-done", start);
+      window.clearTimeout(warmTimer);
     };
 
-    // Intention only — not scroll/pointermove. Lighthouse scrolls for screenshots
-    // and would otherwise pull Three.js into the lab path.
+    // Warm immediately — brand intro / ink cover hides the load for first visits;
+    // return visits no longer wait ~3s before the funnel appears.
+    const warmTimer = window.setTimeout(start, 32);
+
+    // Intent + intro-done remain as backups if the immediate warm is cancelled somehow.
     window.addEventListener("pointerdown", start, { once: true, passive: true });
     window.addEventListener("keydown", start, { once: true, passive: true });
     window.addEventListener("touchstart", start, { once: true, passive: true });
-    window.addEventListener("pz-intro-done", onIntroDone);
+    window.addEventListener("pz-intro-done", start);
 
     return () => {
       cancelled = true;

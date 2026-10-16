@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Instrument_Sans, JetBrains_Mono } from "next/font/google";
 import { SiteChat } from "@/components/marketing/site-chat";
+import { ogMedia } from "@/lib/open-graph";
 import { canonicalOrigin, isIndexingEnabled, product } from "@/lib/site";
 import "./globals.css";
 
@@ -69,7 +70,7 @@ export const metadata: Metadata = {
     siteName: product.name,
     title: `${product.name} · less administration. more care.`,
     description: product.description,
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "practice zero" }],
+    ...ogMedia(),
   },
   twitter: {
     card: "summary_large_image",

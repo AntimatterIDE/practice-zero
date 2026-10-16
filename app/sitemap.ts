@@ -10,6 +10,7 @@ const paths = [
   { path: "/patient", priority: 0.8, changeFrequency: "weekly" as const },
   { path: "/ai", priority: 0.8, changeFrequency: "weekly" as const },
   { path: "/research", priority: 0.8, changeFrequency: "weekly" as const },
+  { path: "/onboarding", priority: 0.85, changeFrequency: "weekly" as const },
   { path: "/pricing", priority: 0.9, changeFrequency: "weekly" as const },
   { path: "/contact", priority: 0.7, changeFrequency: "monthly" as const },
 ];

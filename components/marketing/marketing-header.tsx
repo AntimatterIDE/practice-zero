@@ -8,6 +8,7 @@ const links = [
   { href: "/ai", label: "AI" },
   { href: "/research", label: "Research" },
   { href: "/patient", label: "Patient" },
+  { href: "/onboarding", label: "Onboarding" },
   { href: "/pricing", label: "Pricing" },
   { href: "/contact", label: "Contact" },
 ] as const;

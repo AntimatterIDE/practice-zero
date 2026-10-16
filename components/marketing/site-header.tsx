@@ -86,6 +86,7 @@ const menus: { id: string; label: string; href: string; items: Item[] }[] = [
 const flatLinks = [
   { href: "/ai", label: "AI" },
   { href: "/research", label: "Research" },
+  { href: "/onboarding", label: "Onboarding" },
   { href: "/pricing", label: "Pricing" },
   { href: "/contact", label: "Contact" },
 ] as const;

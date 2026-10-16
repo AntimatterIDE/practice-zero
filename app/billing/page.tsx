@@ -2,12 +2,19 @@ import type { Metadata } from "next";
 import { Footer11 } from "@/components/blocks/footer-11";
 import { BillingLanding } from "@/components/marketing/billing/billing-landing";
 import { SiteHeader } from "@/components/marketing/site-header";
+import { pageOpenGraph } from "@/lib/open-graph";
 
 export const metadata: Metadata = {
   title: "Billing",
   description:
     "Connect care to collections. Reduce billing friction, keep claims moving, and gain a clearer view of cash flow.",
   alternates: { canonical: "/billing" },
+  openGraph: pageOpenGraph({
+    title: "Billing · practice zero",
+    description:
+      "Connect care to collections. Reduce billing friction, keep claims moving, and gain a clearer view of cash flow.",
+    url: "/billing",
+  }),
 };
 
 export default function BillingPage() {

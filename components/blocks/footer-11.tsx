@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ClipboardList, Mic, Stethoscope, User, type LucideIcon } from "lucide-react";
 import { BrandMark } from "@/components/marketing/brand-mark";
+import { ComplianceBadges } from "@/components/marketing/compliance-badges";
 
 const focusRing =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slash focus-visible:ring-offset-2 focus-visible:ring-offset-ink";
@@ -59,6 +60,7 @@ const columns: {
     links: [
       { label: "AI", href: "/ai" },
       { label: "Research", href: "/research" },
+      { label: "Onboarding", href: "/onboarding" },
       { label: "Pricing", href: "/pricing" },
       { label: "Contact", href: "/contact" },
       { label: "Try the demo", href: "/try" },
@@ -103,6 +105,7 @@ export function Footer11() {
           <p className="max-w-xl font-sans text-3xl font-semibold lowercase leading-tight tracking-[-0.03em] text-paper sm:text-4xl">
             from the first patient to the <span className="text-foam">claim</span>.
           </p>
+          <ComplianceBadges tone="dark" className="max-w-2xl" />
         </div>
       </div>
     </footer>

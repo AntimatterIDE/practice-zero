@@ -6,6 +6,7 @@ import { ResearchArticleView } from "@/components/marketing/research/research-ar
 import { demoPublishedArticles, findDemoArticle } from "@/lib/research/demo";
 import { getResearchBySlug, listPublishedResearch } from "@/lib/research/store";
 import type { ResearchArticle } from "@/lib/research/types";
+import { ogMedia } from "@/lib/open-graph";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await loadArticle(slug);
   if (!article) return { title: "Research" };
+  const media = ogMedia();
   return {
     title: article.search_title || article.title,
     description: article.search_description || article.excerpt,
@@ -42,7 +44,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: article.title,
       description: article.excerpt,
-      images: article.cover_image_url ? [{ url: article.cover_image_url }] : undefined,
+      url: `/research/${article.slug}`,
+      videos: media.videos,
+      images: article.cover_image_url
+        ? [{ url: article.cover_image_url }]
+        : media.images,
     },
   };
 }

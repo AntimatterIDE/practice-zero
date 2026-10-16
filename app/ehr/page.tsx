@@ -9,10 +9,17 @@ import { TasksSection } from "@/components/marketing/ehr/tasks";
 import { VisitsSection } from "@/components/marketing/ehr/visits";
 import { CategoryClose, CategoryIntro } from "@/components/marketing/depth";
 import { SiteHeader } from "@/components/marketing/site-header";
+import { pageOpenGraph } from "@/lib/open-graph";
 
 export const metadata: Metadata = {
   title: "EHR",
   description: "Patients, visits, the scribe, intake, agreements, tasks, and requests.",
+  alternates: { canonical: "/ehr" },
+  openGraph: pageOpenGraph({
+    title: "EHR · practice zero",
+    description: "Patients, visits, the scribe, intake, agreements, tasks, and requests.",
+    url: "/ehr",
+  }),
 };
 
 export default function EhrPage() {

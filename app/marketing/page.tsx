@@ -7,10 +7,17 @@ import { SeoSection } from "@/components/marketing/marketing/seo";
 import { SocialSection } from "@/components/marketing/marketing/social";
 import { CategoryClose, CategoryIntro } from "@/components/marketing/depth";
 import { SiteHeader } from "@/components/marketing/site-header";
+import { pageOpenGraph } from "@/lib/open-graph";
 
 export const metadata: Metadata = {
   title: "Marketing",
   description: "Outreach, follow-up, scheduling, search, and social for an independent practice.",
+  alternates: { canonical: "/marketing" },
+  openGraph: pageOpenGraph({
+    title: "Marketing · practice zero",
+    description: "Outreach, follow-up, scheduling, search, and social for an independent practice.",
+    url: "/marketing",
+  }),
 };
 
 export default function MarketingPage() {

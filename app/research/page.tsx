@@ -5,6 +5,7 @@ import { ResearchIndex } from "@/components/marketing/research/research-index";
 import { demoPublishedArticles } from "@/lib/research/demo";
 import { listPublishedResearch } from "@/lib/research/store";
 import type { ResearchArticle } from "@/lib/research/types";
+import { pageOpenGraph } from "@/lib/open-graph";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,12 @@ export const metadata: Metadata = {
   description:
     "Practice Zero research notes on agentic EHR, room hardware, autonomous scheduling, claims, and payment tracking.",
   alternates: { canonical: "/research" },
+  openGraph: pageOpenGraph({
+    title: "Research · practice zero",
+    description:
+      "Practice Zero research notes on agentic EHR, room hardware, autonomous scheduling, claims, and payment tracking.",
+    url: "/research",
+  }),
 };
 
 async function loadArticles(): Promise<ResearchArticle[]> {

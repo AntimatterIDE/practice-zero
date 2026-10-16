@@ -2,18 +2,19 @@ import type { Metadata } from "next";
 import Pricing12 from "@/components/blocks/pricing-12";
 import { Footer11 } from "@/components/blocks/footer-11";
 import { SiteHeader } from "@/components/marketing/site-header";
+import { pageOpenGraph } from "@/lib/open-graph";
 
 export const metadata: Metadata = {
   title: "Pricing",
   description:
     "EHR, billing, and marketing included at no additional license fee when you route collections through PracticeZero under a one-year billing agreement. Optional advertising spend is separate.",
   alternates: { canonical: "/pricing" },
-  openGraph: {
+  openGraph: pageOpenGraph({
     title: "Pricing · practice zero",
     description:
       "EHR, billing, and marketing included at no additional license fee. One-year billing agreement. Optional advertising spend on your terms.",
     url: "/pricing",
-  },
+  }),
 };
 
 export default function PricingPage() {

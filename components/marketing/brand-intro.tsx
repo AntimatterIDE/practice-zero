@@ -3,12 +3,36 @@
 import { useEffect, useState, type ComponentType } from "react";
 
 const STORAGE_KEY = "pz-intro-v2";
+const FUNNEL_GATE_MS = 4000;
 
 function clearIntroGate() {
   try {
     document.documentElement.removeAttribute("data-pz-intro");
   } catch {
     /* ignore */
+  }
+}
+
+function isHomePath() {
+  const path = window.location.pathname;
+  return path === "/" || path === "";
+}
+
+/** Hold the ink first-paint cover until the funnel is ready (or timeout). */
+function holdCoverUntilFunnel() {
+  let settled = false;
+  const finish = () => {
+    if (settled) return;
+    settled = true;
+    window.clearTimeout(maxWait);
+    window.removeEventListener("pz-funnel-ready", finish);
+    clearIntroGate();
+  };
+  const maxWait = window.setTimeout(finish, FUNNEL_GATE_MS);
+  window.addEventListener("pz-funnel-ready", finish);
+  // Funnel may already be ready (race with HeroFunnelMount)
+  if (document.getElementById("pz-home-hero")?.dataset.funnelReady === "1") {
+    finish();
   }
 }
 
@@ -47,8 +71,18 @@ export function BrandIntro() {
   const [Animation, setAnimation] = useState<ComponentType<{ onReady?: () => void }> | null>(null);
 
   useEffect(() => {
-    if (document.documentElement.dataset.pzLab === "1" || shouldSkipIntro()) {
+    if (document.documentElement.dataset.pzLab === "1") {
       clearIntroGate();
+      return;
+    }
+
+    if (shouldSkipIntro()) {
+      // Return visit on homepage: keep cover until funnel paints to avoid late pop-in CLS.
+      if (isHomePath()) {
+        holdCoverUntilFunnel();
+      } else {
+        clearIntroGate();
+      }
       return;
     }
 
@@ -63,5 +97,6 @@ export function BrandIntro() {
   }, []);
 
   if (!Animation) return null;
+  // First visit: swap CSS cover for the animated overlay immediately; funnel warms underneath.
   return <Animation onReady={clearIntroGate} />;
 }

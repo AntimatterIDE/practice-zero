@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ArrowRight, BarChart3, Clock3, ShieldCheck } from "lucide-react";
-import { MarketingHeader } from "@/components/marketing/marketing-header";
+import { SiteHeader } from "@/components/marketing/site-header";
 import { HeroFunnelMount } from "@/components/blocks/hero-funnel-mount";
+import { ComplianceBadges } from "@/components/marketing/compliance-badges";
 
 const STEPS = [
   { name: "Visits completed", count: 1284 },
@@ -18,17 +19,25 @@ export function HomeTop() {
   return (
     <section
       id="pz-home-hero"
-      className="relative isolate flex min-h-screen w-full flex-col overflow-hidden bg-paper px-4 pb-10 pt-6 text-ink sm:px-6 lg:px-8 lg:pb-12"
+      className="relative isolate flex min-h-screen w-full flex-col overflow-x-clip bg-paper px-4 pb-10 pt-6 text-ink sm:px-6 lg:px-8 lg:pb-12"
     >
-      <div className="relative z-40 mx-auto w-full max-w-[1400px]">
-        <MarketingHeader />
+      {/*
+        Header sits outside overflow clipping so mega-menus are not cut off.
+        z-50 keeps it above the absolute step overlay.
+      */}
+      <div className="relative z-50 mx-auto w-full max-w-[1400px]">
+        <SiteHeader />
       </div>
 
+      {/*
+        pointer-events-none on the content shell so empty space over the WebGL funnel
+        still receives hover/click on #pz-home-hero. Interactive children re-enable hits.
+      */}
       <div
         id="pz-hero-content"
-        className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col pt-10 lg:pt-16"
+        className="pointer-events-none relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col pt-10 lg:pt-16"
       >
-        <div id="pz-hero-copy" className="max-w-[28rem] xl:max-w-[34rem]">
+        <div id="pz-hero-copy" className="pointer-events-auto max-w-[28rem] xl:max-w-[34rem]">
           <p className="kicker">The autonomous practice</p>
           <h1 className="mt-6 max-w-[14ch] font-sans text-5xl font-semibold lowercase leading-[1.02] tracking-[-0.04em] text-ink sm:text-6xl xl:text-7xl">
             less administration. more care.
@@ -38,7 +47,7 @@ export function HomeTop() {
           </p>
         </div>
 
-        <div className="mt-8 flex flex-col gap-6 lg:mt-auto">
+        <div className="pointer-events-auto mt-8 flex flex-col gap-6 lg:mt-auto">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
             <Link
               href="/try"
@@ -70,15 +79,16 @@ export function HomeTop() {
               Writes stay in this browser
             </span>
           </div>
+          <ComplianceBadges className="mt-1 max-w-xl opacity-90" />
         </div>
 
-        {/* Mobile funnel canvas space — opened after WebGL mounts so LCP stays on the headline. */}
+        {/* Reserved mobile funnel band — height is stable; canvas fades in when WebGL is ready. */}
         <div id="pz-hero-band" aria-hidden="true" className="pz-hero-band shrink-0 lg:hidden" />
 
         <ol
           id="pz-hero-steps"
           aria-label="Revenue cycle steps"
-          className="mt-7 flex flex-col gap-1 lg:pointer-events-none lg:absolute lg:inset-0 lg:m-0 lg:pt-28"
+          className="pointer-events-none mt-7 flex flex-col gap-1 lg:absolute lg:inset-0 lg:m-0 lg:pt-28"
         >
           {STEPS.map((step, index) => {
             const selected = index === 1;
