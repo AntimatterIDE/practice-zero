@@ -1,13 +1,16 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   CheckCircle2,
   ChevronDown,
   Circle,
   Loader2,
   MessageSquare,
+  PauseCircle,
+  RefreshCw,
   Send,
+  XCircle,
 } from "lucide-react";
 import {
   countGoliveSteps,
@@ -15,34 +18,77 @@ import {
   GOLIVE_TASKS,
   type GoliveTask,
 } from "@/lib/marketing/golive-tasks";
+import type {
+  GoliveStatusReport,
+  StepStatus,
+  VerifiedStep,
+} from "@/lib/marketing/golive-status-types";
 import { cn } from "@/lib/utils";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
 const STARTERS = [
-  "What’s the next incomplete step?",
-  "Walk me through task 3 — GA4 and Search Console",
-  "Help me with Instantly domains (task 7)",
-  "What Google Ads campaigns first?",
-  "How do I wire the Instantly webhook?",
+  "What’s the next free step?",
+  "Verify my setup and tell me what’s missing",
+  "Walk me through Search Console",
+  "How do I test a UTM consultation lead?",
 ];
 
-const STORAGE_KEY = "pz_marketing_golive_steps_v2";
+function statusIcon(status: StepStatus | undefined) {
+  switch (status) {
+    case "pass":
+    case "optional_pass":
+      return <CheckCircle2 className="size-5 text-slash" />;
+    case "fail":
+      return <XCircle className="size-5 text-emergency" />;
+    case "deferred":
+      return <PauseCircle className="size-5 text-graphite/45" />;
+    default:
+      return <Circle className="size-5 text-graphite/45" />;
+  }
+}
 
-function taskProgress(task: GoliveTask, done: Record<string, boolean>) {
-  const total = task.steps.length;
-  const completed = task.steps.filter((step) => done[goliveStepKey(task.id, step.id)]).length;
-  return { completed, total, allDone: completed === total && total > 0 };
+function statusLabel(status: StepStatus | undefined) {
+  switch (status) {
+    case "pass":
+      return "Verified";
+    case "optional_pass":
+      return "Optional · set";
+    case "fail":
+      return "Needs fix";
+    case "deferred":
+      return "Deferred · paid";
+    default:
+      return "Pending · free";
+  }
+}
+
+function taskCounts(task: GoliveTask, byKey: Map<string, VerifiedStep>) {
+  let verified = 0;
+  let actionable = 0;
+  for (const step of task.steps) {
+    const st = byKey.get(goliveStepKey(task.id, step.id))?.status;
+    if (st === "pass" || st === "optional_pass") verified += 1;
+    if (st === "fail" || st === "pending") actionable += 1;
+  }
+  return {
+    verified,
+    total: task.steps.length,
+    actionable,
+    allClear: actionable === 0,
+  };
 }
 
 export function MarketingGoliveDesk() {
-  const [done, setDone] = useState<Record<string, boolean>>({});
+  const [report, setReport] = useState<GoliveStatusReport | null>(null);
+  const [loadingStatus, setLoadingStatus] = useState(true);
+  const [statusError, setStatusError] = useState<string | null>(null);
   const [openTaskId, setOpenTaskId] = useState<string>(GOLIVE_TASKS[0]?.id ?? "");
   const [messages, setMessages] = useState<Msg[]>([
     {
       role: "assistant",
       content:
-        "I’m your marketing go-live assistant. Each task on the left has separate steps — check them off as you go. Ask “what’s next,” or tap Help on any step.",
+        "I’ll auto-verify what’s live in production (env, Supabase, code). Paid Instantly/Ads/Semrush steps stay deferred until you’re ready to spend. Ask “what’s next” for free actions.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -50,22 +96,42 @@ export function MarketingGoliveDesk() {
   const [usedModel, setUsedModel] = useState<boolean | null>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  const byKey = useMemo(() => {
+    const map = new Map<string, VerifiedStep>();
+    for (const step of report?.steps ?? []) map.set(step.key, step);
+    return map;
+  }, [report]);
+
+  const refreshStatus = useCallback(async () => {
+    setLoadingStatus(true);
+    setStatusError(null);
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setDone(JSON.parse(raw) as Record<string, boolean>);
+      const res = await fetch("/api/admin/marketing/status", { cache: "no-store" });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        setStatusError("Session expired. Sign in again.");
+        return;
+      }
+      if (!res.ok) {
+        setStatusError(typeof data.error === "string" ? data.error : "Status check failed.");
+        return;
+      }
+      setReport(data as GoliveStatusReport);
+      const next = (data as GoliveStatusReport).freePathNext;
+      if (next) {
+        const task = GOLIVE_TASKS.find((t) => t.id === next.taskId);
+        if (task) setOpenTaskId(task.id);
+      }
     } catch {
-      // ignore
+      setStatusError("Network error while verifying.");
+    } finally {
+      setLoadingStatus(false);
     }
   }, []);
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(done));
-    } catch {
-      // ignore
-    }
-  }, [done]);
+    void refreshStatus();
+  }, [refreshStatus]);
 
   useEffect(() => {
     const el = scrollerRef.current;
@@ -74,35 +140,9 @@ export function MarketingGoliveDesk() {
   }, [messages, busy]);
 
   const totalSteps = countGoliveSteps();
-  const completedSteps = useMemo(
-    () => Object.values(done).filter(Boolean).length,
-    [done],
-  );
-
-  const nextIncomplete = useMemo(() => {
-    for (const task of GOLIVE_TASKS) {
-      for (const step of task.steps) {
-        if (!done[goliveStepKey(task.id, step.id)]) {
-          return { task, step };
-        }
-      }
-    }
-    return null;
-  }, [done]);
-
-  function toggleStep(taskId: string, stepId: string) {
-    const key = goliveStepKey(taskId, stepId);
-    setDone((prev) => ({ ...prev, [key]: !prev[key] }));
-  }
-
-  function askAboutStep(task: GoliveTask, stepId: string) {
-    const step = task.steps.find((s) => s.id === stepId);
-    if (!step) return;
-    setOpenTaskId(task.id);
-    void send(
-      `Help me complete Task ${task.number} (“${task.title}”), step “${step.title}”: ${step.detail}`,
-    );
-  }
+  const summary = report?.summary;
+  const completedLike =
+    (summary?.pass ?? 0) + (summary?.optionalPass ?? 0);
 
   async function send(text: string) {
     const content = text.trim();
@@ -123,11 +163,13 @@ export function MarketingGoliveDesk() {
             .slice(-16)
             .map(({ role, content: c }) => ({ role, content: c })),
           progress: {
-            completedSteps,
+            completedSteps: completedLike,
             totalSteps,
-            nextTaskNumber: nextIncomplete?.task.number,
-            nextTaskTitle: nextIncomplete?.task.title,
-            nextStepTitle: nextIncomplete?.step.title,
+            nextTaskNumber: report?.freePathNext
+              ? GOLIVE_TASKS.find((t) => t.id === report.freePathNext?.taskId)?.number
+              : undefined,
+            nextTaskTitle: report?.freePathNext?.title,
+            nextStepTitle: report?.freePathNext?.title,
           },
         }),
       });
@@ -142,7 +184,7 @@ export function MarketingGoliveDesk() {
       const reply =
         typeof data.reply === "string" && data.reply.trim()
           ? data.reply.trim()
-          : "Something went wrong. Try again, or open marketing/cold-email/README.md in the repo.";
+          : "Something went wrong. Try Verify again.";
       setUsedModel(Boolean(data.usedModel));
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
     } catch {
@@ -155,6 +197,16 @@ export function MarketingGoliveDesk() {
     }
   }
 
+  function askAboutStep(task: GoliveTask, stepId: string) {
+    const step = task.steps.find((s) => s.id === stepId);
+    const verified = byKey.get(goliveStepKey(task.id, stepId));
+    if (!step) return;
+    setOpenTaskId(task.id);
+    void send(
+      `Help with Task ${task.number} step “${step.title}” (status: ${verified?.status ?? "unknown"}). Verifier says: ${verified?.detail ?? step.detail}`,
+    );
+  }
+
   function onSubmit(event: FormEvent) {
     event.preventDefault();
     void send(input);
@@ -162,37 +214,68 @@ export function MarketingGoliveDesk() {
 
   return (
     <div>
-      <div>
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-slash">Admin</p>
-        <h1 className="mt-2 font-sans text-3xl font-semibold lowercase tracking-[-0.03em] text-ink">
-          marketing go-live
-        </h1>
-        <p className="mt-2 max-w-2xl text-sm text-graphite">
-          Ten tasks with separate steps for analytics, Ads, Semrush, Instantly, and attribution —
-          plus an AI assistant on the same{" "}
-          <span className="font-mono text-[12px] text-ink">OPENAI_API_KEY</span>.
-        </p>
-        <p className="mt-3 text-xs text-graphite">
-          Steps {completedSteps}/{totalSteps}
-          {nextIncomplete
-            ? ` · next: task ${nextIncomplete.task.number} — ${nextIncomplete.step.title}`
-            : " · all steps complete"}
-          {usedModel === false ? " · assistant on template fallback" : null}
-          {usedModel === true ? " · assistant using OpenAI" : null}
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-slash">Admin</p>
+          <h1 className="mt-2 font-sans text-3xl font-semibold lowercase tracking-[-0.03em] text-ink">
+            marketing go-live
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm text-graphite">
+            Auto-verifies production env, Supabase attribution, and code gates. Paid Ads / Semrush /
+            Instantly sending stay deferred until you budget for them.
+          </p>
+          <p className="mt-3 text-xs text-graphite">
+            {loadingStatus && !report
+              ? "Verifying…"
+              : summary
+                ? `Verified ${completedLike}/${totalSteps} · ${summary.fail} fail · ${summary.pending} free pending · ${summary.deferred} deferred`
+                : null}
+            {report?.freePathNext
+              ? ` · next free: ${report.freePathNext.title}`
+              : report
+                ? " · no free blockers left"
+                : null}
+            {usedModel === true ? " · assistant using OpenAI" : null}
+            {usedModel === false ? " · assistant fallback" : null}
+          </p>
+          {statusError ? (
+            <p className="mt-2 text-sm text-emergency">{statusError}</p>
+          ) : null}
+        </div>
+        <button
+          type="button"
+          onClick={() => void refreshStatus()}
+          disabled={loadingStatus}
+          className="inline-flex items-center gap-2 rounded-full border border-line bg-card px-4 py-2 text-sm font-medium text-ink hover:border-slash/40 disabled:opacity-60"
+        >
+          <RefreshCw className={cn("size-3.5", loadingStatus && "animate-spin")} />
+          {loadingStatus ? "Verifying…" : "Verify now"}
+        </button>
       </div>
+
+      {report?.freePathNext ? (
+        <div className="mt-6 rounded-2xl border border-slash/25 bg-slash/5 px-5 py-4">
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-slash">
+            Next free action
+          </p>
+          <p className="mt-1 text-sm font-medium text-ink">{report.freePathNext.title}</p>
+          <p className="mt-1 text-xs leading-relaxed text-graphite">
+            {report.freePathNext.detail}
+          </p>
+        </div>
+      ) : null}
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <section className="space-y-3">
           {GOLIVE_TASKS.map((task) => {
-            const { completed, total, allDone } = taskProgress(task, done);
+            const { verified, total, allClear, actionable } = taskCounts(task, byKey);
             const open = openTaskId === task.id;
             return (
               <article
                 key={task.id}
                 className={cn(
                   "overflow-hidden rounded-2xl border bg-card",
-                  allDone ? "border-slash/30" : "border-line",
+                  allClear ? "border-slash/30" : "border-line",
                 )}
               >
                 <button
@@ -204,35 +287,22 @@ export function MarketingGoliveDesk() {
                   <span
                     className={cn(
                       "mt-0.5 grid size-7 shrink-0 place-items-center rounded-full font-mono text-[11px]",
-                      allDone
-                        ? "bg-slash/15 text-slash"
-                        : "bg-mist text-graphite",
+                      allClear ? "bg-slash/15 text-slash" : "bg-mist text-graphite",
                     )}
                   >
                     {task.number}
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <span
-                        className={cn(
-                          "text-sm font-medium text-ink",
-                          allDone && "text-graphite",
-                        )}
-                      >
-                        {task.title}
-                      </span>
+                      <span className="text-sm font-medium text-ink">{task.title}</span>
                       <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">
-                        {completed}/{total} steps
+                        {verified}/{total} verified
+                        {actionable ? ` · ${actionable} open` : ""}
                       </span>
                     </span>
                     <span className="mt-1 block text-xs leading-relaxed text-graphite">
                       {task.summary}
                     </span>
-                    {task.docs ? (
-                      <span className="mt-1 block font-mono text-[11px] text-slash/80">
-                        {task.docs}
-                      </span>
-                    ) : null}
                   </span>
                   <ChevronDown
                     className={cn(
@@ -243,48 +313,32 @@ export function MarketingGoliveDesk() {
                 </button>
 
                 {open ? (
-                  <ul className="border-t border-line divide-y divide-line bg-paper/40">
-                    {task.steps.map((step, index) => {
-                      const key = goliveStepKey(task.id, step.id);
-                      const checked = Boolean(done[key]);
+                  <ul className="divide-y divide-line border-t border-line bg-paper/40">
+                    {task.steps.map((s, index) => {
+                      const verifiedStep = byKey.get(goliveStepKey(task.id, s.id));
+                      const st = verifiedStep?.status;
                       return (
-                        <li key={step.id} className="flex items-start gap-2 px-4 py-3 sm:px-5">
-                          <button
-                            type="button"
-                            onClick={() => toggleStep(task.id, step.id)}
-                            className="mt-0.5 shrink-0"
-                            aria-pressed={checked}
-                            aria-label={
-                              checked
-                                ? `Mark incomplete: ${step.title}`
-                                : `Mark complete: ${step.title}`
-                            }
-                          >
-                            {checked ? (
-                              <CheckCircle2 className="size-5 text-slash" />
-                            ) : (
-                              <Circle className="size-5 text-graphite/45" />
-                            )}
-                          </button>
+                        <li key={s.id} className="flex items-start gap-2 px-4 py-3 sm:px-5">
+                          <span className="mt-0.5 shrink-0" title={statusLabel(st)}>
+                            {statusIcon(st)}
+                          </span>
                           <div className="min-w-0 flex-1">
-                            <p
-                              className={cn(
-                                "text-sm font-medium text-ink",
-                                checked && "text-graphite line-through",
-                              )}
-                            >
+                            <p className="text-sm font-medium text-ink">
                               <span className="mr-1.5 font-mono text-[10px] text-graphite">
                                 {task.number}.{index + 1}
                               </span>
-                              {step.title}
+                              {s.title}
+                            </p>
+                            <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.12em] text-graphite">
+                              {statusLabel(st)}
                             </p>
                             <p className="mt-1 text-xs leading-relaxed text-graphite">
-                              {step.detail}
+                              {verifiedStep?.detail ?? s.detail}
                             </p>
                           </div>
                           <button
                             type="button"
-                            onClick={() => askAboutStep(task, step.id)}
+                            onClick={() => askAboutStep(task, s.id)}
                             disabled={busy}
                             className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full border border-line px-2.5 py-1 text-[11px] text-graphite hover:border-slash/40 hover:text-ink disabled:opacity-50"
                           >
@@ -305,7 +359,7 @@ export function MarketingGoliveDesk() {
           <div className="border-b border-paper/10 px-5 py-4">
             <h2 className="text-sm font-medium">Go-live assistant</h2>
             <p className="mt-1 text-xs text-paper/55">
-              Knows every task and step. Tap Help on a step or ask what’s next.
+              Ask what’s next for free actions. Paid steps stay deferred.
             </p>
           </div>
 
@@ -358,7 +412,7 @@ export function MarketingGoliveDesk() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about a task or step…"
+              placeholder="Ask what’s next for free…"
               disabled={busy}
               className="h-11 min-w-0 flex-1 rounded-full border border-paper/15 bg-ink px-4 text-sm text-paper placeholder:text-paper/40 focus:border-slash focus:outline-none focus:ring-2 focus:ring-slash/30 disabled:opacity-60"
             />
