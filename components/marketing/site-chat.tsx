@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { MessageCircle, Send, X } from "lucide-react";
 import { AnalyticsEvents, trackEvent } from "@/lib/analytics/events";
 import { parseChatCtas } from "@/lib/chat/cta";
+import { isLabEnvironment, onUserEngagement } from "@/lib/lab-environment";
 import { cn } from "@/lib/utils";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -80,29 +81,13 @@ export function SiteChat() {
     pathname.startsWith("/portal") ||
     pathname.startsWith("/og");
 
-  // Keep chat off the homepage critical path (labs never mount it).
+  // Keep chat off the lab / first-input path — no idle timers (PageSpeed waits).
   useEffect(() => {
     if (hidden) return;
-    if (document.documentElement.dataset.pzLab === "1") return;
-    if (window.navigator.webdriver) return;
-
-    let cancelled = false;
-    const show = () => {
-      if (!cancelled) setMounted(true);
-    };
-    let idleId: number | undefined;
-    let timeoutId: number | undefined;
-    if (typeof window.requestIdleCallback === "function") {
-      idleId = window.requestIdleCallback(show, { timeout: 4000 });
-    } else {
-      timeoutId = window.setTimeout(show, 2000);
-    }
-
-    return () => {
-      cancelled = true;
-      if (idleId !== undefined) window.cancelIdleCallback(idleId);
-      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
-    };
+    if (isLabEnvironment()) return;
+    return onUserEngagement(() => {
+      if (!isLabEnvironment()) setMounted(true);
+    });
   }, [hidden]);
 
   useEffect(() => {

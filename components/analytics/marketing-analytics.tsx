@@ -10,7 +10,7 @@ import {
   trackEvent,
 } from "@/lib/analytics/events";
 import { isMarketingAnalyticsPath } from "@/lib/analytics/paths";
-import { isLabEnvironment } from "@/lib/lab-environment";
+import { isLabEnvironment, onUserEngagement } from "@/lib/lab-environment";
 
 function GtmBoot({ gtmId }: { gtmId: string }) {
   return (
@@ -59,51 +59,36 @@ function usePosthog(key: string | null, host: string, enabled: boolean) {
     if (!enabled || !key || booted.current) return;
     let cancelled = false;
 
-    const boot = () => {
+    void import("posthog-js").then(({ default: posthog }) => {
       if (cancelled || booted.current) return;
-      void import("posthog-js").then(({ default: posthog }) => {
-        if (cancelled) return;
-        if (!window.__pzPosthog) {
-          posthog.init(key, {
-            api_host: host,
-            capture_pageview: false,
-            capture_pageleave: true,
-            persistence: "localStorage+cookie",
-            // Keep the homepage critical path light — enable richer capture after a gesture.
-            autocapture: false,
-            disable_session_recording: true,
-            disable_surveys: true,
-          });
-          const armRecording = () => {
-            try {
-              // posthog-js typings vary by version; call through a loose shape.
-              (posthog as { startSessionRecording?: () => void }).startSessionRecording?.();
-            } catch {
-              /* ignore */
-            }
-            window.removeEventListener("pointerdown", armRecording);
-            window.removeEventListener("keydown", armRecording);
-          };
-          window.addEventListener("pointerdown", armRecording, { once: true, passive: true });
-          window.addEventListener("keydown", armRecording, { once: true, passive: true });
-        }
-        window.__pzPosthog = posthog;
-        booted.current = true;
-      });
-    };
-
-    let idleId: number | undefined;
-    let timeoutId: number | undefined;
-    if (typeof window.requestIdleCallback === "function") {
-      idleId = window.requestIdleCallback(boot, { timeout: 5000 });
-    } else {
-      timeoutId = window.setTimeout(boot, 2500);
-    }
+      if (!window.__pzPosthog) {
+        posthog.init(key, {
+          api_host: host,
+          capture_pageview: false,
+          capture_pageleave: true,
+          persistence: "localStorage+cookie",
+          autocapture: false,
+          disable_session_recording: true,
+          disable_surveys: true,
+        });
+        const armRecording = () => {
+          try {
+            (posthog as { startSessionRecording?: () => void }).startSessionRecording?.();
+          } catch {
+            /* ignore */
+          }
+          window.removeEventListener("pointerdown", armRecording);
+          window.removeEventListener("keydown", armRecording);
+        };
+        window.addEventListener("pointerdown", armRecording, { once: true, passive: true });
+        window.addEventListener("keydown", armRecording, { once: true, passive: true });
+      }
+      window.__pzPosthog = posthog;
+      booted.current = true;
+    });
 
     return () => {
       cancelled = true;
-      if (idleId !== undefined) window.cancelIdleCallback(idleId);
-      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
     };
   }, [enabled, key, host]);
 }
@@ -118,7 +103,10 @@ function AnalyticsPageTracker() {
 
   useEffect(() => {
     if (isLabEnvironment()) return;
-    setAllowThirdParty(true);
+    // Never idle-timeout third parties — PageSpeed waits through those timers.
+    return onUserEngagement(() => {
+      if (!isLabEnvironment()) setAllowThirdParty(true);
+    });
   }, []);
 
   usePosthog(config.posthogKey, config.posthogHost, enabled);

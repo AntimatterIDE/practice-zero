@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { shouldSkipHeavyVisuals } from "@/lib/lab-environment";
+import { onUserEngagement, shouldSkipHeavyVisuals } from "@/lib/lab-environment";
 
 function markFunnelReady(section: HTMLElement) {
   section.dataset.funnelReady = "1";
@@ -13,36 +13,34 @@ function markFunnelReady(section: HTMLElement) {
 }
 
 /**
- * Mount the WebGL funnel ASAP for real users (intro cover hides warm-up).
- * Labs and reduced-motion / save-data never load Three.js, but still mark the
- * hero ready so step chrome paints (otherwise desktop steps stay opacity 0).
+ * Paint hero chrome immediately. Load Three.js only after real pointer/key
+ * intent — never on a timer or intro-exit (PageSpeed waits through those).
  */
 export function HeroFunnelMount() {
   useEffect(() => {
     const section = document.getElementById("pz-home-hero");
     if (!section) return;
 
-    if (shouldSkipHeavyVisuals()) {
-      markFunnelReady(section);
-      return;
-    }
+    // Steps / band must paint even when WebGL is skipped or deferred.
+    markFunnelReady(section);
+
+    if (shouldSkipHeavyVisuals()) return;
 
     const band = document.getElementById("pz-hero-band");
     const copy = document.getElementById("pz-hero-copy");
     const content = document.getElementById("pz-hero-content");
-    if (!band || !copy || !content) {
-      markFunnelReady(section);
-      return;
-    }
+    if (!band || !copy || !content) return;
 
     let cancelled = false;
     let funnel: { focus: (index: number) => void; destroy: () => void } | null = null;
     let started = false;
+    let pendingFocus = 1;
+    let detachEngagement = () => {};
 
     const start = () => {
-      if (cancelled || started) return;
+      if (cancelled || started || shouldSkipHeavyVisuals()) return;
       started = true;
-      detachWarm();
+      detachEngagement();
 
       const quality =
         window.matchMedia("(max-width: 1023px)").matches ||
@@ -63,39 +61,24 @@ export function HeroFunnelMount() {
           }
         };
         funnel = createFunnel(section, band, copy, content, rows, onFocus, quality);
-        markFunnelReady(section);
-        if (funnel) funnel.focus(1);
+        if (funnel) funnel.focus(pendingFocus);
       });
     };
 
     const onSelect = (event: Event) => {
       const index = (event as CustomEvent<number>).detail;
-      if (typeof index === "number") funnel?.focus(index);
+      if (typeof index !== "number") return;
+      pendingFocus = index;
+      if (funnel) funnel.focus(index);
+      else start();
     };
     window.addEventListener("pz-funnel-select", onSelect);
 
-    const detachWarm = () => {
-      window.removeEventListener("pointerdown", start);
-      window.removeEventListener("keydown", start);
-      window.removeEventListener("touchstart", start);
-      window.removeEventListener("pz-intro-exit", start);
-      window.removeEventListener("pz-intro-done", start);
-      window.clearTimeout(warmTimer);
-    };
-
-    // Wait for the intro to start exiting before loading Three.js so the
-    // countdown stays smooth. Intent + timeouts remain as backups.
-    const warmTimer = window.setTimeout(start, 4500);
-
-    window.addEventListener("pointerdown", start, { once: true, passive: true });
-    window.addEventListener("keydown", start, { once: true, passive: true });
-    window.addEventListener("touchstart", start, { once: true, passive: true });
-    window.addEventListener("pz-intro-exit", start, { once: true });
-    window.addEventListener("pz-intro-done", start, { once: true });
+    detachEngagement = onUserEngagement(start);
 
     return () => {
       cancelled = true;
-      detachWarm();
+      detachEngagement();
       window.removeEventListener("pz-funnel-select", onSelect);
       funnel?.destroy();
       funnel = null;

@@ -3,6 +3,7 @@ import { Instrument_Sans, JetBrains_Mono } from "next/font/google";
 import { MarketingAnalytics } from "@/components/analytics/marketing-analytics";
 import { SiteChat } from "@/components/marketing/site-chat";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { LAB_BOOT_SNIFF } from "@/lib/lab-environment";
 import { ogMedia } from "@/lib/open-graph";
 import { canonicalOrigin, isIndexingEnabled, product } from "@/lib/site";
 import "./globals.css";
@@ -121,11 +122,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta charSet="utf-8" />
       </head>
       <body className="min-h-full bg-paper font-sans text-ink">
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{var u=navigator.userAgent||"";var p=location.pathname||"/";var home=p==="/"||p==="";var lab=!!navigator.webdriver||/Lighthouse|Chrome-Lighthouse|PageSpeed|Headless|GTMetrix|webpagetest|Pingdom|PTST|Speed Insights/i.test(u);try{if(!lab&&navigator.languages&&navigator.languages.length===0)lab=true}catch(e){}var reduce=false;try{reduce=!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)}catch(e){}var seen=false;try{seen=sessionStorage.getItem("pz-intro-v2")==="1"}catch(e){}if(lab){document.documentElement.dataset.pzLab="1"}else if(home&&!seen&&!reduce){document.documentElement.dataset.pzIntro="pending"}}catch(e){}`,
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: LAB_BOOT_SNIFF }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

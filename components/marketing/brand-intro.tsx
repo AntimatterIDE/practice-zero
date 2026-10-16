@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState, type ComponentType } from "react";
-import { INTRO_SESSION_KEY, shouldSkipHeavyVisuals } from "@/lib/lab-environment";
+import {
+  INTRO_SESSION_KEY,
+  isLabEnvironment,
+  shouldSkipHeavyVisuals,
+} from "@/lib/lab-environment";
 
 function clearIntroGate() {
   try {
@@ -21,13 +25,13 @@ function markIntroSeen() {
 
 /**
  * Homepage brand intro — plays on first home load in a session (except labs /
- * reduced-motion / save-data). The WebGL funnel warms as the intro exits.
+ * reduced-motion / save-data). WebGL stays engagement-gated separately.
  */
 export function BrandIntro() {
   const [Animation, setAnimation] = useState<ComponentType<{ onReady?: () => void }> | null>(null);
 
   useEffect(() => {
-    if (shouldSkipHeavyVisuals()) {
+    const skip = () => {
       clearIntroGate();
       markIntroSeen();
       try {
@@ -35,6 +39,10 @@ export function BrandIntro() {
       } catch {
         /* ignore */
       }
+    };
+
+    if (shouldSkipHeavyVisuals() || isLabEnvironment()) {
+      skip();
       return;
     }
 
@@ -49,7 +57,12 @@ export function BrandIntro() {
 
     let cancelled = false;
     void import("./brand-intro-animation").then((mod) => {
-      if (!cancelled) setAnimation(() => mod.BrandIntroAnimation);
+      // Re-check after the chunk arrives — labs must never mount motion.
+      if (cancelled || shouldSkipHeavyVisuals() || isLabEnvironment()) {
+        skip();
+        return;
+      }
+      setAnimation(() => mod.BrandIntroAnimation);
     });
 
     return () => {
