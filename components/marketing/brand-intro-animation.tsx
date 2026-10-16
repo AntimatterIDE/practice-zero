@@ -11,7 +11,10 @@ const tasks = [
 ];
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+/** Matches React Bits preloader slide exit. */
+const SLIDE_EASE: [number, number, number, number] = [0.65, 0, 0.35, 1];
 const START_COUNT = 23;
+const SLIDE_MS = 800;
 
 export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
   const reduce = useReducedMotion();
@@ -35,7 +38,6 @@ export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
   useEffect(() => {
     if (gate !== "play" || exiting) return;
 
-    // Same beats as before — just a tighter clock so the page isn't held as long.
     const duration = reduce ? 1100 : 2000;
     const start = performance.now();
     let frame = 0;
@@ -59,7 +61,7 @@ export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
         if (countRef.current) countRef.current.textContent = "0";
         clearedRef.current = tasks.length;
         setCleared(tasks.length);
-        window.setTimeout(() => setExiting(true), 160);
+        window.setTimeout(() => setExiting(true), 180);
       }
     };
 
@@ -79,7 +81,7 @@ export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
   useEffect(() => {
     if (!exiting) return;
 
-    // Let the funnel warm during the fade — don't hold the cover waiting on WebGL.
+    // Let the funnel warm during the slide — don't hold the cover waiting on WebGL.
     try {
       window.dispatchEvent(new Event("pz-intro-exit"));
     } catch {
@@ -98,49 +100,94 @@ export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
       }
     };
 
-    // Match the opacity fade so the hero is visible as the ink clears.
-    const timer = window.setTimeout(finish, 420);
+    const timer = window.setTimeout(finish, reduce ? 320 : SLIDE_MS);
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [exiting]);
+  }, [exiting, reduce]);
 
   return (
     <AnimatePresence>
       {gate === "play" ? (
         <motion.div
           key="intro"
-          className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-ink text-paper"
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-paper text-ink"
           initial={false}
-          animate={{ opacity: exiting ? 0 : 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: EASE }}
+          animate={{ x: exiting ? "100%" : "0%" }}
+          exit={{ x: "100%" }}
+          transition={{
+            duration: reduce ? 0.3 : SLIDE_MS / 1000,
+            ease: reduce ? EASE : SLIDE_EASE,
+          }}
           aria-hidden="true"
         >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background: "linear-gradient(180deg, #FAF9F5 0%, #F5F4EF 100%)",
+            }}
+          />
+
           <motion.div
             className="relative z-10 flex w-full max-w-lg flex-col items-center px-6 text-center"
             animate={{
               opacity: exiting ? 0 : 1,
-              y: exiting ? -10 : 0,
-              scale: exiting ? 1.02 : 1,
+              x: exiting ? 24 : 0,
             }}
-            transition={{ duration: 0.4, ease: EASE }}
+            transition={{
+              duration: reduce ? 0.2 : 0.45,
+              ease: EASE,
+            }}
           >
-            <div className="relative">
-              <span className="font-mono text-[5rem] leading-none text-slash sm:text-[7rem]">Ø</span>
-              <motion.span
-                className="absolute left-1/2 top-1/2 h-[3px] w-[120%] -translate-x-1/2 -translate-y-1/2 origin-center bg-slash"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: cleared > 0 ? 1 : 0 }}
-                transition={{ duration: 0.45, ease: EASE }}
+            {/* Same mark language as the social share / OG card — no horizontal cross. */}
+            <motion.svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 64 80"
+              fill="none"
+              className="h-20 w-16 sm:h-28 sm:w-[5.5rem]"
+              aria-hidden
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: EASE }}
+            >
+              <ellipse
+                cx="32"
+                cy="40"
+                rx="22"
+                ry="30"
+                stroke="#111418"
+                strokeWidth="8"
+                fill="none"
               />
-            </div>
+              <motion.path
+                d="M14 62 L50 18"
+                stroke="#2D4BF0"
+                strokeWidth="8"
+                strokeLinecap="round"
+                pathLength={1}
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: cleared > 0 || reduce ? 1 : 0 }}
+                transition={{ duration: 0.85, ease: EASE }}
+              />
+            </motion.svg>
 
-            <p className="mt-8 font-sans text-6xl font-semibold tracking-[-0.05em] tabular-nums sm:text-7xl">
+            <motion.p
+              className="mt-6 font-sans text-3xl font-semibold lowercase tracking-[-0.055em] text-ink sm:text-4xl"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.12, ease: EASE }}
+            >
+              practice zero
+            </motion.p>
+
+            <p className="mt-10 font-sans text-6xl font-semibold tracking-[-0.05em] tabular-nums text-ink sm:text-7xl">
               <span ref={countRef}>{START_COUNT}</span>
             </p>
-            <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.28em] text-foam">Open tasks</p>
+            <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.28em] text-graphite">
+              Open tasks
+            </p>
 
             <ul className="mt-10 w-full max-w-sm space-y-3 text-left">
               {tasks.map((task, index) => {
@@ -148,14 +195,14 @@ export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
                 return (
                   <li
                     key={task}
-                    className="relative flex items-center gap-3 text-sm font-medium lowercase tracking-[-0.02em] text-paper/80"
+                    className="relative flex items-center gap-3 text-sm font-medium lowercase tracking-[-0.02em] text-ink/75"
                   >
-                    <span className="font-mono text-foam">ø</span>
+                    <span className="font-mono text-slash">ø</span>
                     <span className="relative">
                       {task}
                       <motion.span
                         aria-hidden="true"
-                        className="absolute left-0 right-0 top-1/2 h-[2px] -translate-y-1/2 origin-left bg-slash"
+                        className="absolute left-0 right-0 top-1/2 h-[2px] origin-left -translate-y-1/2 bg-slash"
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: done ? 1 : 0 }}
                         transition={{ duration: 0.4, ease: EASE }}
