@@ -18,6 +18,7 @@ import {
   type ComplianceTrack,
 } from "@/lib/compliance/tasks";
 import { COMPLIANCE_CHECKLIST_KEY } from "@/lib/status/brief";
+import { AdminPageHeader } from "@/components/admin/admin-page";
 import { cn } from "@/lib/utils";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -213,41 +214,27 @@ export function ComplianceDesk() {
 
   return (
     <div>
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-slash">Admin</p>
-          <h1 className="mt-2 font-sans text-3xl font-semibold lowercase tracking-[-0.03em] text-ink">
-            compliance
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm text-graphite">
-            Checklist for HIPAA, SOC 2 Type II, AES-256, BAAs, and 99.9% uptime — with vendor links,
-            repo docs, and an assistant. Progress is saved in this browser only.
-          </p>
-          <p className="mt-3 text-xs text-graphite">
-            {hydrated
-              ? `${completedSteps}/${totalSteps} steps checked`
-              : "Loading checklist…"}
-            {nextIncomplete
-              ? ` · next: ${nextIncomplete.track.badge} — ${nextIncomplete.step.title}`
-              : hydrated
-                ? " · all steps checked"
-                : null}
+      <AdminPageHeader
+        title="compliance"
+        lede="Checklist for HIPAA, SOC 2, BAAs, and uptime, with vendor links and an assistant. Progress is saved in this browser."
+        meta={
+          <>
+            {hydrated ? `${completedSteps}/${totalSteps} steps checked` : "Loading checklist…"}
+            {hydrated && !nextIncomplete ? " · all steps checked" : null}
             {usedModel === true ? " · assistant using OpenAI" : null}
             {usedModel === false ? " · assistant fallback" : null}
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {(["HIPAA", "SOC 2 Type II", "AES-256", "BAA available", "99.9% uptime"] as const).map(
-            (label) => (
-              <span
-                key={label}
-                className="inline-flex items-center rounded-full border border-line bg-card px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-graphite"
-              >
-                {label}
-              </span>
-            ),
-          )}
-        </div>
+          </>
+        }
+      />
+      <div className="mt-4 flex flex-wrap gap-2">
+        {(["HIPAA", "SOC 2 Type II", "AES-256", "BAA available", "99.9% uptime"] as const).map((label) => (
+          <span
+            key={label}
+            className="inline-flex items-center rounded-full border border-line bg-card px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-graphite"
+          >
+            {label}
+          </span>
+        ))}
       </div>
 
       {nextIncomplete ? (
@@ -429,10 +416,10 @@ export function ComplianceDesk() {
           })}
         </section>
 
-        <section className="flex min-h-[32rem] flex-col overflow-hidden rounded-2xl border border-line bg-ink text-paper lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)]">
-          <div className="border-b border-paper/10 px-5 py-4">
-            <h2 className="text-sm font-medium">Compliance assistant</h2>
-            <p className="mt-1 text-xs text-paper/55">
+        <section className="flex min-h-[24rem] flex-col overflow-hidden rounded-2xl border border-line bg-card lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)]">
+          <div className="border-b border-line px-5 py-4">
+            <h2 className="text-sm font-medium text-ink">Compliance assistant</h2>
+            <p className="mt-1 text-xs leading-relaxed text-graphite">
               Asks what’s next from your checklist. Won’t invent BAAs or SOC 2 reports.
             </p>
           </div>
@@ -449,14 +436,14 @@ export function ComplianceDesk() {
               ) : (
                 <div
                   key={`a-${i}`}
-                  className="max-w-[92%] whitespace-pre-wrap rounded-2xl bg-paper/10 px-3.5 py-2.5 text-sm leading-relaxed text-paper/90"
+                  className="max-w-[92%] whitespace-pre-wrap rounded-2xl bg-mist px-3.5 py-2.5 text-sm leading-relaxed text-ink"
                 >
                   {msg.content}
                 </div>
               ),
             )}
             {busy ? (
-              <div className="flex w-fit items-center gap-2 rounded-2xl bg-paper/10 px-3.5 py-2.5 text-sm text-paper/60">
+              <div className="flex w-fit items-center gap-2 rounded-2xl bg-mist px-3.5 py-2.5 text-sm text-graphite">
                 <Loader2 className="size-3.5 animate-spin" />
                 Thinking…
               </div>
@@ -464,14 +451,14 @@ export function ComplianceDesk() {
           </div>
 
           {messages.length <= 2 ? (
-            <div className="flex shrink-0 flex-wrap gap-2 border-t border-paper/10 px-3 py-2.5">
+            <div className="flex shrink-0 flex-wrap gap-2 border-t border-line px-3 py-2.5">
               {STARTERS.map((s) => (
                 <button
                   key={s}
                   type="button"
                   disabled={busy}
                   onClick={() => void send(s)}
-                  className="rounded-full border border-paper/15 bg-paper/5 px-3 py-1.5 text-left text-xs text-paper/80 hover:border-slash/50 disabled:opacity-50"
+                  className="rounded-full border border-line bg-paper px-3 py-1.5 text-left text-xs text-graphite hover:text-ink disabled:opacity-50"
                 >
                   {s}
                 </button>
@@ -480,7 +467,7 @@ export function ComplianceDesk() {
           ) : null}
 
           <form
-            className="flex shrink-0 items-center gap-2 border-t border-paper/10 p-3"
+            className="flex shrink-0 items-center gap-2 border-t border-line p-3"
             onSubmit={onSubmit}
           >
             <input
@@ -488,7 +475,7 @@ export function ComplianceDesk() {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask what’s next for compliance…"
               disabled={busy}
-              className="h-11 min-w-0 flex-1 rounded-full border border-paper/15 bg-ink px-4 text-sm text-paper placeholder:text-paper/40 focus:border-slash focus:outline-none focus:ring-2 focus:ring-slash/30 disabled:opacity-60"
+              className="h-11 min-w-0 flex-1 rounded-full border border-line bg-paper px-4 text-sm text-ink placeholder:text-graphite/60 focus:border-slash focus:outline-none focus:ring-2 focus:ring-slash/30 disabled:opacity-60"
             />
             <button
               type="submit"

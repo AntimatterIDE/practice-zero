@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { AdminPageHeader } from "@/components/admin/admin-page";
 import type { ResearchArticle } from "@/lib/research/types";
 
 const SUGGESTIONS = [
@@ -60,18 +61,10 @@ export function ResearchDesk({ articles }: { articles: ResearchArticle[] }) {
 
   return (
     <div>
-      <div>
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-slash">
-          Website
-        </p>
-        <h1 className="mt-2 font-sans text-3xl font-semibold lowercase tracking-[-0.03em] text-ink">
-          Research
-        </h1>
-        <p className="mt-2 max-w-2xl text-sm text-graphite">
-          Research agentic EHR topics, draft a note in Practice Zero&apos;s voice,
-          and leave it unpublished until you approve it.
-        </p>
-      </div>
+      <AdminPageHeader
+        title="research"
+        lede="Draft a note in Practice Zero’s voice and leave it unpublished until you approve it."
+      />
 
       <form
         onSubmit={draft}

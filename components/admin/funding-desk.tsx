@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
+import { AdminPageHeader } from "@/components/admin/admin-page";
 import {
   FUNDING_HORIZON,
   SCENARIOS,
@@ -24,6 +25,11 @@ const CATEGORY_LABEL: Record<ExpenseCategory, string> = {
   staff: "Staff",
   operating: "Operating",
 };
+
+const CATEGORY_ORDER: ExpenseCategory[] = ["staff", "compliance", "marketing", "operating"];
+
+const fieldInput =
+  "w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm tabular-nums text-ink outline-none focus:border-slash";
 
 const money = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -90,10 +96,116 @@ function Field({
           const next = event.target.value === "" ? 0 : Number(event.target.value);
           onChange(Number.isFinite(next) ? next : 0);
         }}
-        className="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2 text-sm tabular-nums text-ink outline-none focus:border-slash"
+        className={cn("mt-1", fieldInput)}
       />
       {hint ? <span className="mt-1 block text-[11px] leading-relaxed text-graphite">{hint}</span> : null}
     </label>
+  );
+}
+
+function AmountMonth({
+  label,
+  amount,
+  onAmount,
+  month,
+  onMonth,
+  hint,
+}: {
+  label: string;
+  amount: number;
+  onAmount: (value: number) => void;
+  month: number;
+  onMonth: (value: number) => void;
+  hint?: string;
+}) {
+  return (
+    <div>
+      <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">{label}</span>
+      <div className="mt-1 grid grid-cols-[minmax(0,1fr)_4.5rem] gap-2">
+        <input
+          type="number"
+          inputMode="decimal"
+          min={0}
+          step={500}
+          aria-label={`${label} amount`}
+          value={Number.isFinite(amount) ? amount : 0}
+          onChange={(event) => {
+            const next = event.target.value === "" ? 0 : Number(event.target.value);
+            onAmount(Number.isFinite(next) ? next : 0);
+          }}
+          className={fieldInput}
+        />
+        <input
+          type="number"
+          inputMode="numeric"
+          min={1}
+          max={18}
+          aria-label={`${label} start month`}
+          value={Number.isFinite(month) ? month : 1}
+          onChange={(event) => {
+            const next = event.target.value === "" ? 1 : Number(event.target.value);
+            onMonth(Number.isFinite(next) ? next : 1);
+          }}
+          className={fieldInput}
+        />
+      </div>
+      {hint ? <span className="mt-1 block text-[11px] leading-relaxed text-graphite">{hint}</span> : null}
+    </div>
+  );
+}
+
+function CashChart({ values, breakMonth }: { values: number[]; breakMonth: number | null }) {
+  if (values.length === 0) return null;
+  const max = Math.max(...values, 0);
+  const min = Math.min(...values, 0);
+  const span = max - min || 1;
+  const width = 640;
+  const height = 148;
+  const padX = 4;
+  const padY = 8;
+  const innerW = width - padX * 2;
+  const innerH = height - padY * 2;
+  const x = (index: number) =>
+    padX + (values.length <= 1 ? innerW / 2 : (index / (values.length - 1)) * innerW);
+  const y = (value: number) => padY + ((max - value) / span) * innerH;
+  const line = values
+    .map((value, index) => `${index === 0 ? "M" : "L"}${x(index).toFixed(1)} ${y(value).toFixed(1)}`)
+    .join(" ");
+  const zeroY = y(0);
+  const area = `${line} L${x(values.length - 1).toFixed(1)} ${zeroY.toFixed(1)} L${x(0).toFixed(1)} ${zeroY.toFixed(1)} Z`;
+  const breakIndex = breakMonth && breakMonth >= 1 && breakMonth <= values.length ? breakMonth - 1 : null;
+
+  return (
+    <svg
+      viewBox={`0 0 ${width} ${height}`}
+      className="mt-2 h-36 w-full text-slash"
+      role="img"
+      aria-label="Cash balance across 18 months"
+    >
+      <line x1={padX} x2={width - padX} y1={zeroY} y2={zeroY} stroke="#e4e2da" strokeWidth="1" />
+      <path d={area} fill="currentColor" fillOpacity="0.12" />
+      <path d={line} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+      {breakIndex !== null ? <circle cx={x(breakIndex)} cy={y(values[breakIndex])} r="4" fill="#b42318" /> : null}
+    </svg>
+  );
+}
+
+function Stat({ label, value, note }: { label: string; value: string; note: string }) {
+  return (
+    <div className="px-5 py-4">
+      <dt className="text-[11px] font-medium uppercase tracking-wider text-graphite">{label}</dt>
+      <dd className="mt-1 text-lg font-medium tabular-nums tracking-[-0.02em] text-ink">{value}</dd>
+      <dd className="mt-1 text-xs leading-relaxed text-graphite">{note}</dd>
+    </div>
+  );
+}
+
+function Group({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <h3 className="text-xs font-medium text-ink">{title}</h3>
+      <div className="mt-3 grid gap-3">{children}</div>
+    </div>
   );
 }
 
@@ -113,10 +225,6 @@ export function FundingDesk() {
 
   const plan = useMemo(() => buildFundingPlan(assumptions), [assumptions]);
   const scenario = matchingScenario(plan.assumptions);
-  const peak = Math.max(
-    1,
-    ...plan.months.map((month) => Math.max(month.spend, month.revenue)),
-  );
 
   function patch(partial: Partial<FundingAssumptions>) {
     setAssumptions((current) => buildFundingPlan({ ...current, ...partial }).assumptions);
@@ -131,263 +239,336 @@ export function FundingDesk() {
   }
 
   const { totals } = plan;
+  const expenseGroups = CATEGORY_ORDER.map((category) => ({
+    category,
+    lines: plan.expenses.filter((line) => line.category === category),
+    total: totals.spendByCategory[category],
+  })).filter((group) => group.lines.length > 0);
+
+  const runway = totals.runwayBreakMonth
+    ? `Crosses zero in month ${totals.runwayBreakMonth}. Add ${formatMoney(totals.extraCapital)} to finish above zero.`
+    : totals.monthOfMinCash === 0
+      ? "Cash stays at or above the opening balance."
+      : `Lowest balance is ${formatMoney(totals.minCash)} in month ${totals.monthOfMinCash}.`;
+
+  const cover =
+    totals.practicesToCoverRunRate === null
+      ? `Fee is ${formatMoney(totals.feePerPractice)} per practice.`
+      : `${formatMoney(totals.feePerPractice)} per practice. ${totals.practicesToCoverRunRate} live practices cover the ending run rate of ${formatMoney(totals.endingRunRate)}.`;
 
   return (
     <div>
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-slash">Admin</p>
-          <h1 className="mt-2 font-sans text-3xl font-semibold lowercase tracking-[-0.03em] text-ink">
-            funding
-          </h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-graphite">
-            Eighteen-month cash plan from the compliance cost bands and the marketing go-live notes.
-            Change the assumptions and the expenses, timeline, and return figures update together.
-            Saved in this browser only.
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => setAssumptions(defaultAssumptions())}
-          className="rounded-full border border-line px-3 py-1.5 text-xs text-graphite hover:border-slash/40 hover:text-ink"
-        >
-          Reset to base
-        </button>
-      </div>
+      <AdminPageHeader
+        title="funding"
+        lede="Eighteen-month cash plan. Change a number and the rest of the page moves with it."
+        meta="Saved in this browser only."
+        actions={
+          <button
+            type="button"
+            onClick={() => setAssumptions(defaultAssumptions())}
+            className="rounded-full border border-line px-3 py-1.5 text-xs text-graphite hover:border-slash/40 hover:text-ink"
+          >
+            Reset to base
+          </button>
+        }
+      />
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        <Metric
-          label="Ending cash"
-          value={formatMoney(totals.endingCash)}
-          detail={
-            totals.runwayBreakMonth
-              ? `Crosses zero in month ${totals.runwayBreakMonth}. Add ${formatMoney(totals.extraCapital)} to finish above zero.`
-              : totals.monthOfMinCash === 0
-                ? "Cash stays at or above the opening balance."
-                : `Lowest balance is ${formatMoney(totals.minCash)} in month ${totals.monthOfMinCash}.`
-          }
-          tone={totals.endingCash < 0 ? "bad" : "good"}
-        />
-        <Metric
-          label="18-month spend"
-          value={formatMoney(totals.spend)}
-          detail={`${formatMoney(totals.spendByCategory.staff)} staff · ${formatMoney(totals.spendByCategory.compliance)} compliance · ${formatMoney(totals.spendByCategory.marketing)} marketing`}
-        />
-        <Metric
-          label="18-month fees"
-          value={formatMoney(totals.revenue)}
-          detail={
-            totals.firstRevenueMonth
-              ? `First fee in month ${totals.firstRevenueMonth}. Net ${formatMoney(totals.net)}.`
-              : "No fee lands inside the horizon at this lag and sign curve."
-          }
-        />
-        <Metric
-          label="Fee per practice"
-          value={formatMoney(totals.feePerPractice)}
-          detail={`${plan.assumptions.takeRatePct}% of ${formatMoney(plan.assumptions.collectionsPerPractice)} monthly collections, collected after ${plan.assumptions.revenueLagMonths} months.`}
-        />
-        <Metric
-          label="Practices to cover burn"
-          value={totals.practicesToCoverRunRate === null ? "—" : String(totals.practicesToCoverRunRate)}
-          detail={`Ending run-rate is ${formatMoney(totals.endingRunRate)} a month, before one-time bills. Book ends at ${countFormat.format(totals.endingPractices)} live.`}
-        />
-        <Metric
-          label="Payback"
-          value={totals.paybackMonth ? `Month ${totals.paybackMonth}` : "Beyond 18"}
-          detail={
-            totals.spend > 0
-              ? `Fees are ${Math.round((totals.revenue / totals.spend) * 100)}% of spend over the horizon.`
-              : "No spend in this plan."
-          }
-        />
-      </div>
-
-      <section className="mt-8">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 className="text-sm font-medium text-ink">Scenarios</h2>
-            <p className="mt-1 max-w-2xl text-xs leading-relaxed text-graphite">
-              Each preset sets the sign curve, when ePHI infra starts, when the practice lead and biller start, and the ads budget. Take rate, collections, and the raise stay as you set them.
-            </p>
-          </div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">
-            {scenario === "custom" ? "Custom" : SCENARIOS[scenario].label}
-          </p>
-        </div>
-        <div className="mt-3 grid gap-3 lg:grid-cols-3">
+      <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <div className="inline-flex rounded-full border border-line bg-mist p-1" role="group" aria-label="Scenarios">
           {(Object.values(SCENARIOS) as Array<(typeof SCENARIOS)[ScenarioId]>).map((preset) => {
             const active = scenario === preset.id;
-            const signed = preset.newPractices.reduce((sum, n) => sum + n, 0);
             return (
               <button
                 key={preset.id}
                 type="button"
                 onClick={() => setAssumptions((current) => applyScenario(current, preset.id))}
                 className={cn(
-                  "rounded-2xl border px-4 py-4 text-left",
-                  active ? "border-slash bg-slash/5" : "border-line bg-card hover:border-slash/40",
+                  "rounded-full px-3 py-1.5 text-sm",
+                  active ? "bg-card font-medium text-ink shadow-sm" : "text-graphite hover:text-ink",
                 )}
                 aria-pressed={active}
               >
-                <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-slash">
-                  {signed} practices
-                </span>
-                <span className="mt-1 block text-sm font-medium text-ink">{preset.label}</span>
-                <span className="mt-1 block text-xs leading-relaxed text-graphite">{preset.summary}</span>
+                {preset.label}
               </button>
             );
           })}
         </div>
+        <p className="min-w-0 max-w-xl text-sm leading-relaxed text-graphite">
+          {scenario === "custom"
+            ? "Custom. The fields no longer match a preset. Take rate, collections, and the raise stay when you pick one."
+            : SCENARIOS[scenario].summary}
+        </p>
+      </div>
+
+      <section className="mt-6 overflow-hidden rounded-2xl border border-line bg-card">
+        <div className="grid gap-6 px-5 py-5 lg:grid-cols-[minmax(0,16rem)_minmax(0,1fr)] lg:items-end">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">Ending cash</p>
+            <p
+              className={cn(
+                "mt-2 text-4xl font-semibold tabular-nums tracking-[-0.03em]",
+                totals.endingCash < 0 ? "text-emergency" : "text-ink",
+              )}
+            >
+              {formatMoney(totals.endingCash)}
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-graphite">{runway}</p>
+            <p className="mt-2 text-xs leading-relaxed text-graphite">{cover}</p>
+          </div>
+          <div>
+            <div className="flex items-baseline justify-between gap-3">
+              <p className="text-xs text-graphite">Cash by month</p>
+              {totals.runwayBreakMonth ? (
+                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-emergency">
+                  Zero in month {totals.runwayBreakMonth}
+                </p>
+              ) : (
+                <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">18 months</p>
+              )}
+            </div>
+            <CashChart values={plan.months.map((month) => month.cash)} breakMonth={totals.runwayBreakMonth} />
+            <div className="mt-1 flex justify-between font-mono text-[10px] tabular-nums text-graphite">
+              <span>1</span>
+              <span>6</span>
+              <span>12</span>
+              <span>18</span>
+            </div>
+          </div>
+        </div>
+        <dl className="grid grid-cols-2 border-t border-line sm:grid-cols-4">
+          <Stat
+            label="18-month spend"
+            value={formatMoney(totals.spend)}
+            note={`${formatMoney(totals.spendByCategory.staff)} staff`}
+          />
+          <Stat
+            label="18-month fees"
+            value={formatMoney(totals.revenue)}
+            note={
+              totals.firstRevenueMonth
+                ? `First fee in month ${totals.firstRevenueMonth}`
+                : "No fee in this horizon"
+            }
+          />
+          <Stat
+            label="Payback"
+            value={totals.paybackMonth ? `Month ${totals.paybackMonth}` : "Beyond 18"}
+            note={
+              totals.spend > 0
+                ? `${Math.round((totals.revenue / totals.spend) * 100)}% of spend`
+                : "No spend in this plan"
+            }
+          />
+          <Stat
+            label="Live practices"
+            value={countFormat.format(totals.endingPractices)}
+            note={`${countFormat.format(totals.endingBillingPractices)} billing`}
+          />
+        </dl>
       </section>
 
-      <section className="mt-8 rounded-2xl border border-line bg-card px-5 py-5">
+      <section className="mt-6 rounded-2xl border border-line bg-card px-5 py-5">
         <h2 className="text-sm font-medium text-ink">Assumptions</h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <Field
-            label="Starting cash"
-            value={plan.assumptions.startingCash}
-            min={0}
-            step={10000}
-            onChange={(startingCash) => patch({ startingCash })}
-            hint="Raise or savings available in month 1."
-          />
-          <Field
-            label="Take rate %"
-            value={plan.assumptions.takeRatePct}
-            min={0}
-            max={40}
-            step={0.5}
-            onChange={(takeRatePct) => patch({ takeRatePct })}
-            hint="Share of collections. The site does not publish a rate; 5% is a planning default."
-          />
-          <Field
-            label="Collections / practice"
-            value={plan.assumptions.collectionsPerPractice}
-            min={0}
-            step={5000}
-            onChange={(collectionsPerPractice) => patch({ collectionsPerPractice })}
-            hint="Monthly collections for one independent practice."
-          />
-          <Field
-            label="Fee lag (months)"
-            value={plan.assumptions.revenueLagMonths}
-            min={0}
-            max={12}
-            onChange={(revenueLagMonths) => patch({ revenueLagMonths })}
-            hint="Claims pay, then the fee follows. Two months is about 60 days."
-          />
-          <Field
-            label="Monthly churn %"
-            value={plan.assumptions.monthlyChurnPct}
-            min={0}
-            max={20}
-            step={0.5}
-            onChange={(monthlyChurnPct) => patch({ monthlyChurnPct })}
-            hint="Share of the live book that leaves each month."
-          />
-          <Field
-            label="ePHI month"
-            value={plan.assumptions.phiMonth}
-            min={1}
-            max={18}
-            onChange={(phiMonth) => patch({ phiMonth })}
-            hint="Supabase HIPAA, insurance, model usage, and the clearinghouse start here."
-          />
-          <Field
-            label="Founder draw / mo"
-            value={plan.assumptions.founderMonthly}
-            min={0}
-            step={500}
-            onChange={(founderMonthly) => patch({ founderMonthly })}
-          />
-          <Field
-            label="Founder starts"
-            value={plan.assumptions.founderStart}
-            min={1}
-            max={18}
-            onChange={(founderStart) => patch({ founderStart })}
-          />
-          <Field
-            label="Practice lead / mo"
-            value={plan.assumptions.leadMonthly}
-            min={0}
-            step={500}
-            onChange={(leadMonthly) => patch({ leadMonthly })}
-          />
-          <Field
-            label="Lead starts"
-            value={plan.assumptions.leadStart}
-            min={1}
-            max={18}
-            onChange={(leadStart) => patch({ leadStart })}
-          />
-          <Field
-            label="Biller / mo"
-            value={plan.assumptions.billerMonthly}
-            min={0}
-            step={500}
-            onChange={(billerMonthly) => patch({ billerMonthly })}
-            hint="One person. Past about eight practices, raise this or the model understates cost."
-          />
-          <Field
-            label="Biller starts"
-            value={plan.assumptions.billerStart}
-            min={1}
-            max={18}
-            onChange={(billerStart) => patch({ billerStart })}
-          />
-          <Field
-            label="Ads / mo"
-            value={plan.assumptions.adsMonthly}
-            min={0}
-            step={500}
-            onChange={(adsMonthly) => patch({ adsMonthly })}
-          />
-          <Field
-            label="Ads from"
-            value={plan.assumptions.adsStart}
-            min={1}
-            max={18}
-            onChange={(adsStart) => patch({ adsStart })}
-          />
-          <Field
-            label="Ads through"
-            value={plan.assumptions.adsEnd}
-            min={1}
-            max={18}
-            onChange={(adsEnd) => patch({ adsEnd })}
-          />
-        </div>
-
-        <h3 className="mt-6 text-sm font-medium text-ink">Practices signed each month</h3>
-        <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-6 lg:grid-cols-9">
-          {plan.assumptions.newPractices.map((signed, index) => (
-            <label key={index} className="block">
-              <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">
-                M{index + 1}
-              </span>
-              <input
-                type="number"
+        <div className="mt-5 grid gap-6 lg:grid-cols-3">
+            <Group title="Raise and fee">
+              <Field
+                label="Starting cash"
+                value={plan.assumptions.startingCash}
                 min={0}
-                step={1}
-                value={signed}
-                onChange={(event) => {
-                  const next = event.target.value === "" ? 0 : Number(event.target.value);
-                  setSigned(index, Number.isFinite(next) ? next : 0);
-                }}
-                className="mt-1 w-full rounded-lg border border-line bg-paper px-2 py-1.5 text-sm tabular-nums text-ink outline-none focus:border-slash"
+                step={10000}
+                onChange={(startingCash) => patch({ startingCash })}
+                hint="Raise or savings available in month 1."
               />
-            </label>
-          ))}
-        </div>
-      </section>
+              <Field
+                label="Take rate %"
+                value={plan.assumptions.takeRatePct}
+                min={0}
+                max={40}
+                step={0.5}
+                onChange={(takeRatePct) => patch({ takeRatePct })}
+                hint="Share of collections. 5% is a planning default."
+              />
+              <Field
+                label="Collections / practice"
+                value={plan.assumptions.collectionsPerPractice}
+                min={0}
+                step={5000}
+                onChange={(collectionsPerPractice) => patch({ collectionsPerPractice })}
+                hint="Monthly collections for one practice."
+              />
+              <div className="grid grid-cols-2 gap-3">
+                <Field
+                  label="Fee lag"
+                  value={plan.assumptions.revenueLagMonths}
+                  min={0}
+                  max={12}
+                  onChange={(revenueLagMonths) => patch({ revenueLagMonths })}
+                />
+                <Field
+                  label="Churn %"
+                  value={plan.assumptions.monthlyChurnPct}
+                  min={0}
+                  max={20}
+                  step={0.5}
+                  onChange={(monthlyChurnPct) => patch({ monthlyChurnPct })}
+                />
+              </div>
+            </Group>
+
+            <Group title="People">
+              <AmountMonth
+                label="Founder / mo"
+                amount={plan.assumptions.founderMonthly}
+                onAmount={(founderMonthly) => patch({ founderMonthly })}
+                month={plan.assumptions.founderStart}
+                onMonth={(founderStart) => patch({ founderStart })}
+              />
+              <AmountMonth
+                label="Practice lead / mo"
+                amount={plan.assumptions.leadMonthly}
+                onAmount={(leadMonthly) => patch({ leadMonthly })}
+                month={plan.assumptions.leadStart}
+                onMonth={(leadStart) => patch({ leadStart })}
+              />
+              <AmountMonth
+                label="Biller / mo"
+                amount={plan.assumptions.billerMonthly}
+                onAmount={(billerMonthly) => patch({ billerMonthly })}
+                month={plan.assumptions.billerStart}
+                onMonth={(billerStart) => patch({ billerStart })}
+                hint="One person. Past about eight practices, raise this."
+              />
+            </Group>
+
+            <Group title="Timing">
+              <Field
+                label="ePHI month"
+                value={plan.assumptions.phiMonth}
+                min={1}
+                max={18}
+                onChange={(phiMonth) => patch({ phiMonth })}
+                hint="HIPAA infra, insurance, and the clearinghouse start here."
+              />
+              <Field
+                label="Ads / mo"
+                value={plan.assumptions.adsMonthly}
+                min={0}
+                step={500}
+                onChange={(adsMonthly) => patch({ adsMonthly })}
+              />
+              <div className="grid grid-cols-2 gap-3">
+                <Field
+                  label="Ads from"
+                  value={plan.assumptions.adsStart}
+                  min={1}
+                  max={18}
+                  onChange={(adsStart) => patch({ adsStart })}
+                />
+                <Field
+                  label="Ads through"
+                  value={plan.assumptions.adsEnd}
+                  min={1}
+                  max={18}
+                  onChange={(adsEnd) => patch({ adsEnd })}
+                />
+              </div>
+            </Group>
+
+            <div className="lg:col-span-3">
+            <Group title="Practices signed">
+              <div className="grid grid-cols-6 gap-2 sm:grid-cols-9 lg:grid-cols-[repeat(18,minmax(0,1fr))]">
+                {plan.assumptions.newPractices.map((signed, index) => (
+                  <label key={index} className="block">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">
+                      {index + 1}
+                    </span>
+                    <input
+                      type="number"
+                      min={0}
+                      step={1}
+                      value={signed}
+                      onChange={(event) => {
+                        const next = event.target.value === "" ? 0 : Number(event.target.value);
+                        setSigned(index, Number.isFinite(next) ? next : 0);
+                      }}
+                      className="mt-1 w-full rounded-lg border border-line bg-paper px-2 py-1.5 text-sm tabular-nums text-ink outline-none focus:border-slash"
+                    />
+                  </label>
+                ))}
+              </div>
+            </Group>
+            </div>
+          </div>
+        </section>
+
 
       <section className="mt-8">
-        <h2 className="text-sm font-medium text-ink">Itemized expenses</h2>
+          <h2 className="text-sm font-medium text-ink">Month by month</h2>
+          <p className="mt-1 text-xs leading-relaxed text-graphite">
+            Cash is the raise plus every month of fees minus spend.
+          </p>
+          <div className="mt-3 overflow-x-auto rounded-2xl border border-line bg-card">
+            <table className="w-full min-w-[760px] text-left text-sm">
+              <thead>
+                <tr className="border-b border-line font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">
+                  <th className="px-4 py-3 font-medium">Month</th>
+                  <th className="px-4 py-3 text-right font-medium">Signed</th>
+                  <th className="px-4 py-3 text-right font-medium">Live</th>
+                  <th className="px-4 py-3 text-right font-medium">Billing</th>
+                  <th className="px-4 py-3 text-right font-medium">Spend</th>
+                  <th className="px-4 py-3 text-right font-medium">Fees</th>
+                  <th className="px-4 py-3 text-right font-medium">Net</th>
+                  <th className="px-4 py-3 text-right font-medium">Cash</th>
+                </tr>
+              </thead>
+              <tbody>
+                {plan.months.map((month) => (
+                  <tr
+                    key={month.month}
+                    className={cn(
+                      "border-b border-line last:border-0",
+                      month.cash < 0 && "bg-emergency/5",
+                    )}
+                  >
+                    <td className="px-4 py-2.5 tabular-nums text-ink">{month.month}</td>
+                    <td className="px-4 py-2.5 text-right tabular-nums text-graphite">
+                      {countFormat.format(month.newPractices)}
+                    </td>
+                    <td className="px-4 py-2.5 text-right tabular-nums text-graphite">
+                      {countFormat.format(month.practicesLive)}
+                    </td>
+                    <td className="px-4 py-2.5 text-right tabular-nums text-graphite">
+                      {countFormat.format(month.practicesBilling)}
+                    </td>
+                    <td className="px-4 py-2.5 text-right tabular-nums text-ink">{formatMoney(month.spend)}</td>
+                    <td className="px-4 py-2.5 text-right tabular-nums text-ink">{formatMoney(month.revenue)}</td>
+                    <td
+                      className={cn(
+                        "px-4 py-2.5 text-right tabular-nums",
+                        month.net < 0 ? "text-emergency" : "text-ink",
+                      )}
+                    >
+                      {formatMoney(month.net)}
+                    </td>
+                    <td
+                      className={cn(
+                        "px-4 py-2.5 text-right tabular-nums",
+                        month.cash < 0 ? "text-emergency" : "text-ink",
+                      )}
+                    >
+                      {formatMoney(month.cash)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      <section className="mt-8">
+        <h2 className="text-sm font-medium text-ink">Expenses</h2>
         <p className="mt-1 max-w-2xl text-xs leading-relaxed text-graphite">
-          Repo lines use a figure written in the compliance desk or the marketing go-live checks.
-          Planning lines are allowances inside a stated band, or costs those docs name without a price.
+          Repo lines use a figure from the compliance desk or the marketing go-live checks. Planning lines are allowances.
         </p>
         <div className="mt-3 overflow-x-auto rounded-2xl border border-line bg-card">
           <table className="w-full min-w-[720px] text-left text-sm">
@@ -400,109 +581,40 @@ export function FundingDesk() {
               </tr>
             </thead>
             <tbody>
-              {plan.expenses.map((line) => (
-                <tr key={line.id} className="border-b border-line last:border-0">
-                  <td className="px-4 py-3 align-top">
-                    <p className="font-medium text-ink">{line.name}</p>
-                    <p className="mt-1 text-xs leading-relaxed text-graphite">{line.source}</p>
-                    <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-slash">
-                      {CATEGORY_LABEL[line.category]} · {line.basis}
-                    </p>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 align-top text-graphite">
-                    {whenLabel(line.startMonth, line.endMonth, line.kind)}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right align-top tabular-nums text-ink">
-                    {formatMoney(line.amount)}
-                    {line.kind === "monthly" ? <span className="text-graphite">/mo</span> : null}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right align-top tabular-nums text-ink">
-                    {formatMoney(lineTotal(line))}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section className="mt-8">
-        <div className="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 className="text-sm font-medium text-ink">Timeline</h2>
-            <p className="mt-1 text-xs text-graphite">
-              Bars compare spend and fees. Cash is the raise plus every month of net.
-            </p>
-          </div>
-          <p className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">
-            <span className="inline-flex items-center gap-1">
-              <span className="inline-block h-2 w-2 rounded-sm bg-ink/25" /> Spend
-            </span>
-            <span className="inline-flex items-center gap-1">
-              <span className="inline-block h-2 w-2 rounded-sm bg-slash" /> Fees
-            </span>
-          </p>
-        </div>
-        <div className="mt-3 flex h-28 items-end gap-1 rounded-2xl border border-line bg-card px-3 py-3">
-          {plan.months.map((month) => (
-            <div key={month.month} className="flex h-full min-w-0 flex-1 items-end gap-px" title={`Month ${month.month}`}>
-              <div
-                className="w-1/2 rounded-sm bg-ink/20"
-                style={{ height: `${Math.max(2, (month.spend / peak) * 100)}%` }}
-              />
-              <div
-                className="w-1/2 rounded-sm bg-slash"
-                style={{ height: `${(month.revenue / peak) * 100}%` }}
-              />
-            </div>
-          ))}
-        </div>
-        <div className="mt-3 overflow-x-auto rounded-2xl border border-line bg-card">
-          <table className="w-full min-w-[760px] text-left text-sm">
-            <thead>
-              <tr className="border-b border-line font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">
-                <th className="px-4 py-3 font-medium">Month</th>
-                <th className="px-4 py-3 text-right font-medium">Signed</th>
-                <th className="px-4 py-3 text-right font-medium">Live</th>
-                <th className="px-4 py-3 text-right font-medium">Billing</th>
-                <th className="px-4 py-3 text-right font-medium">Spend</th>
-                <th className="px-4 py-3 text-right font-medium">Fees</th>
-                <th className="px-4 py-3 text-right font-medium">Net</th>
-                <th className="px-4 py-3 text-right font-medium">Cash</th>
-              </tr>
-            </thead>
-            <tbody>
-              {plan.months.map((month) => (
-                <tr key={month.month} className="border-b border-line last:border-0">
-                  <td className="px-4 py-2.5 tabular-nums text-ink">{month.month}</td>
-                  <td className="px-4 py-2.5 text-right tabular-nums text-graphite">
-                    {countFormat.format(month.newPractices)}
-                  </td>
-                  <td className="px-4 py-2.5 text-right tabular-nums text-graphite">
-                    {countFormat.format(month.practicesLive)}
-                  </td>
-                  <td className="px-4 py-2.5 text-right tabular-nums text-graphite">
-                    {countFormat.format(month.practicesBilling)}
-                  </td>
-                  <td className="px-4 py-2.5 text-right tabular-nums text-ink">{formatMoney(month.spend)}</td>
-                  <td className="px-4 py-2.5 text-right tabular-nums text-ink">{formatMoney(month.revenue)}</td>
-                  <td
-                    className={cn(
-                      "px-4 py-2.5 text-right tabular-nums",
-                      month.net < 0 ? "text-emergency" : "text-ink",
-                    )}
-                  >
-                    {formatMoney(month.net)}
-                  </td>
-                  <td
-                    className={cn(
-                      "px-4 py-2.5 text-right tabular-nums",
-                      month.cash < 0 ? "text-emergency" : "text-ink",
-                    )}
-                  >
-                    {formatMoney(month.cash)}
-                  </td>
-                </tr>
+              {expenseGroups.map((group) => (
+                <Fragment key={group.category}>
+                  <tr className="border-b border-line bg-mist/70">
+                    <td colSpan={3} className="px-4 py-2 text-xs font-medium text-ink">
+                      {CATEGORY_LABEL[group.category]}
+                    </td>
+                    <td className="px-4 py-2 text-right text-xs font-medium tabular-nums text-ink">
+                      {formatMoney(group.total)}
+                    </td>
+                  </tr>
+                  {group.lines.map((line) => (
+                    <tr key={line.id} className="border-b border-line last:border-0">
+                      <td className="px-4 py-3 align-top">
+                        <p className="font-medium text-ink">
+                          {line.name}
+                          <span className="ml-2 font-mono text-[10px] font-normal uppercase tracking-[0.14em] text-graphite">
+                            {line.basis}
+                          </span>
+                        </p>
+                        <p className="mt-1 text-xs leading-relaxed text-graphite">{line.source}</p>
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3 align-top text-graphite">
+                        {whenLabel(line.startMonth, line.endMonth, line.kind)}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3 text-right align-top tabular-nums text-ink">
+                        {formatMoney(line.amount)}
+                        {line.kind === "monthly" ? <span className="text-graphite">/mo</span> : null}
+                      </td>
+                      <td className="whitespace-nowrap px-4 py-3 text-right align-top tabular-nums text-ink">
+                        {formatMoney(lineTotal(line))}
+                      </td>
+                    </tr>
+                  ))}
+                </Fragment>
               ))}
             </tbody>
           </table>
@@ -512,33 +624,6 @@ export function FundingDesk() {
       <p className="mt-6 max-w-2xl text-xs leading-relaxed text-graphite">
         Sources: Vercel $350, monitors, 1Password, Supabase Team plus HIPAA plus PITR, the GRC band, the pen-test band, and the Type II auditor band are the compliance desk. Instantly Hypergrowth is the marketing go-live note. Staff, ads, counsel, insurance, lists, Semrush, mailboxes, credentialing, model usage, and the clearinghouse minimum are planning allowances. Headcount does not add a second biller as the book grows.
       </p>
-    </div>
-  );
-}
-
-function Metric({
-  label,
-  value,
-  detail,
-  tone = "neutral",
-}: {
-  label: string;
-  value: string;
-  detail: string;
-  tone?: "neutral" | "good" | "bad";
-}) {
-  return (
-    <div className="rounded-2xl border border-line bg-card px-4 py-4">
-      <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">{label}</p>
-      <p
-        className={cn(
-          "mt-2 text-2xl font-medium tabular-nums tracking-[-0.02em]",
-          tone === "bad" ? "text-emergency" : "text-ink",
-        )}
-      >
-        {value}
-      </p>
-      <p className="mt-1 text-[13px] leading-relaxed text-graphite">{detail}</p>
     </div>
   );
 }

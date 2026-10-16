@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, Circle, Loader2, Send } from "lucide-react";
+import { AdminPageHeader } from "@/components/admin/admin-page";
 import type { GoliveStatusReport } from "@/lib/marketing/golive-status-types";
 import {
   COMPLIANCE_CHECKLIST_KEY,
@@ -16,7 +17,6 @@ import {
   type StatusState,
 } from "@/lib/status/brief";
 import type { FundingAssumptions as PlanAssumptions } from "@/lib/funding/model";
-import { cn } from "@/lib/utils";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -63,15 +63,13 @@ function stateWord(state: StatusState) {
 
 function CheckRow({ check }: { check: StatusCheck }) {
   return (
-    <li className="flex items-start gap-3 py-3">
+    <li className="flex items-start gap-3 py-3.5">
       <span className="mt-0.5 shrink-0" title={stateWord(check.state)}>
         <Mark state={check.state} />
       </span>
       <span className="min-w-0">
         <span className="flex flex-wrap items-center gap-2">
-          <span className={cn("text-sm font-medium text-ink", check.state === "done" && "text-graphite")}>
-            {check.label}
-          </span>
+          <span className="text-sm font-medium text-ink">{check.label}</span>
           <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">
             {stateWord(check.state)}
           </span>
@@ -82,29 +80,12 @@ function CheckRow({ check }: { check: StatusCheck }) {
   );
 }
 
-function LaneCard({ lane }: { lane: StatusLane }) {
+function laneProgress(lane: StatusLane) {
   const done = lane.checks.filter((check) => check.state === "done").length;
-  return (
-    <article className="flex flex-col rounded-2xl border border-line bg-card">
-      <div className="flex items-start justify-between gap-3 px-5 pt-5">
-        <div>
-          <h2 className="text-sm font-medium text-ink">{lane.title}</h2>
-          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-graphite">
-            {lane.checks.length === 0 ? "Loading" : `${done} of ${lane.checks.length}`}
-          </p>
-        </div>
-        <Link href={lane.href} className="shrink-0 text-xs font-medium text-slash hover:text-oxide-ink">
-          Open
-        </Link>
-      </div>
-      <p className="px-5 pt-3 text-sm leading-relaxed text-ink">{lane.headline}</p>
-      <ul className="mt-2 divide-y divide-line px-5 pb-2">
-        {lane.checks.map((check) => (
-          <CheckRow key={check.id} check={check} />
-        ))}
-      </ul>
-    </article>
-  );
+  const total = lane.checks.length;
+  const next = lane.checks.find((check) => check.state === "open") ?? lane.checks.find((check) => check.state === "later");
+  const note = total === 0 ? lane.headline : next ? next.label : "Clear";
+  return { done, total, pct: total === 0 ? 0 : Math.round((done / total) * 100), note };
 }
 
 export function StatusDesk() {
@@ -209,86 +190,147 @@ export function StatusDesk() {
     void send(input);
   }
 
+  const openCount = lanes.reduce(
+    (sum, lane) => sum + lane.checks.filter((check) => check.state !== "done").length,
+    0,
+  );
+
   return (
     <div>
-      <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-slash">Admin</p>
-      <h1 className="mt-2 font-sans text-3xl font-semibold lowercase tracking-[-0.03em] text-ink">status</h1>
-      <p className="mt-3 max-w-3xl text-lg leading-snug text-ink">{sentence}</p>
-      <p className="mt-2 max-w-3xl text-sm leading-relaxed text-graphite">
-        Boxes fill themselves. Marketing comes from the live go-live check. Compliance and funding come from this browser. Open a lane for the full list.
-      </p>
+      <AdminPageHeader
+        title="status"
+        lede="Marketing is read from production. Compliance and funding are saved in this browser."
+      />
 
-      <div className="mt-8 grid items-start gap-4 lg:grid-cols-3">
-        {lanes.map((lane) => (
-          <LaneCard key={lane.id} lane={lane} />
-        ))}
+      <p className="mt-6 max-w-3xl text-xl font-medium leading-snug tracking-[-0.02em] text-ink">{sentence}</p>
+
+      <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        {lanes.map((lane) => {
+          const progress = laneProgress(lane);
+          return (
+            <Link
+              key={lane.id}
+              href={lane.href}
+              className="rounded-2xl border border-line bg-card px-4 py-4 hover:border-slash/40"
+            >
+              <span className="flex items-baseline justify-between gap-3">
+                <span className="text-sm font-medium text-ink">{lane.title}</span>
+                <span className="font-mono text-[11px] tabular-nums text-graphite">
+                  {progress.total === 0 ? "…" : `${progress.done}/${progress.total}`}
+                </span>
+              </span>
+              <span className="mt-3 block h-1.5 overflow-hidden rounded-full bg-mist">
+                <span className="block h-full rounded-full bg-slash" style={{ width: `${progress.pct}%` }} />
+              </span>
+              <span className="mt-3 block line-clamp-2 text-xs leading-relaxed text-graphite">{progress.note}</span>
+            </Link>
+          );
+        })}
       </div>
 
-      <section className="mt-8 flex min-h-[28rem] flex-col overflow-hidden rounded-2xl border border-line bg-ink text-paper">
-        <div className="border-b border-paper/10 px-5 py-4">
-          <h2 className="text-sm font-medium">Status assistant</h2>
-          <p className="mt-1 text-xs text-paper/55">
-            Answers from the checks on this page. It will not invent a certification or a signed practice.
-          </p>
-        </div>
-        <div ref={scrollerRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4">
-          {messages.map((message, index) =>
-            message.role === "user" ? (
-              <div
-                key={`u-${index}`}
-                className="ml-auto max-w-[40rem] rounded-2xl bg-slash px-3.5 py-2.5 text-sm leading-relaxed text-paper"
-              >
-                {message.content}
-              </div>
-            ) : (
-              <div
-                key={`a-${index}`}
-                className="max-w-[40rem] whitespace-pre-wrap rounded-2xl bg-paper/10 px-3.5 py-2.5 text-sm leading-relaxed text-paper/90"
-              >
-                {message.content}
-              </div>
-            ),
+      <div className="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <div className="space-y-4">
+          {openCount === 0 && lanes.every((lane) => lane.checks.length > 0) ? (
+            <section className="rounded-2xl border border-line bg-card px-5 py-5">
+              <h2 className="text-sm font-medium text-ink">Nothing open</h2>
+              <p className="mt-1 text-sm leading-relaxed text-graphite">
+                The meters above are the whole picture. Open a lane for the full list.
+              </p>
+            </section>
+          ) : (
+            lanes.map((lane) => {
+              const attention = lane.checks.filter((check) => check.state !== "done");
+              const loading = lane.checks.length === 0;
+              if (!loading && attention.length === 0) return null;
+              return (
+                <section key={lane.id} className="overflow-hidden rounded-2xl border border-line bg-card">
+                  <div className="flex items-center justify-between gap-3 px-5 py-4">
+                    <h2 className="text-sm font-medium text-ink">{lane.title}</h2>
+                    <Link href={lane.href} className="text-xs font-medium text-slash hover:text-oxide-ink">
+                      Open
+                    </Link>
+                  </div>
+                  {loading ? (
+                    <p className="border-t border-line px-5 py-4 text-sm text-graphite">{lane.headline}</p>
+                  ) : (
+                    <ul className="divide-y divide-line border-t border-line px-5">
+                      {attention.map((check) => (
+                        <CheckRow key={check.id} check={check} />
+                      ))}
+                    </ul>
+                  )}
+                </section>
+              );
+            })
           )}
-          {busy ? (
-            <div className="flex w-fit items-center gap-2 rounded-2xl bg-paper/10 px-3.5 py-2.5 text-sm text-paper/60">
-              <Loader2 className="size-3.5 animate-spin" />
-              Thinking…
+        </div>
+
+        <section className="flex min-h-[24rem] flex-col overflow-hidden rounded-2xl border border-line bg-card lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)]">
+          <div className="border-b border-line px-4 py-4">
+            <h2 className="text-sm font-medium text-ink">Status assistant</h2>
+            <p className="mt-1 text-xs leading-relaxed text-graphite">
+              Answers from the checks on this page. It will not invent a certification or a signed practice.
+            </p>
+          </div>
+          <div ref={scrollerRef} className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4">
+            {messages.map((message, index) =>
+              message.role === "user" ? (
+                <div
+                  key={`u-${index}`}
+                  className="ml-auto max-w-[90%] rounded-2xl bg-slash px-3.5 py-2.5 text-sm leading-relaxed text-paper"
+                >
+                  {message.content}
+                </div>
+              ) : (
+                <div
+                  key={`a-${index}`}
+                  className="max-w-[90%] whitespace-pre-wrap rounded-2xl bg-mist px-3.5 py-2.5 text-sm leading-relaxed text-ink"
+                >
+                  {message.content}
+                </div>
+              ),
+            )}
+            {busy ? (
+              <div className="flex w-fit items-center gap-2 rounded-2xl bg-mist px-3.5 py-2.5 text-sm text-graphite">
+                <Loader2 className="size-3.5 animate-spin" />
+                Thinking…
+              </div>
+            ) : null}
+          </div>
+          {messages.length <= 2 ? (
+            <div className="flex shrink-0 flex-wrap gap-2 border-t border-line px-3 py-2.5">
+              {STARTERS.map((starter) => (
+                <button
+                  key={starter}
+                  type="button"
+                  disabled={busy}
+                  onClick={() => void send(starter)}
+                  className="rounded-full border border-line bg-paper px-3 py-1.5 text-left text-xs text-graphite hover:text-ink disabled:opacity-50"
+                >
+                  {starter}
+                </button>
+              ))}
             </div>
           ) : null}
-        </div>
-        {messages.length <= 2 ? (
-          <div className="flex shrink-0 flex-wrap gap-2 border-t border-paper/10 px-3 py-2.5">
-            {STARTERS.map((starter) => (
-              <button
-                key={starter}
-                type="button"
-                disabled={busy}
-                onClick={() => void send(starter)}
-                className="rounded-full border border-paper/15 bg-paper/5 px-3 py-1.5 text-left text-xs text-paper/80 hover:border-slash/50 disabled:opacity-50"
-              >
-                {starter}
-              </button>
-            ))}
-          </div>
-        ) : null}
-        <form className="flex shrink-0 items-center gap-2 border-t border-paper/10 p-3" onSubmit={onSubmit}>
-          <input
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            placeholder="Ask what needs attention…"
-            disabled={busy}
-            className="h-11 min-w-0 flex-1 rounded-full border border-paper/15 bg-ink px-4 text-sm text-paper placeholder:text-paper/40 focus:border-slash focus:outline-none focus:ring-2 focus:ring-slash/30 disabled:opacity-60"
-          />
-          <button
-            type="submit"
-            disabled={busy || !input.trim()}
-            aria-label="Send"
-            className="grid size-11 shrink-0 place-items-center rounded-full bg-slash text-paper hover:bg-oxide-deep disabled:opacity-40"
-          >
-            <Send className="size-4" />
-          </button>
-        </form>
-      </section>
+          <form className="flex shrink-0 items-center gap-2 border-t border-line p-3" onSubmit={onSubmit}>
+            <input
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              placeholder="Ask what needs attention…"
+              disabled={busy}
+              className="h-11 min-w-0 flex-1 rounded-full border border-line bg-paper px-4 text-sm text-ink placeholder:text-graphite/60 focus:border-slash focus:outline-none focus:ring-2 focus:ring-slash/30 disabled:opacity-60"
+            />
+            <button
+              type="submit"
+              disabled={busy || !input.trim()}
+              aria-label="Send"
+              className="grid size-11 shrink-0 place-items-center rounded-full bg-slash text-paper hover:bg-oxide-deep disabled:opacity-40"
+            >
+              <Send className="size-4" />
+            </button>
+          </form>
+        </section>
+      </div>
     </div>
   );
 }

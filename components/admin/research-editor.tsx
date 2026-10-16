@@ -115,9 +115,7 @@ export function ResearchEditor({ article: initial }: { article: ResearchArticle 
     <div className="space-y-10">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-slash">
-            Editor
-          </p>
+          <h1 className="font-sans text-2xl font-semibold lowercase tracking-[-0.03em] text-ink">editor</h1>
           <p className="mt-2 text-sm text-graphite">
             {article.status === "published"
               ? "Published. Readers can see this on /research."
