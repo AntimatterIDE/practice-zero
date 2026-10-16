@@ -62,6 +62,7 @@ const columns: {
       { label: "Research", href: "/research" },
       { label: "Onboarding", href: "/onboarding" },
       { label: "Pricing", href: "/pricing" },
+      { label: "Specialties", href: "/specialties" },
       { label: "Contact", href: "/contact" },
       { label: "Try the demo", href: "/try" },
       { label: "See patient experience", href: "/portal" },

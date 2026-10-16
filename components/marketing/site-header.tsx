@@ -195,6 +195,7 @@ const menus: MegaMenu[] = [
 
 /** Links without mega panels — hovering these must close any open dropdown. */
 const flatLinks = [
+  { href: "/specialties", label: "Specialties" },
   { href: "/pricing", label: "Pricing" },
   { href: "/contact", label: "Contact" },
 ] as const;

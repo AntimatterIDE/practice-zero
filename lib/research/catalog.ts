@@ -891,7 +891,193 @@ const specs: CatalogSpec[] = [
       },
     ],
   },
+  // 17 — SEO brief: commercial model comparison
+  {
+    key: "collections-pricing-models",
+    headline: "Collections pricing vs per-seat EHR: what independents actually buy",
+    publishedAt: "2026-10-16T12:00:00.000Z",
+    photo: "photo-1554224155-6726b3ff858f",
+    excerpt:
+      "athenahealth-shaped percentage-of-collections buying and per-seat stacks answer different fears. Practice Zero’s one-year billing agreement is a third path: platform included when collections route through us.",
+    searchTitle: "Collections pricing vs per-seat EHR for independent practices",
+    searchDescription:
+      "How percentage-of-collections EHR pricing compares to per-seat licenses — and how Practice Zero’s one-year billing agreement bundles EHR, billing, and outreach.",
+    keywords: [
+      "percentage of collections EHR",
+      "athenahealth alternative",
+      "EHR pricing independent practice",
+      "billing agreement EHR",
+      "per seat EHR cost",
+    ],
+    topic: "pricing",
+    readMinutes: 6,
+    bodies: [
+      [
+        "Independent practices evaluating a new EHR are rarely deciding on features alone. They are deciding how software gets paid for — and whether the vendor’s incentives line up with collections.",
+        "Practice Zero publishes a clear commercial frame: EHR, billing, and marketing at no additional license fee under a one-year billing agreement, with optional advertising spend on the practice’s terms.",
+      ],
+      [
+        "Percentage-of-collections models, popularized in market conversation by platforms such as athenahealth, align vendor revenue with cash posted. Per-seat subscriptions, common in stacks shaped like Tebra/Kareo, keep software cost predictable as revenue grows.",
+        "Industry reviews in 2025–2026 keep returning to the same tradeoff: variable cost that scales with collections versus fixed seats that can feel cheaper once the practice is already clean on RCM.",
+      ],
+      [
+        "For a small independent practice, the wrong commercial model shows up as either surprise spend when collections rise or a pile of add-on fees for scribe, marketing, and clearinghouse pieces that were never really optional.",
+        "Buyers should ask what is included, what happens at renewal, and who owns the claim work when a denial lands on a Tuesday morning.",
+      ],
+      [
+        "Practice Zero bundles the agentic EHR, RCM, and outreach on one morning board under the billing agreement. Agents clear documentation, eligibility, claims, and follow-up under practice rules; humans approve exceptions.",
+        "The consultation is where sizing happens — not a public rate card — because practice mix and payer mix change the economics.",
+      ],
+      [
+        "Compare the model on /pricing, then open /try to see chart → claim → collect on one surface. Request a consultation when you want the agreement walked against your specialty.",
+        "This note is general product information, not financial or legal advice.",
+      ],
+    ],
+    sources: [
+      {
+        kind: "Brief",
+        year: "2026",
+        title: "athenahealth public positioning on pricing aligned with collections",
+        url: "https://www.athenahealth.com/why-choose-us/cost-value",
+      },
+      {
+        kind: "Brief",
+        year: "2026",
+        title: "Tebra public positioning on subscription pricing vs percentage of collections",
+        url: "https://www.tebra.com/pricing/overview",
+      },
+      {
+        kind: "Report",
+        year: "2025",
+        title: "Industry comparisons of EHR commercial models for independent ambulatory practices",
+      },
+    ],
+  },
+  // 18 — SEO brief: leaving per-seat stacks
+  {
+    key: "beyond-per-seat-ehr",
+    headline: "Beyond per-seat EHR: one morning board instead of a bolt-on stack",
+    publishedAt: "2026-10-16T15:00:00.000Z",
+    photo: "photo-1576091160550-2173dba07efd",
+    excerpt:
+      "Per-seat EHRs often grow a second stack for marketing and engagement. Practice Zero keeps chart, billing, and outreach on one agentic morning board.",
+    searchTitle: "Beyond per-seat EHR stacks for independent practices",
+    searchDescription:
+      "Why independent practices outgrow per-seat EHR plus bolt-on marketing — and how an agentic morning board collapses chart, claim, and outreach.",
+    keywords: [
+      "tebra alternative",
+      "kareo alternative",
+      "patientpop alternative",
+      "EHR patient marketing",
+      "practice management all in one",
+    ],
+    topic: "platform",
+    readMinutes: 5,
+    bodies: [
+      [
+        "Many independents did not choose fragmentation. They bought an EHR, then a marketing layer, then another tool for reviews or reminders — because the chart never owned the outbox.",
+        "Practice Zero starts from a different premise: clinical, financial, and operational work belong on one morning board.",
+      ],
+      [
+        "All-in-one vendors that merged practice management with patient acquisition tools made the category clearer. Tebra’s lineage (Kareo + PatientPop) is the usual reference point in buying conversations.",
+        "The open question is whether ‘all-in-one’ still means humans stitching portals together, or agents that clear loops from visit to remittance.",
+      ],
+      [
+        "Bolt-on stacks create handoff failure: the note is done, the claim is late, the recall never sent. Staff time fills the gaps the software left between products.",
+        "Practices feel this as after-hours charting, missed eligibility, and phone tag with payers — the work that should not own the day.",
+      ],
+      [
+        "Practice Zero agents draft documentation and coding, keep eligibility and claims moving, and queue outreach from the same surface. Optional room hardware can capture the visit so agents start from what happened.",
+        "There is no additional license fee when collections route through Practice Zero under a one-year billing agreement.",
+      ],
+      [
+        "Open the demo at /try and watch a visit become a queued claim and an outbox item. Then use /contact for a consultation mapped to your practice size.",
+        "This note is general product information, not clinical advice.",
+      ],
+    ],
+    sources: [
+      {
+        kind: "Brief",
+        year: "2026",
+        title: "Market coverage of Tebra as the Kareo and PatientPop combined platform",
+      },
+      {
+        kind: "Survey",
+        year: "2025",
+        title: "AMA themes on administrative burden in ambulatory practice",
+        url: "https://www.ama-assn.org/practice-management/prior-authorization",
+      },
+      {
+        kind: "Report",
+        year: "2025",
+        title: "Industry reviews of all-in-one practice management and patient engagement suites",
+      },
+    ],
+  },
+  // 19 — SEO brief: specialty mornings
+  {
+    key: "specialty-mornings-horizontal-ehr",
+    headline: "Specialty mornings on a horizontal agentic EHR",
+    publishedAt: "2026-10-16T18:00:00.000Z",
+    photo: "photo-1631217868264-e5b90bb7e629",
+    excerpt:
+      "Independent ophthalmology, ortho, primary care, derm, and OB-GYN practices share the same admin loops — with different accents. Specialty pages frame the morning; the platform stays one board.",
+    searchTitle: "Specialty mornings on a horizontal agentic EHR",
+    searchDescription:
+      "Why Practice Zero stays specialty-agnostic as a platform while publishing specialty pages for ophthalmology, orthopedics, primary care, dermatology, and OB-GYN.",
+    keywords: [
+      "ophthalmology EHR",
+      "orthopedic practice management",
+      "dermatology EHR",
+      "primary care EHR independent",
+      "OB-GYN EHR",
+    ],
+    topic: "specialties",
+    readMinutes: 5,
+    bodies: [
+      [
+        "A horizontal EHR fails when every specialty is forced into the same marketing sentence. It also fails when the product forks into five disconnected apps.",
+        "Practice Zero keeps one agentic platform and publishes specialty pages so buyers see their morning — prior auth in ortho, chair turnover in ophthalmology, panel volume in primary care.",
+      ],
+      [
+        "AMA practice-ownership data shows independence is uneven across specialties. Ophthalmology and orthopedics retain higher private-practice shares than many hospital-leaning fields, while primary care remains a large absolute base of independents.",
+        "Those ownership patterns matter for go-to-market: the buyers who can still choose software are concentrated in ambulatory specialties that feel admin load every morning.",
+      ],
+      [
+        "Specialty teams do not need a different definition of ‘done.’ They need the same loops cleared with the right forms, agreements, and payer reality: eligibility before the room, claims after the note, outreach before the schedule collapses.",
+        "Onboarding is where specialty forms and custom components enter — not a separate product SKU for each vertical.",
+      ],
+      [
+        "Wave 1 specialty pages cover ophthalmology, orthopedics, primary care, dermatology, and OB-GYN. Each page frames what goes to zero, then points to the same demo and consultation path.",
+        "Dental, veterinary, and pure med-spa ecosystems stay out of Wave 1 because buying centers and PMS lock-in differ.",
+      ],
+      [
+        "Browse /specialties, open your lander, then try /try. Request a consultation with the specialty query already attached so the walkthrough starts in the right frame.",
+        "This note is general product information, not clinical advice.",
+      ],
+    ],
+    sources: [
+      {
+        kind: "Report",
+        year: "2024",
+        title: "AMA Physician Practice Benchmark Report — private practice shares by specialty",
+        url: "https://www.ama-assn.org/system/files/2024-prp-pp-characteristics.pdf",
+      },
+      {
+        kind: "Brief",
+        year: "2025",
+        title: "Becker’s ASC coverage of where physicians stay independent by specialty",
+        url: "https://www.beckersasc.com/asc-news/where-physicians-stay-independent-a-specialty-breakdown/",
+      },
+      {
+        kind: "Brief",
+        year: "2025",
+        title: "AAMC key findings on largest active physician specialties",
+        url: "https://www.aamc.org/data-reports/data/2025-key-findings",
+      },
+    ],
+  },
 ];
 
-/** Sixteen published Practice Zero research notes, ordered by topic and staggered by publish date. */
+/** Published Practice Zero research notes, ordered by topic and staggered by publish date. */
 export const publishedResearchCatalog: ResearchArticle[] = specs.map(buildArticle);

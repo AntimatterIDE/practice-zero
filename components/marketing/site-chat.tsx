@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { MessageCircle, Send, X } from "lucide-react";
+import { AnalyticsEvents, trackEvent } from "@/lib/analytics/events";
 import { parseChatCtas } from "@/lib/chat/cta";
 import { cn } from "@/lib/utils";
 
@@ -227,7 +228,13 @@ export function SiteChat() {
         type="button"
         aria-label={open ? "Close chat" : "Open chat"}
         aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          setOpen((v) => {
+            const next = !v;
+            if (next) trackEvent(AnalyticsEvents.chatOpen);
+            return next;
+          });
+        }}
         className="pointer-events-auto grid size-14 place-items-center rounded-full bg-ink text-paper shadow-lg shadow-ink/25 transition-transform hover:scale-[1.03] active:scale-[0.98]"
       >
         {open ? <X className="size-5" /> : <MessageCircle className="size-5" />}
@@ -253,6 +260,19 @@ function AssistantBubble({ content }: { content: string }) {
               key={cta.href}
               href={cta.href}
               prefetch={false}
+              onClick={() => {
+                if (cta.href.includes("/contact")) {
+                  trackEvent(AnalyticsEvents.chatQualified, {
+                    cta_label: cta.label,
+                    href: cta.href,
+                  });
+                }
+                trackEvent(AnalyticsEvents.ctaClick, {
+                  cta_name: "chat_cta",
+                  cta_location: "site_chat",
+                  href: cta.href,
+                });
+              }}
               className="inline-flex items-center justify-center rounded-full bg-slash px-4 py-2 text-xs font-medium text-paper transition-colors hover:bg-oxide-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slash"
             >
               {cta.label}

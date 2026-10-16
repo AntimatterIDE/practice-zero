@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Instrument_Sans, JetBrains_Mono } from "next/font/google";
+import { MarketingAnalytics } from "@/components/analytics/marketing-analytics";
 import { SiteChat } from "@/components/marketing/site-chat";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { ogMedia } from "@/lib/open-graph";
@@ -58,6 +59,9 @@ export const metadata: Metadata = {
   robots: indexing
     ? { index: true, follow: true, googleBot: { index: true, follow: true } }
     : { index: false, follow: false, nocache: true },
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim()
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION.trim() }
+    : undefined,
   alternates: {
     canonical: "/",
   },
@@ -127,6 +131,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <ScrollToTop />
+        <MarketingAnalytics />
         {children}
         <SiteChat />
       </body>

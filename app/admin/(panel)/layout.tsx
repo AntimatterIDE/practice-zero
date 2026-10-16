@@ -26,6 +26,9 @@ export default async function AdminPanelLayout({ children }: { children: React.R
               <Link href="/admin/research" className="font-medium text-ink hover:text-slash">
                 Research
               </Link>
+              <Link href="/admin/marketing" className="font-medium text-ink hover:text-slash">
+                Marketing
+              </Link>
             </nav>
           </div>
           <AdminLogoutButton />

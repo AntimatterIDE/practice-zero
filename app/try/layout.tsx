@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DemoOpenTracker } from "@/components/analytics/demo-open-tracker";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { AdminMobileBar } from "@/components/admin/admin-mobile-bar";
 import { ResetDemoButton } from "@/components/admin/reset-demo";
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 export default function TryLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-full bg-white lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
+      <DemoOpenTracker />
       <aside className="hidden border-r border-neutral-200 bg-neutral-50 lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:overflow-y-auto">
         <div className="flex h-14 shrink-0 items-center gap-2.5 border-b border-neutral-200 px-3">
           <ExitToHome className="w-full justify-start" />

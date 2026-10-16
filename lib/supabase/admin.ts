@@ -16,6 +16,13 @@ export type ConsultationLead = {
   status: "new" | "contacted" | "qualified" | "closed";
   notes: string | null;
   source: string;
+  specialty: string | null;
+  campaign: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+  utm_content: string | null;
+  utm_term: string | null;
 };
 
 let cached: SupabaseClient | null = null;

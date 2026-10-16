@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
-import { canonicalOrigin, isIndexingEnabled } from "@/lib/site";
+import { specialties } from "@/lib/marketing/specialties";
 import { listPublishedResearch } from "@/lib/research/store";
+import { canonicalOrigin, isIndexingEnabled } from "@/lib/site";
 
 const paths = [
   { path: "/", priority: 1, changeFrequency: "weekly" as const },
@@ -13,6 +14,12 @@ const paths = [
   { path: "/onboarding", priority: 0.85, changeFrequency: "weekly" as const },
   { path: "/pricing", priority: 0.9, changeFrequency: "weekly" as const },
   { path: "/contact", priority: 0.7, changeFrequency: "monthly" as const },
+  { path: "/specialties", priority: 0.85, changeFrequency: "weekly" as const },
+  ...specialties.map((specialty) => ({
+    path: `/specialties/${specialty.slug}`,
+    priority: 0.85,
+    changeFrequency: "weekly" as const,
+  })),
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

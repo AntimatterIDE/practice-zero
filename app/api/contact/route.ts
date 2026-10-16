@@ -12,6 +12,8 @@ const recipients = [
   "anas@antimatterai.com",
 ] as const;
 
+const optionalText = z.string().trim().max(120).optional().default("");
+
 const bodySchema = z.object({
   email: z.string().email(),
   firstName: z.string().trim().min(1).max(80),
@@ -21,6 +23,14 @@ const bodySchema = z.object({
   size: z.string().trim().min(1).max(80),
   phone: z.string().trim().max(40).optional().default(""),
   message: z.string().trim().max(4000).optional().default(""),
+  specialty: optionalText,
+  source: optionalText,
+  campaign: optionalText,
+  utmSource: optionalText,
+  utmMedium: optionalText,
+  utmCampaign: optionalText,
+  utmContent: optionalText,
+  utmTerm: optionalText,
 });
 
 function escapeHtml(value: string) {
@@ -29,6 +39,11 @@ function escapeHtml(value: string) {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
+}
+
+function nullIfEmpty(value: string | undefined) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
 }
 
 async function notifyTeam(data: z.infer<typeof bodySchema>) {
@@ -48,6 +63,9 @@ async function notifyTeam(data: z.infer<typeof bodySchema>) {
     `Role: ${data.title}`,
     `Practice size: ${data.size}`,
     `Phone: ${data.phone || "—"}`,
+    `Specialty: ${data.specialty || "—"}`,
+    `Source: ${data.source || "contact"}`,
+    `Campaign: ${data.campaign || data.utmCampaign || "—"}`,
     "",
     "Message:",
     data.message || "—",
@@ -66,6 +84,9 @@ async function notifyTeam(data: z.infer<typeof bodySchema>) {
         <tr><td style="padding:8px 0;color:#4A4F57">Role</td><td style="padding:8px 0">${escapeHtml(data.title)}</td></tr>
         <tr><td style="padding:8px 0;color:#4A4F57">Practice size</td><td style="padding:8px 0">${escapeHtml(data.size)}</td></tr>
         <tr><td style="padding:8px 0;color:#4A4F57">Phone</td><td style="padding:8px 0">${escapeHtml(data.phone || "—")}</td></tr>
+        <tr><td style="padding:8px 0;color:#4A4F57">Specialty</td><td style="padding:8px 0">${escapeHtml(data.specialty || "—")}</td></tr>
+        <tr><td style="padding:8px 0;color:#4A4F57">Source</td><td style="padding:8px 0">${escapeHtml(data.source || "contact")}</td></tr>
+        <tr><td style="padding:8px 0;color:#4A4F57">Campaign</td><td style="padding:8px 0">${escapeHtml(data.campaign || data.utmCampaign || "—")}</td></tr>
       </table>
       <p style="margin:24px 0 8px;color:#4A4F57">Message</p>
       <p style="white-space:pre-wrap;margin:0">${escapeHtml(data.message || "—")}</p>
@@ -94,6 +115,7 @@ export async function POST(request: Request) {
   }
 
   const data = parsed.data;
+  const source = nullIfEmpty(data.source) ?? "contact";
 
   try {
     const supabase = getSupabaseAdmin();
@@ -106,7 +128,14 @@ export async function POST(request: Request) {
       practice_size: data.size,
       phone: data.phone || null,
       message: data.message || null,
-      source: "contact",
+      source,
+      specialty: nullIfEmpty(data.specialty),
+      campaign: nullIfEmpty(data.campaign) ?? nullIfEmpty(data.utmCampaign),
+      utm_source: nullIfEmpty(data.utmSource),
+      utm_medium: nullIfEmpty(data.utmMedium),
+      utm_campaign: nullIfEmpty(data.utmCampaign),
+      utm_content: nullIfEmpty(data.utmContent),
+      utm_term: nullIfEmpty(data.utmTerm),
       status: "new",
     });
 

@@ -64,6 +64,7 @@ export function LeadsTable({ leads }: { leads: ConsultationLead[] }) {
               </p>
               <p className="mt-2 text-xs uppercase tracking-[0.14em] text-graphite">
                 {lead.role} · {lead.practice_size}
+                {lead.specialty ? ` · ${lead.specialty}` : ""}
               </p>
               {lead.message ? (
                 <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-ink/80">{lead.message}</p>
@@ -72,6 +73,16 @@ export function LeadsTable({ leads }: { leads: ConsultationLead[] }) {
             <div className="text-sm text-graphite">
               <p>{formatWhen(lead.created_at)}</p>
               <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-slash">{lead.source}</p>
+              {lead.campaign ? (
+                <p className="mt-1 font-mono text-[11px] tracking-[0.08em] text-graphite">
+                  {lead.campaign}
+                </p>
+              ) : null}
+              {lead.utm_medium || lead.utm_content ? (
+                <p className="mt-1 text-xs text-graphite">
+                  {[lead.utm_medium, lead.utm_content].filter(Boolean).join(" · ")}
+                </p>
+              ) : null}
             </div>
             <div>
               <label className="grid gap-2 text-xs font-medium uppercase tracking-[0.14em] text-graphite">
