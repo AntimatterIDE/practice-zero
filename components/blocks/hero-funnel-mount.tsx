@@ -12,17 +12,39 @@ function markFunnelReady(section: HTMLElement) {
   }
 }
 
+function clearInlineStepPositions(section: HTMLElement) {
+  section.querySelectorAll<HTMLElement>("[data-funnel-step]").forEach((row) => {
+    row.style.left = "";
+    row.style.top = "";
+    row.style.right = "";
+  });
+}
+
+/** Right-rail layout so steps never pile at (0,0) before the funnel places them. */
+function enableStaticSteps(section: HTMLElement) {
+  clearInlineStepPositions(section);
+  section.dataset.funnelStatic = "1";
+  section.dataset.funnelPlaced = "1";
+  markFunnelReady(section);
+}
+
+function enableFunnelSteps(section: HTMLElement) {
+  delete section.dataset.funnelStatic;
+  section.dataset.funnelPlaced = "1";
+  markFunnelReady(section);
+}
+
 /**
- * Paint hero chrome immediately. Load Three.js only after real pointer/key
- * intent — never on a timer or intro-exit (PageSpeed waits through those).
+ * Paint a static step rail immediately. Load Three.js only after real
+ * pointer/key intent — never on a timer or intro-exit.
  */
 export function HeroFunnelMount() {
   useEffect(() => {
     const section = document.getElementById("pz-home-hero");
     if (!section) return;
 
-    // Steps / band must paint even when WebGL is skipped or deferred.
-    markFunnelReady(section);
+    // Always start static — avoids the top-left garble while WebGL is deferred.
+    enableStaticSteps(section);
 
     if (shouldSkipHeavyVisuals()) return;
 
@@ -61,7 +83,12 @@ export function HeroFunnelMount() {
           }
         };
         funnel = createFunnel(section, band, copy, content, rows, onFocus, quality);
-        if (funnel) funnel.focus(pendingFocus);
+        if (funnel) {
+          enableFunnelSteps(section);
+          funnel.focus(pendingFocus);
+        } else {
+          enableStaticSteps(section);
+        }
       });
     };
 
@@ -83,6 +110,9 @@ export function HeroFunnelMount() {
       funnel?.destroy();
       funnel = null;
       delete section.dataset.funnelReady;
+      delete section.dataset.funnelPlaced;
+      delete section.dataset.funnelStatic;
+      clearInlineStepPositions(section);
     };
   }, []);
 

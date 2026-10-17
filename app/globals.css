@@ -92,23 +92,50 @@ html[data-pz-intro="pending"] {
     margin-top: 0;
   }
 
-  /* Soft-hide desktop step chrome until the funnel is painted — no layout shift.
-     Keep buttons inert while hidden so they cannot steal nav clicks. */
-  #pz-home-hero:not([data-funnel-ready]) #pz-hero-steps {
+  /*
+   * Desktop steps are position:absolute for the funnel. Until JS places them
+   * (or we opt into the static right rail), keep them invisible — otherwise all
+   * four labels pile at the section origin as a top-left garble flash.
+   */
+  #pz-home-hero:not([data-funnel-placed]) #pz-hero-steps {
     opacity: 0;
+    visibility: hidden;
   }
 
-  #pz-home-hero:not([data-funnel-ready]) #pz-hero-steps [data-funnel-step] {
+  #pz-home-hero:not([data-funnel-placed]) #pz-hero-steps [data-funnel-step] {
     pointer-events: none !important;
   }
 
-  #pz-home-hero[data-funnel-ready] #pz-hero-steps {
+  #pz-home-hero[data-funnel-placed] #pz-hero-steps {
     opacity: 1;
+    visibility: visible;
     transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  #pz-home-hero[data-funnel-ready] #pz-hero-steps [data-funnel-step] {
+  #pz-home-hero[data-funnel-placed] #pz-hero-steps [data-funnel-step] {
     pointer-events: auto !important;
+  }
+
+  /* Readable right-rail fallback before / without WebGL placement. */
+  #pz-home-hero[data-funnel-static] #pz-hero-steps {
+    inset: 7rem 2rem auto auto;
+    display: flex;
+    width: 14rem;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  #pz-home-hero[data-funnel-static] #pz-hero-steps [data-funnel-step] {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    right: auto !important;
+    width: 100%;
+    transform: none !important;
+  }
+
+  #pz-home-hero[data-funnel-static] #pz-hero-steps [data-funnel-step] > span:first-child {
+    display: none;
   }
 }
 

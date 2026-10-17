@@ -15,6 +15,15 @@ function clearIntroGate() {
   }
 }
 
+/** Wait until the React overlay has painted before dropping the CSS cover. */
+function clearIntroGateAfterPaint() {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      clearIntroGate();
+    });
+  });
+}
+
 function markIntroSeen() {
   try {
     window.sessionStorage.setItem(INTRO_SESSION_KEY, "1");
@@ -75,8 +84,8 @@ export function BrandIntro() {
   return (
     <Animation
       onReady={() => {
-        clearIntroGate();
         markIntroSeen();
+        clearIntroGateAfterPaint();
       }}
     />
   );
