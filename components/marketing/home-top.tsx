@@ -2,7 +2,6 @@ import Link from "next/link";
 import { ArrowRight, BarChart3, Clock3, ShieldCheck } from "lucide-react";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { ComplianceBadges } from "@/components/marketing/compliance-badges";
-import { HeroSteps } from "@/components/marketing/hero-steps";
 import { MobileHeroSky } from "@/components/marketing/mobile-hero-sky";
 
 export function HomeTop() {
@@ -19,7 +18,7 @@ export function HomeTop() {
 
       {/*
         Copy / CTAs sit in a pointer-events-none shell. Interactive children opt
-        back in and stay narrowly sized so they never cover the step labels.
+        back in.
       */}
       <div
         id="pz-hero-content"
@@ -69,11 +68,7 @@ export function HomeTop() {
           </div>
           <ComplianceBadges className="pointer-events-auto mt-1 max-w-xl opacity-90" />
         </div>
-
-        <div id="pz-hero-band" aria-hidden="true" className="pz-hero-band shrink-0 lg:hidden" />
       </div>
-
-      <HeroSteps />
     </section>
   );
 }
