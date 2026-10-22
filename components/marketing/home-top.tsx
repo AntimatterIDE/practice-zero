@@ -4,14 +4,16 @@ import { SiteHeader } from "@/components/marketing/site-header";
 import { HeroFunnelMount } from "@/components/blocks/hero-funnel-mount";
 import { ComplianceBadges } from "@/components/marketing/compliance-badges";
 import { HeroSteps } from "@/components/marketing/hero-steps";
+import { MobileHeroSky } from "@/components/marketing/mobile-hero-sky";
 
 export function HomeTop() {
   return (
     <section
       id="pz-home-hero"
-      className="relative isolate flex min-h-screen w-full flex-col bg-paper px-4 pb-10 pt-6 text-ink sm:px-6 lg:px-8 lg:pb-12"
+      className="relative isolate flex min-h-screen w-full flex-col bg-[#E7ECFB] px-4 pb-10 pt-6 text-ink sm:px-6 lg:bg-paper lg:px-8 lg:pb-12"
     >
       {/* No overflow-x-clip on this section — it breaks sticky hide-on-scroll for the header. */}
+      <MobileHeroSky />
       <div className="relative z-50 mx-auto w-full max-w-[1400px]">
         <SiteHeader />
       </div>

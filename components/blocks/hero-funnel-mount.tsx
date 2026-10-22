@@ -58,17 +58,16 @@ export function HeroFunnelMount() {
     let started = false;
     let pendingFocus = 1;
     let detachEngagement = () => {};
+    const mobile = window.matchMedia("(max-width: 1023px)");
 
     const start = () => {
       if (cancelled || started || shouldSkipHeavyVisuals()) return;
+      // Phones use the cloud field. The funnel stays the desktop hero.
+      if (mobile.matches) return;
       started = true;
       detachEngagement();
 
-      const quality =
-        window.matchMedia("(max-width: 1023px)").matches ||
-        window.matchMedia("(pointer: coarse)").matches
-          ? "low"
-          : "high";
+      const quality = window.matchMedia("(pointer: coarse)").matches ? "low" : "high";
 
       void import("@/components/blocks/hero-29-funnel").then(({ createFunnel }) => {
         if (cancelled) return;
@@ -101,11 +100,17 @@ export function HeroFunnelMount() {
     };
     window.addEventListener("pz-funnel-select", onSelect);
 
+    const onViewport = () => {
+      if (!mobile.matches) start();
+    };
+    mobile.addEventListener("change", onViewport);
+
     detachEngagement = onUserEngagement(start);
 
     return () => {
       cancelled = true;
       detachEngagement();
+      mobile.removeEventListener("change", onViewport);
       window.removeEventListener("pz-funnel-select", onSelect);
       funnel?.destroy();
       funnel = null;

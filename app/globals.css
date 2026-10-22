@@ -69,13 +69,14 @@ html[data-pz-intro="pending"] {
 
 /*
  * Funnel layout is stable from first paint:
- * - Mobile band height is always reserved (canvas fades in) — no CLS when WebGL mounts.
+ * - The band stays in the DOM for desktop placement math, but it no longer
+ *   reserves a canvas hole. Mobile uses the cloud field behind the copy.
  * - Desktop step list stays absolute (Tailwind lg:absolute) — never flips from flow → overlay.
  */
 .pz-hero-band {
   display: block;
-  height: min(19rem, 76vw);
-  margin-top: 2rem;
+  height: 0;
+  margin-top: 0;
   opacity: 0;
   transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
