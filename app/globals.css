@@ -67,88 +67,12 @@ html[data-pz-intro="pending"] {
   overflow: hidden;
 }
 
-/*
- * Funnel layout is stable from first paint:
- * - The band stays in the DOM for desktop placement math, but it no longer
- *   reserves a canvas hole. Mobile uses the cloud field behind the copy.
- * - Desktop step list stays absolute (Tailwind lg:absolute) — never flips from flow → overlay.
- */
+/* The hero band is a leftover placement hook. It must not reserve space. */
 .pz-hero-band {
   display: block;
   height: 0;
   margin-top: 0;
-  opacity: 0;
-  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
-}
-
-#pz-home-hero[data-funnel-ready] .pz-hero-band {
-  opacity: 1;
-}
-
-@media (min-width: 1024px) {
-  .pz-hero-band {
-    display: none;
-    height: 0;
-    margin-top: 0;
-  }
-
-  /*
-   * Desktop steps are position:absolute for the funnel. Keep them invisible
-   * until the canvas has placed them — otherwise the four labels show with no
-   * graphic, or pile at the section origin.
-   */
-  #pz-home-hero:not([data-funnel-placed]) #pz-hero-steps {
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  #pz-home-hero:not([data-funnel-placed]) #pz-hero-steps [data-funnel-step] {
-    pointer-events: none !important;
-  }
-
-  #pz-home-hero[data-funnel-placed] #pz-hero-steps {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  #pz-home-hero[data-funnel-placed] #pz-hero-steps [data-funnel-step] {
-    pointer-events: auto !important;
-  }
-
-  /*
-   * Readable right-rail fallback before / without WebGL placement.
-   * The list also carries lg:px-8 and each label is 14rem, which used to
-   * push the counts past the viewport until the funnel repositioned them.
-   */
-  #pz-home-hero[data-funnel-static] #pz-hero-steps {
-    inset: 7rem 2rem auto auto;
-    display: flex;
-    width: 16rem;
-    max-width: calc(100% - 4rem);
-    flex-direction: column;
-    gap: 0.15rem;
-    padding-right: 0;
-    padding-left: 0;
-  }
-
-  #pz-home-hero[data-funnel-static] #pz-hero-steps [data-funnel-step] {
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
-    right: auto !important;
-    width: 100%;
-    transform: none !important;
-  }
-
-  #pz-home-hero[data-funnel-static] #pz-hero-steps [data-funnel-step] > span:last-child {
-    width: 100%;
-  }
-
-  #pz-home-hero[data-funnel-static] #pz-hero-steps [data-funnel-step] > span:first-child {
-    display: none;
-  }
 }
 
 body {

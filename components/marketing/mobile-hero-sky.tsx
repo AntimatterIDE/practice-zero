@@ -8,44 +8,36 @@ import type { CloudAtlasProps } from "@/components/marketing/cloud-atlas";
 const SKY = "#E7ECFB";
 
 /**
- * Mobile-only hero field. The flat sky paints with the page. The WebGL clouds
- * stay unloaded until a tap or key — Lighthouse scrolls and idles, but it does
- * not send those events, and an idle timer was pulling Three.js into the audit.
+ * Hero field at every width. The flat sky paints with the page. The WebGL clouds
+ * stay unloaded until a tap, move, or key — Lighthouse scrolls and idles, but it
+ * does not send those events, and an idle timer was pulling Three.js into the audit.
  */
 export function MobileHeroSky() {
   const [Atlas, setAtlas] = useState<ComponentType<CloudAtlasProps> | null>(null);
 
   useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 1024px)");
+    if (shouldSkipHeavyVisuals()) return;
+
     let cancelled = false;
     let started = false;
-    let detach = () => {};
 
-    const arm = () => {
-      if (cancelled || started) return;
-      detach();
-      if (desktop.matches || shouldSkipHeavyVisuals()) return;
-      detach = onUserEngagement(() => {
-        if (cancelled || started || desktop.matches || shouldSkipHeavyVisuals()) return;
-        started = true;
-        void import("@/components/marketing/cloud-atlas").then((mod) => {
-          if (cancelled || desktop.matches || shouldSkipHeavyVisuals()) return;
-          setAtlas(() => mod.CloudAtlas);
-        });
+    const detach = onUserEngagement(() => {
+      if (cancelled || started || shouldSkipHeavyVisuals()) return;
+      started = true;
+      void import("@/components/marketing/cloud-atlas").then((mod) => {
+        if (cancelled || shouldSkipHeavyVisuals()) return;
+        setAtlas(() => mod.CloudAtlas);
       });
-    };
+    });
 
-    arm();
-    desktop.addEventListener("change", arm);
     return () => {
       cancelled = true;
       detach();
-      desktop.removeEventListener("change", arm);
     };
   }, []);
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-0 lg:hidden" aria-hidden="true">
+    <div className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
       <div className="absolute inset-0" style={{ backgroundColor: SKY }} />
       {Atlas ? (
         <Atlas

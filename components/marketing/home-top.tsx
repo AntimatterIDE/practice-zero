@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, BarChart3, Clock3, ShieldCheck } from "lucide-react";
 import { SiteHeader } from "@/components/marketing/site-header";
-import { HeroFunnelMount } from "@/components/blocks/hero-funnel-mount";
 import { ComplianceBadges } from "@/components/marketing/compliance-badges";
 import { HeroSteps } from "@/components/marketing/hero-steps";
 import { MobileHeroSky } from "@/components/marketing/mobile-hero-sky";
@@ -10,7 +9,7 @@ export function HomeTop() {
   return (
     <section
       id="pz-home-hero"
-      className="relative isolate flex min-h-screen w-full flex-col bg-[#E7ECFB] px-4 pb-10 pt-6 text-ink sm:px-6 lg:bg-paper lg:px-8 lg:pb-12"
+      className="relative isolate flex min-h-screen w-full flex-col bg-[#E7ECFB] px-4 pb-10 pt-6 text-ink sm:px-6 lg:px-8 lg:pb-12"
     >
       {/* No overflow-x-clip on this section — it breaks sticky hide-on-scroll for the header. */}
       <MobileHeroSky />
@@ -19,9 +18,8 @@ export function HomeTop() {
       </div>
 
       {/*
-        Copy / CTAs sit in a pointer-events-none shell so the WebGL funnel can
-        still receive hover on empty space. Interactive children opt back in —
-        and stay narrowly sized so they never cover the step labels on the right.
+        Copy / CTAs sit in a pointer-events-none shell. Interactive children opt
+        back in and stay narrowly sized so they never cover the step labels.
       */}
       <div
         id="pz-hero-content"
@@ -37,7 +35,7 @@ export function HomeTop() {
           </p>
         </div>
 
-        <div className="mt-8 flex flex-col gap-6 lg:mt-auto">
+        <div className="mt-8 flex flex-col gap-6">
           <div className="pointer-events-auto flex w-fit max-w-full flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
             <Link
               href="/try"
@@ -75,13 +73,7 @@ export function HomeTop() {
         <div id="pz-hero-band" aria-hidden="true" className="pz-hero-band shrink-0 lg:hidden" />
       </div>
 
-      {/*
-        Steps are a direct child of #pz-home-hero so funnel JS coordinates
-        (section-relative) match the absolute containing block.
-      */}
       <HeroSteps />
-
-      <HeroFunnelMount />
     </section>
   );
 }
