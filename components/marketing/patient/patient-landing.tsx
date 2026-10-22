@@ -232,6 +232,23 @@ export function PatientLanding() {
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
             </div>
+            <nav aria-label="Patient pages" className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
+              {[
+                ["Find a physician", "/patient/find"],
+                ["Results", "/patient/results"],
+                ["What you owe", "/patient/bills"],
+                ["Before you arrive", "/patient/prepare"],
+              ].map(([label, href]) => (
+                <Link
+                  key={href}
+                  href={href}
+                  prefetch={false}
+                  className="text-sm font-medium text-slash transition-colors hover:text-oxide-deep"
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
           </FadeIn>
           <PortalLoginCard />
         </div>
