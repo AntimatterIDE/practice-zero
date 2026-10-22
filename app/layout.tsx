@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Instrument_Sans, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import { MarketingAnalytics } from "@/components/analytics/marketing-analytics";
 import { SiteChat } from "@/components/marketing/site-chat";
 import { ScrollToTop } from "@/components/scroll-to-top";
@@ -15,22 +15,25 @@ export const viewport: Viewport = {
   interactiveWidget: "overlays-content",
 };
 
-const sans = Instrument_Sans({
-  subsets: ["latin"],
-  weight: ["400", "600"],
+const sans = localFont({
+  src: [
+    { path: "./fonts/instrument-sans-latin-400.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/instrument-sans-latin-600.woff2", weight: "600", style: "normal" },
+  ],
   variable: "--font-sans-family",
   // optional avoids long LCP render-delay while the webfont arrives on slow mobile.
   display: "optional",
-  adjustFontFallback: true,
+  adjustFontFallback: "Arial",
   preload: true,
 });
 
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
+const mono = localFont({
+  src: [
+    { path: "./fonts/jetbrains-mono-latin-400.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/jetbrains-mono-latin-500.woff2", weight: "500", style: "normal" },
+  ],
   variable: "--font-mono-family",
   display: "optional",
-  adjustFontFallback: true,
   preload: false,
 });
 
