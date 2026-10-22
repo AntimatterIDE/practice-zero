@@ -20,14 +20,6 @@ function clearInlineStepPositions(section: HTMLElement) {
   });
 }
 
-/** Right-rail layout so steps never pile at (0,0) before the funnel places them. */
-function enableStaticSteps(section: HTMLElement) {
-  clearInlineStepPositions(section);
-  section.dataset.funnelStatic = "1";
-  section.dataset.funnelPlaced = "1";
-  markFunnelReady(section);
-}
-
 function enableFunnelSteps(section: HTMLElement) {
   delete section.dataset.funnelStatic;
   section.dataset.funnelPlaced = "1";
@@ -35,16 +27,13 @@ function enableFunnelSteps(section: HTMLElement) {
 }
 
 /**
- * Paint a static step rail immediately. Load Three.js only after real
- * pointer/key intent — never on a timer or intro-exit.
+ * Desktop counts stay hidden until the funnel canvas has drawn.
+ * Load Three.js only after real pointer/key intent — never on a timer or intro-exit.
  */
 export function HeroFunnelMount() {
   useEffect(() => {
     const section = document.getElementById("pz-home-hero");
     if (!section) return;
-
-    // Always start static — avoids the top-left garble while WebGL is deferred.
-    enableStaticSteps(section);
 
     if (shouldSkipHeavyVisuals()) return;
 
@@ -85,8 +74,6 @@ export function HeroFunnelMount() {
         if (funnel) {
           enableFunnelSteps(section);
           funnel.focus(pendingFocus);
-        } else {
-          enableStaticSteps(section);
         }
       });
     };

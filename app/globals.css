@@ -94,9 +94,9 @@ html[data-pz-intro="pending"] {
   }
 
   /*
-   * Desktop steps are position:absolute for the funnel. Until JS places them
-   * (or we opt into the static right rail), keep them invisible — otherwise all
-   * four labels pile at the section origin as a top-left garble flash.
+   * Desktop steps are position:absolute for the funnel. Keep them invisible
+   * until the canvas has placed them — otherwise the four labels show with no
+   * graphic, or pile at the section origin.
    */
   #pz-home-hero:not([data-funnel-placed]) #pz-hero-steps {
     opacity: 0;
