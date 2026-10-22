@@ -117,13 +117,20 @@ html[data-pz-intro="pending"] {
     pointer-events: auto !important;
   }
 
-  /* Readable right-rail fallback before / without WebGL placement. */
+  /*
+   * Readable right-rail fallback before / without WebGL placement.
+   * The list also carries lg:px-8 and each label is 14rem, which used to
+   * push the counts past the viewport until the funnel repositioned them.
+   */
   #pz-home-hero[data-funnel-static] #pz-hero-steps {
     inset: 7rem 2rem auto auto;
     display: flex;
-    width: 14rem;
+    width: 16rem;
+    max-width: calc(100% - 4rem);
     flex-direction: column;
     gap: 0.15rem;
+    padding-right: 0;
+    padding-left: 0;
   }
 
   #pz-home-hero[data-funnel-static] #pz-hero-steps [data-funnel-step] {
@@ -133,6 +140,10 @@ html[data-pz-intro="pending"] {
     right: auto !important;
     width: 100%;
     transform: none !important;
+  }
+
+  #pz-home-hero[data-funnel-static] #pz-hero-steps [data-funnel-step] > span:last-child {
+    width: 100%;
   }
 
   #pz-home-hero[data-funnel-static] #pz-hero-steps [data-funnel-step] > span:first-child {
