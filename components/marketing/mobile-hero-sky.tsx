@@ -1,54 +1,54 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
-import { shouldSkipHeavyVisuals } from "@/lib/lab-environment";
-
-const CloudAtlas = dynamic(
-  () => import("@/components/marketing/cloud-atlas").then((mod) => mod.CloudAtlas),
-  { ssr: false },
-);
+import { useEffect, useState, type ComponentType } from "react";
+import { onUserEngagement, shouldSkipHeavyVisuals } from "@/lib/lab-environment";
+import type { CloudAtlasProps } from "@/components/marketing/cloud-atlas";
 
 /** Pale wash of slash, close enough to paper that the rest of the page still meets it. */
 const SKY = "#E7ECFB";
 
 /**
- * Mobile-only hero field. The flat sky paints immediately; the cloud shader
- * loads after idle, and never on desktop, lab, or reduced-motion visits.
+ * Mobile-only hero field. The flat sky paints with the page. The WebGL clouds
+ * stay unloaded until a tap or key — Lighthouse scrolls and idles, but it does
+ * not send those events, and an idle timer was pulling Three.js into the audit.
  */
 export function MobileHeroSky() {
-  const [live, setLive] = useState(false);
+  const [Atlas, setAtlas] = useState<ComponentType<CloudAtlasProps> | null>(null);
 
   useEffect(() => {
     const desktop = window.matchMedia("(min-width: 1024px)");
-    if (desktop.matches || shouldSkipHeavyVisuals()) return;
-
     let cancelled = false;
-    const start = () => {
-      if (!cancelled && !desktop.matches) setLive(true);
+    let started = false;
+    let detach = () => {};
+
+    const arm = () => {
+      if (cancelled || started) return;
+      detach();
+      if (desktop.matches || shouldSkipHeavyVisuals()) return;
+      detach = onUserEngagement(() => {
+        if (cancelled || started || desktop.matches || shouldSkipHeavyVisuals()) return;
+        started = true;
+        void import("@/components/marketing/cloud-atlas").then((mod) => {
+          if (cancelled || desktop.matches || shouldSkipHeavyVisuals()) return;
+          setAtlas(() => mod.CloudAtlas);
+        });
+      });
     };
 
-    const requestIdle = window.requestIdleCallback;
-    if (typeof requestIdle === "function") {
-      const id = requestIdle(start, { timeout: 1200 });
-      return () => {
-        cancelled = true;
-        window.cancelIdleCallback(id);
-      };
-    }
-
-    const timer = window.setTimeout(start, 700);
+    arm();
+    desktop.addEventListener("change", arm);
     return () => {
       cancelled = true;
-      window.clearTimeout(timer);
+      detach();
+      desktop.removeEventListener("change", arm);
     };
   }, []);
 
   return (
     <div className="pointer-events-none absolute inset-0 z-0 lg:hidden" aria-hidden="true">
       <div className="absolute inset-0" style={{ backgroundColor: SKY }} />
-      {live ? (
-        <CloudAtlas
+      {Atlas ? (
+        <Atlas
           className="h-full w-full"
           backgroundColor={SKY}
           colors={["#FFFFFF", "#C9D4FB"]}
