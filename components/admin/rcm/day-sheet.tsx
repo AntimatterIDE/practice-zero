@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 
 const practiceRooms = ["Room 1", "Room 2", "Procedure"];
 
-/** Rem per hour column — wide enough that short visits stay readable. */
+/** Rem per hour row — tall enough that short visits stay readable. */
 const HOUR_REM = 12;
-const ROOM_LABEL_REM = 8.75;
+const TIME_LABEL_REM = 4.25;
 /** Floor so name + time + Record never collapse into a strip. */
 const MIN_CARD_REM = 12;
 const GUTTER_REM = 0.35;
@@ -106,52 +106,62 @@ export function DaySheet({
         </div>
         <p className="text-sm text-muted">{visits.length === 0 ? empty : `${visits.length} on the board`}</p>
       </div>
-      <div className="overflow-x-auto">
-        <div style={{ minWidth: `${ROOM_LABEL_REM + hours.length * HOUR_REM}rem` }}>
+      <div className="overflow-auto">
+        <div style={{ minWidth: `${TIME_LABEL_REM + rooms.length * laneHeight}rem` }}>
           <div
             className="grid"
-            style={{ gridTemplateColumns: `${ROOM_LABEL_REM}rem repeat(${hours.length}, minmax(${HOUR_REM}rem, 1fr))` }}
+            style={{
+              gridTemplateColumns: `${TIME_LABEL_REM}rem ${rooms
+                .map((room) => {
+                  const placed = byRoom.get(room) ?? [];
+                  const lanes = Math.max(1, ...placed.map((item) => item.lane + 1));
+                  return `minmax(${lanes * laneHeight}rem, 1fr)`;
+                })
+                .join(" ")}`,
+            }}
           >
             <div className="bg-mist/40" />
-            {hours.map((hour) => (
-              <div key={hour} className="border-l border-line bg-mist/40 px-3 py-2.5 text-[0.7rem] font-semibold text-muted">
-                {hourLabel(hour)}
-              </div>
-            ))}
-          </div>
-          {rooms.map((room) => {
-            const placed = byRoom.get(room) ?? [];
-            const lanes = Math.max(1, ...placed.map((item) => item.lane + 1), 1);
-            return (
-              <div
-                key={room}
-                className="grid border-t border-line"
-                style={{ gridTemplateColumns: `${ROOM_LABEL_REM}rem minmax(0, 1fr)` }}
-              >
-                <div className="bg-card px-3 py-3">
+            {rooms.map((room) => {
+              const placed = byRoom.get(room) ?? [];
+              return (
+                <div key={room} className="border-l border-line bg-mist/40 px-3 py-3">
                   <p className="font-display text-xl leading-none">{room}</p>
                   <p className="mt-1 text-xs text-muted">
                     {placed.length === 0 ? "Open" : `${placed.length} ${placed.length === 1 ? "visit" : "visits"}`}
                   </p>
                 </div>
+              );
+            })}
+            <div className="relative border-t border-line bg-mist/40" style={{ height: `${hours.length * HOUR_REM}rem` }}>
+              {hours.map((hour, index) => (
                 <div
-                  className="relative border-l border-line"
-                  style={{ minHeight: `${placed.length === 0 ? 4.75 : lanes * laneHeight + 0.9}rem` }}
+                  key={hour}
+                  className="absolute left-0 right-0 px-2 pt-1 text-[0.7rem] font-semibold text-muted"
+                  style={{ top: `${index * HOUR_REM}rem` }}
                 >
-                  <div
-                    className="pointer-events-none absolute inset-0 grid"
-                    style={{ gridTemplateColumns: `repeat(${hours.length}, minmax(0, 1fr))` }}
-                  >
+                  {hourLabel(hour)}
+                </div>
+              ))}
+            </div>
+            {rooms.map((room) => {
+              const placed = byRoom.get(room) ?? [];
+              return (
+                <div
+                  key={room}
+                  className="relative border-t border-l border-line"
+                  style={{ height: `${hours.length * HOUR_REM}rem` }}
+                >
+                  <div className="pointer-events-none absolute inset-0 flex flex-col">
                     {hours.map((hour) => (
-                      <div key={hour} className="border-l border-line/70 first:border-l-0" />
+                      <div key={hour} className="flex-1 border-t border-line/70 first:border-t-0" />
                     ))}
                   </div>
                   {placed.map(({ visit, lane }) => {
                     const name = names.get(visit.patientId) ?? "Unknown patient";
                     const start = minutes(visit.start);
                     const duration = visit.durationMinutes || 30;
-                    const leftPct = ((start - windowStart) / span) * 100;
-                    const naturalWidthPct = (duration / span) * 100;
+                    const topPct = ((start - windowStart) / span) * 100;
+                    const naturalHeightPct = (duration / span) * 100;
                     const openVisit = recordHref?.(visit, name);
                     const durationShare = Math.min(1, duration / Math.max(duration, minVisualMinutes));
                     return (
@@ -167,10 +177,10 @@ export function DaySheet({
                           visit.status === "scheduled" && "border-line bg-card",
                         )}
                         style={{
-                          left: `calc(${leftPct}% + ${GUTTER_REM}rem)`,
-                          width: `max(calc(${naturalWidthPct}% - ${GUTTER_REM * 2}rem), ${MIN_CARD_REM}rem)`,
-                          top: `${0.45 + lane * laneHeight}rem`,
-                          height: `${laneHeight - 0.65}rem`,
+                          top: `calc(${topPct}% + ${GUTTER_REM}rem)`,
+                          height: `max(calc(${naturalHeightPct}% - ${GUTTER_REM * 2}rem), ${MIN_CARD_REM}rem)`,
+                          left: `${0.45 + lane * laneHeight}rem`,
+                          width: `${laneHeight - 0.65}rem`,
                         }}
                       >
                         {openVisit ? (
@@ -228,16 +238,16 @@ export function DaySheet({
                         {/* True duration cue when the card is wider than the slot */}
                         <span
                           aria-hidden
-                          className="pointer-events-none absolute bottom-0 left-0 h-1 rounded-br-2xl rounded-bl-2xl bg-oxide/35"
-                          style={{ width: `${Math.max(18, durationShare * 100)}%` }}
+                          className="pointer-events-none absolute bottom-0 left-0 top-0 w-1 rounded-bl-2xl rounded-tl-2xl bg-oxide/35"
+                          style={{ height: `${Math.max(18, durationShare * 100)}%` }}
                         />
                       </div>
                     );
                   })}
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
