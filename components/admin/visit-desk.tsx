@@ -8,8 +8,18 @@ import { Button } from "@/components/ui/button";
 import { formatTime, patientName } from "@/lib/rcm/format";
 import { LoadingDesk, PageHeader, fieldClass, panelClass, visitLabel } from "@/components/admin/rcm/ui";
 import { useRcm } from "@/components/admin/rcm/store";
-import type { AppointmentStatus } from "@/lib/rcm/types";
+import type { Appointment, AppointmentStatus, Claim, ClaimStatus } from "@/lib/rcm/types";
 import { cn } from "@/lib/utils";
+
+const claimSent = new Set<ClaimStatus>(["submitted", "processing", "accepted", "paid", "denied", "rejected"]);
+
+function claimForVisit(visit: Appointment, claims: Claim[]) {
+  const day = visit.start.slice(0, 10);
+  return (
+    claims.find((claim) => claim.appointmentId === visit.id) ??
+    claims.find((claim) => claim.patientId === visit.patientId && claim.dateOfService === day)
+  );
+}
 
 const statusOrder: AppointmentStatus[] = ["scheduled", "arrived", "in_progress", "completed", "cancelled", "no_show"];
 
@@ -25,7 +35,7 @@ const statusTone: Record<AppointmentStatus, string> = {
 export function VisitDesk() {
   const params = useSearchParams();
   const focus = params.get("appointment") ?? "";
-  const { ready, appointments, patients, visitNotes, revealVisitNote } = useRcm();
+  const { ready, appointments, patients, visitNotes, claims, revealVisitNote } = useRcm();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<AppointmentStatus | "all">("all");
 
@@ -101,6 +111,7 @@ export function VisitDesk() {
           {rows.map((visit) => {
             const note = visitNotes.find((item) => item.appointmentId === visit.id);
             const focused = focus === visit.id;
+            const sent = visit.status === "completed" && claimSent.has(claimForVisit(visit, claims)?.status ?? "draft");
             return (
               <li key={visit.id} className={cn("px-4 py-3.5", focused && "bg-mist/50 ring-1 ring-inset ring-oxide")}>
                 <div className="flex items-start gap-4">
@@ -119,14 +130,26 @@ export function VisitDesk() {
                       {note ? " · Note ready" : ""}
                     </p>
                   </div>
-                  <span
-                    className={cn(
-                      "inline-flex shrink-0 rounded-full px-2.5 py-1 text-xs uppercase tracking-[0.12em]",
-                      statusTone[visit.status],
-                    )}
-                  >
-                    {visitLabel(visit.status)}
-                  </span>
+                  <div className="flex shrink-0 flex-col items-end gap-1.5">
+                    <span
+                      className={cn(
+                        "inline-flex rounded-full px-2.5 py-1 text-xs uppercase tracking-[0.12em]",
+                        statusTone[visit.status],
+                      )}
+                    >
+                      {visitLabel(visit.status)}
+                    </span>
+                    {visit.status === "completed" ? (
+                      <span
+                        className={cn(
+                          "inline-flex rounded-full px-2.5 py-1 text-xs uppercase tracking-[0.12em]",
+                          sent ? "bg-mint text-oxide-deep" : "bg-amber-50 text-amber-950",
+                        )}
+                      >
+                        {sent ? "Claim sent" : "Claim pending send"}
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
                 {note ? (
                   <div className="mt-3 pl-20">
