@@ -22,6 +22,12 @@ export function patientBalance(
   return Math.max(0, fee - collected - planPaid - writeOff);
 }
 
+export function accountBalance(
+  claims: Pick<Claim, "lines" | "collectedAmount" | "paymentAmount" | "adjustmentAmount">[],
+) {
+  return claims.reduce((sum, claim) => sum + patientBalance(claim), 0);
+}
+
 export function formatDay(value: string) {
   const date = new Date(value.includes("T") ? value : `${value}T12:00:00`);
   if (Number.isNaN(date.getTime())) return value;

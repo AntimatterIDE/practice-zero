@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { patientBalance } from "@/lib/rcm/format";
+import { accountBalance, patientBalance } from "@/lib/rcm/format";
 import { parsePracticeCsv } from "@/lib/rcm/import";
 import { summarizeClaims } from "@/lib/rcm/metrics";
 import { createSeedState } from "@/lib/rcm/seed";
@@ -48,6 +48,8 @@ describe("practice desk fixture", () => {
     expect(paidClaim?.status).toBe("paid");
     expect(paidClaim?.adjustmentAmount ?? 0).toBe(0);
     expect(patientBalance(paidClaim!)).toBe(40);
+    expect(accountBalance(state.claims.filter((claim) => claim.patientId === "pt-hale"))).toBe(0);
+    expect(accountBalance(state.claims.filter((claim) => claim.patientId === "pt-voss"))).toBe(250);
     expect(state.outbox.map((item) => item.kind).sort()).toEqual(["email", "text"]);
     expect(state.agentRuns.map((run) => run.href)).toEqual([
       "/try/eligibility",

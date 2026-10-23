@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { DEMO_CLINIC_DAY, ageFromDob, chartGaps, emptyInjuryCase, primaryCoverage, visitTypeLabel } from "@/lib/rcm/chart";
-import { claimTotal, formatClinicDay, formatDay, formatTime, formatWhen, money, patientName } from "@/lib/rcm/format";
+import { accountBalance, claimTotal, formatClinicDay, formatDay, formatTime, formatWhen, money, patientBalance, patientName } from "@/lib/rcm/format";
 import type {
   Allergy,
   Appointment,
@@ -75,6 +75,10 @@ export function PatientDetail({ id }: { id: string }) {
   const nextVisit = [...relatedVisits].reverse().find((appointment) => appointment.start.slice(0, 10) >= today && appointment.status !== "cancelled");
   const openTasks = tasks.filter((task) => task.patientId === id && task.status === "open");
   const gaps = chartGaps(patient);
+  const account = claims
+    .filter((claim) => claim.patientId === id)
+    .sort((left, right) => left.dateOfService.localeCompare(right.dateOfService) || left.id.localeCompare(right.id));
+  const outstanding = accountBalance(account);
   const severeAllergy = patient.allergies.some((allergy) => allergy.severity === "severe" || allergy.severity === "moderate");
 
   const initials = `${patient.firstName.slice(0, 1)}${patient.lastName.slice(0, 1)}`.toUpperCase();
@@ -149,6 +153,8 @@ export function PatientDetail({ id }: { id: string }) {
             nextVisit={nextVisit}
             openTasks={openTasks}
             gaps={gaps}
+            outstanding={outstanding}
+            visitsOnAccount={account.length}
             onOpen={setTab}
           />
         ) : null}
@@ -166,7 +172,7 @@ export function PatientDetail({ id }: { id: string }) {
         {tab === "visits" ? <Visits visits={relatedVisits} onUpdate={updateAppointment} /> : null}
         {tab === "documents" ? <Documents patient={patient} /> : null}
         {tab === "files" ? <ChartFiles patient={patient} onSave={patchPatient} /> : null}
-        {tab === "billing" ? <Billing claims={claims.filter((claim) => claim.patientId === id)} /> : null}
+        {tab === "billing" ? <Billing claims={account} outstanding={outstanding} /> : null}
       </div>
     </main>
   );
@@ -177,17 +183,33 @@ function Overview({
   nextVisit,
   openTasks,
   gaps,
+  outstanding,
+  visitsOnAccount,
   onOpen,
 }: {
   patient: Patient;
   nextVisit: Appointment | undefined;
   openTasks: { id: string; title: string; detail: string }[];
   gaps: string[];
+  outstanding: number;
+  visitsOnAccount: number;
   onOpen: (tab: Tab) => void;
 }) {
   const coverage = primaryCoverage(patient);
   return (
     <div className="grid gap-4 lg:grid-cols-2">
+      <section className={`${panelClass} lg:col-span-2`}>
+        <p className="text-xs uppercase tracking-[0.14em] text-muted">Outstanding balance</p>
+        <p className="mt-2 font-display text-4xl">{money(outstanding)}</p>
+        <p className="mt-2 text-sm text-muted">
+          {visitsOnAccount === 0
+            ? "No visits on this account."
+            : `${visitsOnAccount} visit${visitsOnAccount === 1 ? "" : "s"} on the account.`}
+        </p>
+        <button type="button" className="mt-3 text-sm underline" onClick={() => onOpen("billing")}>
+          Open the ledger
+        </button>
+      </section>
       <PortalAccess patient={patient} />
       {patient.intakeAnswers?.length ? (
         <section className={`${panelClass} lg:col-span-2`}>
@@ -1250,25 +1272,56 @@ function Documents({ patient }: { patient: Patient }) {
   );
 }
 
-function Billing({ claims }: { claims: Claim[] }) {
+function visitOnAccount(claim: Claim) {
+  const lines = claim.lines.filter((line) => line.includeOnBill !== false);
+  if (!lines.length) return "No service on the bill";
+  return lines.map((line) => `${line.cpt} · ${line.description}`).join("; ");
+}
+
+function Billing({ claims, outstanding }: { claims: Claim[]; outstanding: number }) {
   return (
     <section>
-      <p className="max-w-2xl text-sm text-muted">
-        The billing team files and follows these claims. The practice keeps the chart, the schedule, and what is collected at the visit.
-      </p>
-      <ul className="mt-4 divide-y divide-line border-y border-line">
-        {claims.length === 0 ? <li className="py-3 text-sm text-muted">No claims on this chart.</li> : null}
-        {claims.map((claim) => (
-          <li key={claim.id}>
-            <Link href={`/try/claims/${claim.id}`} className="flex items-center justify-between gap-3 py-3 text-sm">
-              <span>
-                {formatDay(claim.dateOfService)} · {money(claimTotal(claim))}
-              </span>
-              <StatusPill status={claim.status} />
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className={panelClass}>
+        <p className="text-xs uppercase tracking-[0.14em] text-muted">Outstanding balance</p>
+        <p className="mt-2 font-display text-4xl">{money(outstanding)}</p>
+        <p className="mt-2 max-w-2xl text-sm text-muted">
+          Every visit on this chart. The balance is the practice fee, minus what was collected, minus what the plan paid the practice, minus a write-off only when one was recorded.
+        </p>
+      </div>
+      {claims.length === 0 ? <p className="mt-4 text-sm text-muted">No visits on this account.</p> : (
+      <div className="mt-4 overflow-x-auto">
+        <table className="w-full min-w-[52rem] border-y border-line text-left text-sm">
+          <thead>
+            <tr className="text-xs uppercase tracking-[0.12em] text-muted">
+              <th className="py-3 pr-4 font-medium">Date</th>
+              <th className="py-3 pr-4 font-medium">Visit</th>
+              <th className="py-3 pr-4 text-right font-medium">Fee</th>
+              <th className="py-3 pr-4 text-right font-medium">Collected</th>
+              <th className="py-3 pr-4 text-right font-medium">Plan paid</th>
+              <th className="py-3 pr-4 font-medium">Status</th>
+              <th className="py-3 text-right font-medium">Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {claims.map((claim) => (
+              <tr key={claim.id} className="border-t border-line">
+                <td className="py-3 pr-4 align-top">{formatDay(claim.dateOfService)}</td>
+                <td className="py-3 pr-4 align-top">
+                  <Link href={`/try/claims/${claim.id}`} className="underline">
+                    {visitOnAccount(claim)}
+                  </Link>
+                </td>
+                <td className="py-3 pr-4 text-right align-top">{money(claimTotal(claim))}</td>
+                <td className="py-3 pr-4 text-right align-top">{money(claim.collectedAmount ?? 0)}</td>
+                <td className="py-3 pr-4 text-right align-top">{money(claim.paymentAmount ?? 0)}</td>
+                <td className="py-3 pr-4 align-top"><StatusPill status={claim.status} /></td>
+                <td className="py-3 text-right align-top">{money(patientBalance(claim))}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      )}
     </section>
   );
 }
