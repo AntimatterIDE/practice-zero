@@ -66,7 +66,7 @@ const messages = [
   {
     from: "Billing desk",
     when: "Mon",
-    preview: "Your $25 copay posted. A receipt is attached to this message.",
+    preview: "Your $185 practice fee posted. The claim was filed out of network.",
     unread: false,
   },
 ];
@@ -80,7 +80,7 @@ const documents = [
 const updates = [
   { title: "Visit confirmed", detail: "Thu · 9:00 AM · Room 2", tone: "ok" as const },
   { title: "Results ready", detail: "Basic metabolic panel", tone: "info" as const },
-  { title: "Balance update", detail: "$25 copay posted", tone: "ok" as const },
+  { title: "Balance update", detail: "$185 practice fee posted", tone: "ok" as const },
 ];
 
 function FadeIn({
@@ -184,7 +184,7 @@ function ProfileCard() {
       <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
         {[
           ["Phone", "401-555-0144"],
-          ["Coverage", "Pinetree Health · Active"],
+          ["Coverage", "Pinetree Health · out of network"],
           ["Preferred pharmacy", "Hope Street Pharmacy"],
           ["Next visit", "Thu · 9:00 AM"],
         ].map(([label, value]) => (

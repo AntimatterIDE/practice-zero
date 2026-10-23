@@ -94,12 +94,16 @@ export function CategorySection({
   body,
   children,
   flip = false,
+  href,
+  action = "Open the demo",
 }: {
   eyebrow: string;
   title: string;
   body: string;
   children: React.ReactNode;
   flip?: boolean;
+  href?: string;
+  action?: string;
 }) {
   const reduce = useReducedMotion();
   return (
@@ -117,6 +121,11 @@ export function CategorySection({
             {title}
           </h2>
           <p className="mt-5 max-w-md text-base leading-relaxed text-graphite sm:text-lg">{body}</p>
+          {href ? (
+            <Link href={href} className="mt-5 inline-block text-sm font-medium text-slash underline-offset-4 hover:underline">
+              {action}
+            </Link>
+          ) : null}
         </motion.div>
         <motion.div
           className={flip ? "lg:order-1" : undefined}

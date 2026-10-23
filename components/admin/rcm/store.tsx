@@ -327,6 +327,10 @@ export function RcmProvider({ children }: { children: React.ReactNode }) {
           status: input.status ?? "draft",
           source: input.source ?? "manual",
           agentNote: input.agentNote,
+          payerNote: input.payerNote,
+          attachmentName: input.attachmentName,
+          attachmentRequired: input.attachmentRequired,
+          collectedAmount: input.collectedAmount,
           appointmentId: input.appointmentId,
           encounterId: input.encounterId,
           tradingPartnerId: input.tradingPartnerId,
@@ -418,9 +422,25 @@ export function RcmProvider({ children }: { children: React.ReactNode }) {
         const current = getSnapshot();
         const claim = current.claims.find((item) => item.id === id);
         if (!claim) return "That claim is not on this chart.";
+        const at = new Date().toISOString();
+        if (claim.attachmentRequired && !claim.attachmentName?.trim()) {
+          commit({
+            ...current,
+            claims: current.claims.map((item) =>
+              item.id === id
+                ? {
+                    ...item,
+                    status: "held",
+                    holdReason: "A report or image is required before this claim can be filed.",
+                    updatedAt: at,
+                  }
+                : item,
+            ),
+          });
+          return "Held. The claim needs a report or image. The patient balance did not change.";
+        }
         const status = nextLocalClaimStatus(claim.status);
         if (!status) return "This claim is already finished in the demo.";
-        const at = new Date().toISOString();
         const events = [
           ...claim.events,
           { id: nid("ev"), at, kind: "submit" as const, summary: "Submitted in this browser." },
@@ -442,11 +462,13 @@ export function RcmProvider({ children }: { children: React.ReactNode }) {
           payerName: patient.payerName || "Pinetree Health",
           createdAt: new Date().toISOString(),
           active: true,
-          copay: 30,
-          coinsurance: 20,
-          deductibleRemaining: 400,
+          copay: null,
+          coinsurance: 30,
+          deductibleRemaining: 650,
           priorAuthRequired: false,
-          summary: "Pinetree Health still shows active coverage. Office copay is $30. Deductible remaining is $400.",
+          serviceBenefit: true,
+          summary:
+            "Active out-of-network coverage. This is an estimate. Out-of-network deductible remaining $650. Out-of-network coinsurance 30%. This service is a benefit. No prior authorization. The practice fee is due today.",
         };
         commit({ ...current, eligibility: [saved, ...current.eligibility] });
         return saved;

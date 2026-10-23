@@ -7,7 +7,7 @@ import { FadeIn } from "@/components/marketing/patient/fade-in";
 const steps = [
   {
     title: "Sign the open agreement",
-    body: "Assignment of benefits is still open for Paul Wallace.",
+    body: "Assignment of benefits is still open for Paul Wallace. The practice fee due today is $185.",
     href: "/sign/sign-hale-benefits",
     action: "Sign assignment of benefits",
   },

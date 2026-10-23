@@ -7,9 +7,11 @@ export function EftSection() {
   const reduce = useReducedMotion();
   return (
     <CategorySection
-      eyebrow="Collect from payers"
-      title="The June visit came back paid."
-      body="Pinetree Health paid $140 on Anas Khan’s June visit. Enrollment for EFTs is how that money finds the practice — beside patient pay, statements, and balances on the same board."
+      eyebrow="Ledger"
+      title="the june visit came back paid."
+      body="Pinetree Health paid the practice $140 on Anas Khan’s June visit. The unpaid practice fee, $40, is the patient balance on the same ledger as the statement."
+      href="/try/payments"
+      action="Open the ledger"
     >
       <div className="rounded-3xl border border-line bg-white p-6 shadow-xl shadow-ink/10">
         <div className="flex items-end justify-between text-sm">
@@ -34,7 +36,7 @@ export function EftSection() {
             $140
           </motion.div>
         </div>
-        <p className="mt-6 text-xs text-graphite">June 3 visit · remittance June 20 · Anas Khan</p>
+        <p className="mt-6 text-xs text-graphite">June 3 visit · plan paid $140 · patient balance $40</p>
       </div>
     </CategorySection>
   );

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ageFromDob, chartGaps, emptyInjuryCase, primaryCoverage, visitTypeLabel } from "@/lib/rcm/chart";
+import { DEMO_CLINIC_DAY, ageFromDob, chartGaps, emptyInjuryCase, primaryCoverage, visitTypeLabel } from "@/lib/rcm/chart";
 import { claimTotal, formatClinicDay, formatDay, formatTime, formatWhen, money, patientName } from "@/lib/rcm/format";
 import type {
   Allergy,
@@ -132,7 +132,13 @@ export function PatientDetail({ id }: { id: string }) {
               ? patient.allergies.map((allergy) => `${allergy.substance} (${allergy.reaction})`).join(" · ")
               : "No known drug allergies."}
         </p>
-        {coverage ? <p className="mt-1 text-neutral-500">{coverage.payerName} · copay {money(coverage.copay)}</p> : null}
+        {coverage ? (
+          <p className="mt-1 text-neutral-500">
+            {coverage.payerName}
+            {coverage.planName ? ` · ${coverage.planName}` : ""} · {coverage.outOfNetwork ? "Out of network" : "In network"} ·{" "}
+            {coverage.benefitsPaidTo === "practice" ? "plan pays the practice" : "plan pays the patient"}
+          </p>
+        ) : null}
       </div>
       <PatientReach email={patient.email} phone={patient.phone} />
       <ChartTabs tabs={tabs} active={tab} onChange={(key) => setTab(key as Tab)} />
@@ -221,7 +227,9 @@ function Overview({
               {coverage.planName ? ` · ${coverage.planName}` : ""}
             </span>
             <span className="text-muted">
-              Member {coverage.memberId || "not set"} · Copay {money(coverage.copay)} · Subscriber {coverage.subscriberName || "not set"}
+              Member {coverage.memberId || "not set"} · {coverage.outOfNetwork ? "Out of network" : "In network"} ·{" "}
+              {coverage.benefitsPaidTo === "practice" ? "plan pays the practice" : "plan pays the patient"} · Subscriber{" "}
+              {coverage.subscriberName || "not set"}
             </span>
           </p>
         ) : (
@@ -602,6 +610,13 @@ function CoverageDesk({
   eligibility: { id: string; summary: string; active: boolean }[];
   onSave: (id: string, patch: Partial<Patient>) => void;
 }) {
+  const { packets, claims } = useRcm();
+  const assignment = packets.find(
+    (packet) => packet.patientId === patient.id && packet.title === "Assignment of benefits" && packet.status !== "void",
+  );
+  const todayClaim = claims.find((claim) => claim.patientId === patient.id && claim.dateOfService === DEMO_CLINIC_DAY);
+  const feeDue = todayClaim ? claimTotal(todayClaim) : null;
+
   function saveCoverage(coverageId: string, patch: Partial<Coverage>) {
     onSave(patient.id, {
       coverages: patient.coverages.map((coverage) => (coverage.id === coverageId ? { ...coverage, ...patch } : coverage)),
@@ -627,11 +642,17 @@ function CoverageDesk({
               relationship: String(data.get("relationship") ?? "self") as Coverage["relationship"],
               effectiveDate: String(data.get("effectiveDate") ?? ""),
               copay: Number(data.get("copay")) || 0,
+              outOfNetwork: String(data.get("outOfNetwork") ?? "yes") === "yes",
+              benefitsPaidTo: String(data.get("benefitsPaidTo") ?? "patient") === "practice" ? "practice" : "patient",
               rank: String(data.get("rank") ?? coverage.rank) as Coverage["rank"],
             });
           }}
         >
           <h2 className="font-display text-2xl capitalize sm:col-span-2">{coverage.rank} insurance</h2>
+          <p className="text-sm text-muted sm:col-span-2">
+            {coverage.outOfNetwork ? "This practice is out of network for this plan." : "This practice is in network for this plan."}{" "}
+            {coverage.benefitsPaidTo === "practice" ? "Insurance payment goes to the practice." : "Insurance payment goes to the patient."}
+          </p>
           <Field label="Payer">
             <input className={fieldClass} name="payerName" defaultValue={coverage.payerName} />
           </Field>
@@ -658,8 +679,20 @@ function CoverageDesk({
           <Field label="Effective">
             <input className={fieldClass} type="date" name="effectiveDate" defaultValue={coverage.effectiveDate} />
           </Field>
-          <Field label="Office copay">
+          <Field label="Copay on the plan">
             <input className={fieldClass} name="copay" defaultValue={coverage.copay} />
+          </Field>
+          <Field label="Network">
+            <select className={fieldClass} name="outOfNetwork" defaultValue={coverage.outOfNetwork ? "yes" : "no"}>
+              <option value="yes">Out of network</option>
+              <option value="no">In network</option>
+            </select>
+          </Field>
+          <Field label="Insurance payment">
+            <select className={fieldClass} name="benefitsPaidTo" defaultValue={coverage.benefitsPaidTo ?? "patient"}>
+              <option value="patient">Pays the patient</option>
+              <option value="practice">Pays the practice</option>
+            </select>
           </Field>
           <input type="hidden" name="rank" value={coverage.rank} />
           <div className="sm:col-span-2">
@@ -686,6 +719,8 @@ function CoverageDesk({
                   relationship: "self",
                   effectiveDate: "",
                   copay: 0,
+                  outOfNetwork: true,
+                  benefitsPaidTo: "patient",
                 },
               ],
             })
@@ -693,6 +728,20 @@ function CoverageDesk({
         >
           Add secondary insurance
         </Button>
+      ) : null}
+      {assignment ? (
+        <section className={panelClass}>
+          <h2 className="font-display text-2xl">Assignment of benefits</h2>
+          <p className="mt-3 text-sm">
+            {assignment.status === "open" ? "Still open." : assignment.status === "signed" ? "Signed." : "Void."}
+            {feeDue != null ? ` Practice fee due today ${money(feeDue)}.` : ""}
+          </p>
+          {assignment.status === "open" ? (
+            <Link href={`/sign/${assignment.token}`} className="mt-3 inline-block text-sm underline">
+              Sign assignment of benefits
+            </Link>
+          ) : null}
+        </section>
       ) : null}
       {eligibility.length ? (
         <section className={panelClass}>

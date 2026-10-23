@@ -31,7 +31,7 @@ const pillars = [
   {
     icon: FileText,
     title: "Claims without the chase",
-    body: "Eligibility, prior auth, clean claim prep, and denial follow-through run as agent work—so clinical time stays clinical.",
+    body: "Claims agents and payment tracking sit on one loop: check benefits, hold a claim that needs a record, and post the EOB.",
   },
   {
     icon: Wallet,

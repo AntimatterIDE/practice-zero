@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { formatWhen, money, patientName } from "@/lib/rcm/format";
+import { claimTotal, formatWhen, money, patientName } from "@/lib/rcm/format";
+import { lookupFee } from "@/lib/rcm/chart";
 import { Field, LoadingDesk, PageHeader, fieldClass } from "@/components/admin/rcm/ui";
 import { useRcm } from "@/components/admin/rcm/store";
 
@@ -12,11 +13,20 @@ function benefit(value: number | null) {
 }
 
 export function EligibilityDesk() {
-  const { ready, patients, eligibility, runCannedEligibility } = useRcm();
+  const { ready, patients, eligibility, claims, fees, runCannedEligibility } = useRcm();
   const [patientId, setPatientId] = useState("");
   const [message, setMessage] = useState("");
   const names = new Map(patients.map((patient) => [patient.id, patientName(patient)]));
   const resolved = patientId || "pt-hale";
+
+  function practiceFee(forPatient: string) {
+    const related = claims
+      .filter((claim) => claim.patientId === forPatient)
+      .sort((left, right) => right.dateOfService.localeCompare(left.dateOfService));
+    const line = related[0]?.lines.find((item) => item.includeOnBill !== false);
+    if (!line) return null;
+    return lookupFee(fees, line.cpt)?.fee ?? claimTotal({ lines: [line] });
+  }
 
   if (!ready) return <LoadingDesk />;
 
@@ -30,7 +40,7 @@ export function EligibilityDesk() {
       <PageHeader
         kicker="Billing"
         title="Eligibility"
-        lede="Coverage and prior auth status for this morning. Running a check adds another canned result. Nothing leaves this browser."
+        lede="Out-of-network benefits for this morning. Insurance figures are estimates. Amount due today is the practice fee. Running a check adds a canned result. Nothing leaves this browser."
       />
       <div className="mt-8 grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
         <form
@@ -62,8 +72,14 @@ export function EligibilityDesk() {
               </p>
               <p className="mt-3 text-sm">{check.summary}</p>
               <p className="mt-2 text-sm text-muted">
-                Copay {benefit(check.copay)} · Deductible remaining {benefit(check.deductibleRemaining)} · Prior
-                auth {check.priorAuthRequired ? "required" : "not required"}
+                Out of network · deductible remaining {benefit(check.deductibleRemaining)} · coinsurance{" "}
+                {check.coinsurance == null ? "unknown" : `${check.coinsurance}%`} · prior auth{" "}
+                {check.priorAuthRequired ? "required" : "not required"} · service{" "}
+                {check.serviceBenefit == null ? "not confirmed" : check.serviceBenefit ? "is a benefit" : "is not a benefit"}
+              </p>
+              <p className="mt-2 text-sm">
+                Practice fee {practiceFee(check.patientId) == null ? "not on this visit" : money(practiceFee(check.patientId) ?? 0)}.
+                Amount due today is the practice fee. Plan figures above are estimates.
               </p>
               <Link href={`/try/patients/${check.patientId}`} className="mt-3 inline-block text-sm underline">
                 Open chart

@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { Footer11 } from "@/components/blocks/footer-11";
 import { BillingLanding } from "@/components/marketing/billing/billing-landing";
+import { ClaimsSection } from "@/components/marketing/billing/claims";
+import { CoverageSection } from "@/components/marketing/billing/coverage";
+import { DemographicsSection } from "@/components/marketing/billing/demographics";
+import { EftSection } from "@/components/marketing/billing/eft";
+import { EligibilitySection } from "@/components/marketing/billing/eligibility";
+import { FeeScheduleSection } from "@/components/marketing/billing/fee-schedule";
+import { PayersSection } from "@/components/marketing/billing/payers";
+import { CategoryClose } from "@/components/marketing/depth";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { pageOpenGraph } from "@/lib/open-graph";
 
@@ -25,6 +33,17 @@ export default function BillingPage() {
       </div>
       <main>
         <BillingLanding />
+        <FeeScheduleSection />
+        <CoverageSection />
+        <EligibilitySection />
+        <ClaimsSection />
+        <EftSection />
+        <DemographicsSection />
+        <PayersSection />
+        <CategoryClose
+          title="open the ledger."
+          body="Paul Wallace’s $185 fee is collected. The claim is filed out of network."
+        />
       </main>
       <Footer11 />
     </div>

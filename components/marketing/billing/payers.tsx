@@ -10,7 +10,9 @@ export function PayersSection() {
       flip
       eyebrow="Payers"
       title="One plan, on every chart this morning."
-      body="Pinetree Health is the payer across the panel — Paul, Anas, Garrett, Robby, Dannie, Christina, Dawn, and Alex. Choice PPO is the plan on Paul’s coverage."
+      body="Pinetree Health is the payer across the panel. Choice PPO is on Paul’s chart, and it is not a contracted plan. Patients pay the practice fee."
+      href="/try/patients/pt-hale"
+      action="Open the chart"
     >
       <motion.article
         initial={reduce ? false : { rotateX: 18, opacity: 0 }}
@@ -25,7 +27,7 @@ export function PayersSection() {
         <div className="mt-8 grid grid-cols-2 gap-6 text-sm">
           <div>
             <p className="text-graphite/70">Plan</p>
-            <p className="mt-1 font-medium text-ink">Choice PPO</p>
+            <p className="mt-1 font-medium text-ink">Choice PPO · out of network</p>
           </div>
           <div>
             <p className="text-graphite/70">On the 9:00 chart</p>

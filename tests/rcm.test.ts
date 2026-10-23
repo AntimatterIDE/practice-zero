@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { patientBalance } from "@/lib/rcm/format";
 import { parsePracticeCsv } from "@/lib/rcm/import";
 import { summarizeClaims } from "@/lib/rcm/metrics";
 import { createSeedState } from "@/lib/rcm/seed";
@@ -39,9 +40,14 @@ describe("practice desk fixture", () => {
     expect(state.tasks.filter((task) => task.status === "open")).toHaveLength(2);
     expect(state.tasks.find((task) => task.id === "task-voss")?.title).toMatch(/prior auth/i);
     expect(state.packets.filter((packet) => packet.status === "open")).toHaveLength(4);
-    expect(state.claims.find((claim) => claim.id === "clm-hale")?.status).toBe("draft");
+    const haleClaim = state.claims.find((claim) => claim.id === "clm-hale");
+    const paidClaim = state.claims.find((claim) => claim.id === "clm-voss-paid");
+    expect(haleClaim?.status).toBe("draft");
+    expect(patientBalance(haleClaim!)).toBe(0);
     expect(state.claims.find((claim) => claim.id === "clm-voss-denial")?.status).toBe("denied");
-    expect(state.claims.find((claim) => claim.id === "clm-voss-paid")?.status).toBe("paid");
+    expect(paidClaim?.status).toBe("paid");
+    expect(paidClaim?.adjustmentAmount ?? 0).toBe(0);
+    expect(patientBalance(paidClaim!)).toBe(40);
     expect(state.outbox.map((item) => item.kind).sort()).toEqual(["email", "text"]);
     expect(state.agentRuns.map((run) => run.href)).toEqual([
       "/try/eligibility",

@@ -241,7 +241,7 @@ function PlatformPreview() {
                   <div className="mt-1.5 space-y-1">
                     {[
                       ["Wallace · 99203", "$185", "Queued"],
-                      ["Khan · 99213", "$92", "Paid"],
+                      ["Khan · 99213", "$140", "Paid"],
                       ["Chen · 99214", "$145", "Draft"],
                     ].map(([label, amount, status]) => (
                       <div key={label} className="flex items-center justify-between text-[9px]">
@@ -292,13 +292,13 @@ function PlatformPreview() {
       {/* Eligibility chip */}
       <div className="absolute bottom-2 left-1 hidden rounded-lg border border-paper/15 bg-[#1c2027] px-2.5 py-1.5 shadow-xl sm:block">
         <p className="font-mono text-[7px] uppercase tracking-[0.14em] text-paper/45">Eligibility</p>
-        <p className="mt-0.5 text-[10px] font-medium text-paper">Pinetree · Active</p>
+        <p className="mt-0.5 text-[10px] font-medium text-paper">Pinetree · out of network</p>
       </div>
 
       {/* Copay chip */}
       <div className="absolute bottom-1.5 left-[8.5rem] hidden rounded-lg bg-slash px-2.5 py-1.5 text-paper shadow-xl sm:block">
-        <p className="font-mono text-[7px] uppercase tracking-[0.14em] text-paper/80">Copay</p>
-        <p className="font-sans text-base font-semibold tracking-tight">$25</p>
+        <p className="font-mono text-[7px] uppercase tracking-[0.14em] text-paper/80">Practice fee</p>
+        <p className="font-sans text-base font-semibold tracking-tight">$185</p>
       </div>
 
       {/* Phone */}

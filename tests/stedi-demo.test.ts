@@ -7,7 +7,12 @@ describe("local claim and eligibility fixture", () => {
     const state = createSeedState();
     const check = state.eligibility.find((item) => item.patientId === "pt-hale");
     expect(check?.active).toBe(true);
-    expect(check?.copay).toBe(25);
+    expect(check?.copay).toBeNull();
+    expect(check?.serviceBenefit).toBe(true);
+    expect(check?.coinsurance).toBe(30);
+    expect(check?.deductibleRemaining).toBe(650);
+    expect(check?.summary).toMatch(/out-of-network/i);
+    expect(check?.summary).toMatch(/\$185/);
     expect(check?.priorAuthRequired).toBe(false);
     const auth = state.eligibility.find((item) => item.patientId === "pt-voss");
     expect(auth?.priorAuthRequired).toBe(true);

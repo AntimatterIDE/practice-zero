@@ -9,8 +9,10 @@ export function EligibilitySection() {
     <CategorySection
       flip
       eyebrow="Eligibility"
-      title="Checked before the room."
-      body="At 8:10, Paul Wallace is active with Pinetree Health. Office copay $25. Deductible remaining $650. Prior authorization status is already on the visit — none required today."
+      title="checked before the room."
+      body="At 8:10, Paul Wallace is active with Pinetree Health, out of network. The practice fee due today is $185. Out-of-network deductible remaining $650 is an estimate. No prior authorization on this visit, and the service is a benefit."
+      href="/try/eligibility"
+      action="Open the benefits check"
     >
       <TiltFrame className="grid grid-cols-2 gap-4">
         <Drift dx={8} dy={10}>
@@ -20,9 +22,9 @@ export function EligibilitySection() {
             viewport={{ once: true }}
             className="rounded-[2rem] bg-ink p-6 text-white"
           >
-            <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Copay</p>
-            <p className="mt-4 font-display text-6xl">$25</p>
-            <p className="mt-3 text-sm text-paper/55">Office visit</p>
+            <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Practice fee</p>
+            <p className="mt-4 font-display text-6xl">$185</p>
+            <p className="mt-3 text-sm text-paper/55">Due today</p>
           </motion.article>
         </Drift>
         <Drift dx={12} dy={6} className="mt-10">
@@ -35,7 +37,7 @@ export function EligibilitySection() {
           >
             <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Deductible left</p>
             <p className="mt-4 font-display text-6xl text-ink">$650</p>
-            <p className="mt-3 text-sm text-graphite">Active · 8:10</p>
+            <p className="mt-3 text-sm text-graphite">Estimate · 8:10</p>
           </motion.article>
         </Drift>
       </TiltFrame>

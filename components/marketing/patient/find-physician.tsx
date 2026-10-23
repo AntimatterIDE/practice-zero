@@ -88,8 +88,8 @@ export function FindPhysician() {
               search by the problem, not only the name.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-graphite">
-              One practice on this demo: Southeast Medical. Paul Wallace’s coverage is Pinetree Health, Choice PPO, with
-              a $25 copay. The physician on file is Elvis Francois, MD.
+              One practice on this demo: Southeast Medical. Paul Wallace’s coverage is Pinetree Health, Choice PPO. It is
+              not a contracted plan, so he pays the practice fee. The physician on file is Elvis Francois, MD.
             </p>
           </FadeIn>
 
@@ -150,7 +150,7 @@ export function FindPhysician() {
           {results.length === 0 ? (
             <p className="mt-6 max-w-xl text-base leading-relaxed text-graphite">
               {!insuranceOk
-                ? "This demo practice bills Pinetree Health, Choice PPO, with a $25 copay. Try that plan, or clear insurance to see every specialty."
+                ? "This demo practice is not contracted with that plan. Patients pay the practice fee. Try Pinetree Health, or clear insurance to see every specialty."
                 : !nameOk
                   ? "The physician on this demo is Elvis Francois, MD, at Southeast Medical. Clear the name to see the specialties."
                   : "No specialty at Southeast Medical matches that problem. Try blood pressure, a rash, or an eye visit."}
@@ -172,7 +172,7 @@ export function FindPhysician() {
                     </div>
                     <div className="rounded-xl bg-mist px-3 py-2.5">
                       <dt className="font-mono text-[9px] uppercase tracking-[0.12em] text-graphite">Coverage</dt>
-                      <dd className="mt-1 font-medium text-ink">Pinetree Health · $25 copay</dd>
+                      <dd className="mt-1 font-medium text-ink">Pays the practice fee</dd>
                     </div>
                   </dl>
                   <div className="mt-5 flex flex-col gap-2 sm:flex-row">

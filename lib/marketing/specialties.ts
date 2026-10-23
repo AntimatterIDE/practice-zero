@@ -73,6 +73,10 @@ export const specialties: SpecialtyContent[] = [
         body: "coverage and auth status tied to the visit so the desk isn’t guessing at check-in.",
       },
       {
+        title: "out-of-network claims",
+        body: "the visit fee is collected at the practice, and the claim is filed out of network.",
+      },
+      {
         title: "claims in motion",
         body: "submitted, action-needed, and remitted work prioritized instead of buried in a payer portal.",
       },
@@ -172,6 +176,10 @@ export const specialties: SpecialtyContent[] = [
       {
         title: "auth pipeline",
         body: "pending, submitted, and approved authorizations tied to the visits that need them.",
+      },
+      {
+        title: "out-of-network claims",
+        body: "the visit fee is collected at the practice, and the claim is filed out of network.",
       },
       {
         title: "claim & remit status",
@@ -373,7 +381,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "eligibility & balances",
-        body: "coverage and patient pay visible early — not at checkout surprises.",
+        body: "the fee is collected at the visit, and the claim is filed out of network.",
       },
       {
         title: "claims & remits",

@@ -3,6 +3,8 @@ import type {
   ChartDocument,
   Claim,
   Coverage,
+  EligibilityResult,
+  FeeScheduleRow,
   InjuryCase,
   LabResult,
   Medication,
@@ -14,6 +16,20 @@ import type {
 } from "@/lib/rcm/types";
 
 export const DEMO_CLINIC_DAY = "2026-10-14";
+
+export const defaultFees: FeeScheduleRow[] = [
+  { id: "fee-99203", cpt: "99203", description: "New patient office visit", fee: 185, effectiveDate: "2026-01-01" },
+  { id: "fee-99213", cpt: "99213", description: "Office visit, low complexity", fee: 145, effectiveDate: "2026-01-01" },
+  { id: "fee-99214", cpt: "99214", description: "Office visit, moderate complexity", fee: 210, effectiveDate: "2026-01-01" },
+  { id: "fee-97110", cpt: "97110", description: "Therapeutic exercise", fee: 78, effectiveDate: "2026-01-01" },
+  { id: "fee-72148", cpt: "72148", description: "MRI lumbar spine", fee: 890, effectiveDate: "2026-01-01" },
+];
+
+export function lookupFee(fees: FeeScheduleRow[], cpt: string) {
+  const code = cpt.trim().toLowerCase();
+  if (!code) return undefined;
+  return fees.find((row) => row.cpt.toLowerCase() === code);
+}
 
 const requiredDocuments = ["Photo ID", "Insurance card", "New patient intake"];
 
@@ -71,6 +87,18 @@ export function defaultCoverage(input: Pick<PatientInput, "firstName" | "lastNam
     relationship: "self",
     effectiveDate: "",
     copay: 0,
+    outOfNetwork: true,
+    benefitsPaidTo: "patient",
+  };
+}
+
+export function normalizeCoverage(coverage: Coverage): Coverage {
+  const stored = coverage as Partial<Coverage>;
+  return {
+    ...coverage,
+    copay: Number(stored.copay) || 0,
+    outOfNetwork: stored.outOfNetwork !== false,
+    benefitsPaidTo: stored.benefitsPaidTo === "practice" ? "practice" : "patient",
   };
 }
 
@@ -181,7 +209,7 @@ export function normalizePatient(patient: Patient): Patient {
   return {
     ...next,
     flags: next.flags ?? [],
-    coverages: next.coverages ?? [],
+    coverages: (next.coverages ?? []).map((coverage) => normalizeCoverage(coverage)),
     problems: next.problems ?? [],
     allergies: next.allergies ?? [],
     medications: (Array.isArray(next.medications) ? next.medications : [])
@@ -251,6 +279,14 @@ export function normalizeClaim(claim: Claim): Claim {
   };
 }
 
+export function normalizeEligibility(check: EligibilityResult): EligibilityResult {
+  const stored = check as Partial<EligibilityResult>;
+  return {
+    ...check,
+    serviceBenefit: stored.serviceBenefit ?? null,
+  };
+}
+
 export function normalizeState(state: RcmState): RcmState {
   return {
     ...state,
@@ -259,12 +295,13 @@ export function normalizeState(state: RcmState): RcmState {
     claims: (state.claims ?? []).map((claim) => normalizeClaim(claim)),
     appointments: state.appointments.map((appointment) => normalizeAppointment(appointment)),
     tasks: state.tasks ?? [],
-    eligibility: state.eligibility ?? [],
+    eligibility: (state.eligibility ?? []).map((check) => normalizeEligibility(check)),
     outbox: state.outbox ?? [],
     agentRuns: state.agentRuns ?? [],
     visitNotes: state.visitNotes ?? [],
     requests: state.requests ?? [],
     packets: state.packets ?? [],
+    fees: state.fees?.length ? state.fees : defaultFees,
   };
 }
 

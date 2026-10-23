@@ -1,28 +1,29 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { money } from "@/lib/rcm/format";
+import { formatDay, money } from "@/lib/rcm/format";
 import { LoadingDesk, PageHeader, fieldClass } from "@/components/admin/rcm/ui";
 import { useRcm } from "@/components/admin/rcm/store";
 
-const codes = [
-  { code: "M54.5", kind: "ICD-10", label: "Low back pain", fee: null },
-  { code: "M54.2", kind: "ICD-10", label: "Cervicalgia", fee: null },
-  { code: "M51.16", kind: "ICD-10", label: "Lumbar disc degeneration", fee: null },
-  { code: "M47.812", kind: "ICD-10", label: "Spondylosis, cervical region", fee: null },
-  { code: "99213", kind: "CPT", label: "Office visit, low complexity", fee: 145 },
-  { code: "99214", kind: "CPT", label: "Office visit, moderate complexity", fee: 210 },
-  { code: "97110", kind: "CPT", label: "Therapeutic exercise", fee: 78 },
-  { code: "72148", kind: "CPT", label: "MRI lumbar spine", fee: 890 },
+const diagnoses = [
+  { code: "M54.5", kind: "ICD-10", label: "Low back pain" },
+  { code: "M54.2", kind: "ICD-10", label: "Cervicalgia" },
+  { code: "M51.16", kind: "ICD-10", label: "Lumbar disc degeneration" },
+  { code: "M47.812", kind: "ICD-10", label: "Spondylosis, cervical region" },
 ] as const;
 
 export function ToolsDesk() {
-  const { ready } = useRcm();
+  const { ready, fees } = useRcm();
   const [query, setQuery] = useState("");
-  const matches = useMemo(() => {
+  const feeMatches = useMemo(() => {
     const term = query.trim().toLowerCase();
-    if (!term) return codes;
-    return codes.filter((item) => `${item.code} ${item.label} ${item.kind}`.toLowerCase().includes(term));
+    if (!term) return fees;
+    return fees.filter((item) => `${item.cpt} ${item.description}`.toLowerCase().includes(term));
+  }, [fees, query]);
+  const diagnosisMatches = useMemo(() => {
+    const term = query.trim().toLowerCase();
+    if (!term) return diagnoses;
+    return diagnoses.filter((item) => `${item.code} ${item.label} ${item.kind}`.toLowerCase().includes(term));
   }, [query]);
 
   if (!ready) return <LoadingDesk />;
@@ -31,8 +32,8 @@ export function ToolsDesk() {
     <main>
       <PageHeader
         kicker="Practice"
-        title="Tools"
-        lede="A short code list. Fees here are examples, not the practice fee schedule."
+        title="Fee schedule"
+        lede="Each row is a CPT code, the procedure, and this practice’s cash fee. Charge entry uses these fees. There is no in-network allowed amount."
       />
       <input
         className={`${fieldClass} mt-8 max-w-md`}
@@ -41,15 +42,29 @@ export function ToolsDesk() {
         placeholder="Search CPT or ICD-10"
         aria-label="Search codes"
       />
+      <h2 className="mt-8 font-display text-2xl">Cash fees</h2>
       <ul className="mt-4 divide-y divide-line border-y border-line">
-        {matches.length === 0 ? <li className="py-4 text-sm text-muted">No codes match.</li> : null}
-        {matches.map((item) => (
+        {feeMatches.length === 0 ? <li className="py-4 text-sm text-muted">No fees match.</li> : null}
+        {feeMatches.map((item) => (
+          <li key={item.id} className="flex items-baseline justify-between gap-4 py-4 text-sm">
+            <span>
+              <span className="font-semibold">{item.cpt}</span>
+              <span className="text-muted"> · {item.description} · effective {formatDay(item.effectiveDate)}</span>
+            </span>
+            <span>{money(item.fee)}</span>
+          </li>
+        ))}
+      </ul>
+      <h2 className="mt-8 font-display text-2xl">Diagnoses</h2>
+      <ul className="mt-4 divide-y divide-line border-y border-line">
+        {diagnosisMatches.length === 0 ? <li className="py-4 text-sm text-muted">No diagnoses match.</li> : null}
+        {diagnosisMatches.map((item) => (
           <li key={item.code} className="flex items-baseline justify-between gap-4 py-4 text-sm">
             <span>
               <span className="font-semibold">{item.code}</span>
               <span className="text-muted"> · {item.kind} · {item.label}</span>
             </span>
-            <span>{item.fee == null ? "Diagnosis" : money(item.fee)}</span>
+            <span className="text-muted">Diagnosis</span>
           </li>
         ))}
       </ul>

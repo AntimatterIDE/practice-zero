@@ -6,8 +6,8 @@ import { CategorySection } from "@/components/marketing/depth";
 const lines = [
   ["Plan", "Choice PPO"],
   ["Member", "PT-44021"],
-  ["Payer", "Pinetree Health"],
-  ["Status", "Active"],
+  ["Network", "Out of network"],
+  ["Payment", "Pays the patient"],
 ];
 
 export function CoverageSection() {
@@ -16,8 +16,10 @@ export function CoverageSection() {
     <CategorySection
       flip
       eyebrow="Find the coverage"
-      title="Coverage, found for the 9:00 patient."
-      body="Paul Wallace’s benefits are already on the chart. Choice PPO, member PT-44021, active with Pinetree Health."
+      title="the plan is on the chart."
+      body="Paul Wallace’s Choice PPO is active with Pinetree Health, member PT-44021. This practice is out of network. Until assignment of benefits is signed, the plan pays the patient."
+      href="/try/patients/pt-hale"
+      action="Open the chart"
     >
       <div className="grid grid-cols-2 gap-3">
         {lines.map(([label, value], index) => (

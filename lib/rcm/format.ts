@@ -12,6 +12,16 @@ export function claimTotal(claim: Pick<Claim, "lines">) {
   return claim.lines.reduce((sum, line) => sum + (line.includeOnBill === false ? 0 : line.charge * line.units), 0);
 }
 
+export function patientBalance(
+  claim: Pick<Claim, "lines" | "collectedAmount" | "paymentAmount" | "adjustmentAmount">,
+) {
+  const fee = claimTotal(claim);
+  const collected = claim.collectedAmount ?? 0;
+  const planPaid = claim.paymentAmount ?? 0;
+  const writeOff = claim.adjustmentAmount ?? 0;
+  return Math.max(0, fee - collected - planPaid - writeOff);
+}
+
 export function formatDay(value: string) {
   const date = new Date(value.includes("T") ? value : `${value}T12:00:00`);
   if (Number.isNaN(date.getTime())) return value;

@@ -1,4 +1,4 @@
-import { defaultDocuments, emptyVitals, withChart } from "@/lib/rcm/chart";
+import { defaultDocuments, defaultFees, emptyVitals, withChart } from "@/lib/rcm/chart";
 import type { Appointment, ChartDocument, Claim, Coverage, Patient, PatientInput, RcmState } from "@/lib/rcm/types";
 
 export const STORAGE_KEY = "practice-zero-demo";
@@ -147,7 +147,9 @@ function coverage(input: Pick<PatientInput, "firstName" | "lastName" | "payerNam
     subscriberName: `${input.firstName} ${input.lastName}`,
     relationship: "self",
     effectiveDate: "2026-01-01",
-    copay: 25,
+    copay: 0,
+    outOfNetwork: true,
+    benefitsPaidTo: "patient",
     ...extra,
   };
 }
@@ -258,7 +260,12 @@ const hale = patient(
       { label: "Allergies", value: "Penicillin, rash" },
     ],
     documents: documents(true),
-    coverages: [coverage({ firstName: "Paul", lastName: "Wallace", payerName: "Pinetree Health", memberId: "PT-44021" }, { planName: "Choice PPO", copay: 25 })],
+    coverages: [
+      coverage(
+        { firstName: "Paul", lastName: "Wallace", payerName: "Pinetree Health", memberId: "PT-44021" },
+        { planName: "Choice PPO", copay: 0, outOfNetwork: true, benefitsPaidTo: "patient" },
+      ),
+    ],
   },
 );
 
@@ -597,6 +604,11 @@ export function createSeedState(): RcmState {
         lines: [line("ln-hale", "99203", "New patient office visit", 185, "I10")],
         source: "agent",
         agentNote: "Queued from this morning's note. Still a draft.",
+        payerNote: "New patient office visit for essential hypertension, I10. The visit note is attached.",
+        attachmentName: "Visit note 2026-10-14.pdf",
+        attachmentRequired: false,
+        collectedAmount: 185,
+        patientResponsibility: 0,
         appointmentId: "appt-hale",
         createdAt: "2026-10-14T09:28:00",
         updatedAt: "2026-10-14T09:28:00",
@@ -633,10 +645,19 @@ export function createSeedState(): RcmState {
         source: "manual",
         createdAt: "2026-06-03T18:00:00",
         updatedAt: "2026-06-20T12:00:00",
-        events: [{ id: "ev-voss-paid", at: "2026-06-20T12:00:00", kind: "835", summary: "Paid $140." }],
+        events: [
+          {
+            id: "ev-voss-paid",
+            at: "2026-06-20T12:00:00",
+            kind: "835",
+            summary: "Plan paid $140. Patient owes the unpaid practice fee, $40.",
+          },
+        ],
         paymentAmount: 140,
-        adjustmentAmount: 40,
-        patientResponsibility: 25,
+        collectedAmount: 0,
+        allowedAmount: 140,
+        remitReason: "Plan paid $140 of the $180 practice fee. The patient owes the unpaid $40.",
+        patientResponsibility: 40,
         remitOutcome: "paid",
       },
     ],
@@ -647,12 +668,13 @@ export function createSeedState(): RcmState {
         payerName: "Pinetree Health",
         createdAt: "2026-10-14T08:10:00",
         active: true,
-        copay: 25,
-        coinsurance: null,
+        copay: null,
+        coinsurance: 30,
         deductibleRemaining: 650,
         priorAuthRequired: false,
+        serviceBenefit: true,
         summary:
-          "Active coverage on file. Office copay $25. Deductible remaining $650. No prior authorization on this visit.",
+          "Active out-of-network coverage. Practice fee $185 is due today. Out-of-network deductible remaining $650. Out-of-network coinsurance 30% is an estimate. This service is a benefit. No prior authorization on this visit.",
       },
       {
         id: "elig-voss",
@@ -660,11 +682,13 @@ export function createSeedState(): RcmState {
         payerName: "Pinetree Health",
         createdAt: "2026-10-14T08:12:00",
         active: true,
-        copay: 40,
-        coinsurance: null,
+        copay: null,
+        coinsurance: 30,
         deductibleRemaining: 900,
         priorAuthRequired: true,
-        summary: "Active coverage. Imaging prior authorization is required before the study.",
+        serviceBenefit: true,
+        summary:
+          "Active out-of-network coverage. Imaging prior authorization is required before the study. Out-of-network deductible remaining $900. Coinsurance 30% is an estimate.",
       },
     ],
     outbox: [
@@ -679,7 +703,7 @@ export function createSeedState(): RcmState {
         id: "out-text",
         kind: "text",
         to: "401-555-0174",
-        body: "Anas, a patient pay balance from the June visit is waiting. Reply if you want a statement.",
+        body: "Anas, $40 is still due from the June visit. Reply if you want a statement.",
         createdAt: "2026-10-14T08:55:00",
       },
     ],
@@ -687,7 +711,7 @@ export function createSeedState(): RcmState {
       {
         id: "run-eligibility",
         title: "Eligibility checked",
-        detail: "Paul Wallace is active — no prior auth on this visit.",
+        detail: "Paul Wallace is active out of network. Practice fee is due today. No prior auth on this visit.",
         href: "/try/eligibility",
         at: "2026-10-14T08:10:00",
       },
@@ -851,5 +875,6 @@ export function createSeedState(): RcmState {
         signedAt: "",
       },
     ],
+    fees: defaultFees,
   };
 }

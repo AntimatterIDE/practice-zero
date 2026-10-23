@@ -19,7 +19,7 @@ const updates = [
   },
   {
     title: "Patient pay update",
-    detail: "$25 copay posted · statement receipt in Messages",
+    detail: "$185 practice fee posted · claim filed out of network",
     when: "Mon",
     icon: DollarSign,
     tone: "ok" as const,

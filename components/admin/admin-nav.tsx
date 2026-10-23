@@ -47,13 +47,13 @@ export const practiceLinks: DeskLink[] = [
 
 export const billingLinks: DeskLink[] = [
   { href: "/try/claims", title: "Claims", body: "Coding through remittance", icon: Receipt },
-  { href: "/try/eligibility", title: "Eligibility", body: "Coverage and prior auth", icon: ShieldCheck },
+  { href: "/try/eligibility", title: "Eligibility", body: "Out-of-network benefits", icon: ShieldCheck },
   { href: "/try/denials", title: "Denials", body: "Rework and appeals", icon: AlertCircle },
   { href: "/try/payments", title: "Payments", body: "Patient pay, posting, and balances", icon: Wallet },
   { href: "/try/claims/drafts", title: "Drafts", body: "Claims not yet submitted", icon: FileEdit },
   { href: "/try/upload", title: "Upload", body: "Import remits and files", icon: Upload },
   { href: "/try/analytics", title: "Analytics", body: "Collections and backlog", icon: BarChart3 },
-  { href: "/try/tools", title: "Tools", body: "Utilities for the desk", icon: Wrench },
+  { href: "/try/tools", title: "Fee schedule", body: "Cash fees by CPT", icon: Wrench },
 ];
 
 export function isActiveDesk(pathname: string, href: string) {

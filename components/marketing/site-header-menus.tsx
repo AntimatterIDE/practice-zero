@@ -250,7 +250,7 @@ const patientSections: Section[] = [
       },
       {
         title: "What you owe",
-        body: "The $25 copay, a receipt, and pay in the browser",
+        body: "The $185 practice fee, collected, claim filed out of network",
         icon: Receipt,
         href: "/patient/bills",
       },
@@ -720,9 +720,9 @@ function FeaturePreview({
 
   if (kind === "claims") {
     const rows = [
-      { label: "Paid", tone: "text-[#8fd4a8]", amount: "$185" },
-      { label: "Draft", tone: "text-[#a8b5f8]", amount: "$240" },
-      { label: "Review", tone: "text-[#f0c36a]", amount: "$92" },
+      { label: "Paid", tone: "text-[#8fd4a8]", amount: "$140" },
+      { label: "Draft", tone: "text-[#a8b5f8]", amount: "$185" },
+      { label: "Balance", tone: "text-[#f0c36a]", amount: "$40" },
     ];
     return (
       <div className="space-y-2">

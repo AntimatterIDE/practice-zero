@@ -6,9 +6,9 @@ import { onUserEngagement, shouldSkipHeavyVisuals } from "@/lib/lab-environment"
 
 const queue = [
   { id: "hale", label: "Paul Wallace · room 2", detail: "Scribe listening" },
-  { id: "claim", label: "Claim · $185", detail: "Queued for payer" },
-  { id: "elena", label: "Anas · balance text", detail: "Waiting in outbox" },
-  { id: "elig", label: "Eligibility · Pinetree", detail: "Active · confirmed" },
+  { id: "claim", label: "Claim · $185", detail: "Collected · out of network" },
+  { id: "elena", label: "Anas · balance text", detail: "$40 still due" },
+  { id: "elig", label: "Eligibility · Pinetree", detail: "Out of network · estimate" },
   { id: "sched", label: "Unconfirmed mornings", detail: "3 still open" },
 ];
 

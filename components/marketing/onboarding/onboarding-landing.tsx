@@ -106,7 +106,7 @@ export function OnboardingLanding() {
             managers: unlimited hours until your needs are met, lightspeed turnaround on
             feature requests, practice-specific components, a custom website at no extra
             charge, and 24/7 support with uptime and maintenance for the life of your
-            agreement.
+            agreement. The practice fee schedule is loaded at go-live.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 12 }}

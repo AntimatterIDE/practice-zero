@@ -21,7 +21,7 @@ export function PatientsSection() {
           <article className="rotate-[4deg] rounded-2xl border border-line bg-white p-5 shadow-xl">
             <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Coverage</p>
             <p className="mt-3 text-lg font-medium text-ink">Pinetree Health</p>
-            <p className="text-sm text-graphite">Choice PPO · PT-44021</p>
+            <p className="text-sm text-graphite">Choice PPO · out of network · PT-44021</p>
           </article>
         </Drift>
         <Drift dx={4} dy={3} className="absolute inset-x-0 top-0">

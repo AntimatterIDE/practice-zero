@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { patientName } from "@/lib/rcm/format";
-import { DEMO_CLINIC_DAY } from "@/lib/rcm/chart";
+import { DEMO_CLINIC_DAY, lookupFee } from "@/lib/rcm/chart";
 import { AccountNoteDialog } from "@/components/admin/rcm/account-note";
 import { Field, LoadingDesk, PageHeader, fieldClass } from "@/components/admin/rcm/ui";
 import { useRcm } from "@/components/admin/rcm/store";
@@ -34,7 +34,7 @@ const emptyLine = (physician = ""): LineDraft => ({
 export function ClaimForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const { ready, patients, appointments, claims, practice, addClaim, updateClaim } = useRcm();
+  const { ready, patients, appointments, claims, practice, fees, addClaim, updateClaim } = useRcm();
   const requestedPatient = params.get("patient") ?? "";
   const visitId = params.get("visit") || "";
   const claimId = params.get("claim") ?? "";
@@ -94,12 +94,16 @@ export function ClaimForm() {
     const codes = patient.problems.filter((problem) => problem.status === "active").map((problem) => problem.icd).join(", ");
     setLines((current) => [
       ...current.filter((line) => line.cpt || line.charge),
-      ...chosen.map((procedure) => ({
-        ...emptyLine(procedure.physician),
-        cpt: procedure.cpt,
-        description: procedure.description,
-        diagnoses: codes,
-      })),
+      ...chosen.map((procedure) => {
+        const scheduled = lookupFee(fees, procedure.cpt);
+        return {
+          ...emptyLine(procedure.physician),
+          cpt: procedure.cpt,
+          description: scheduled?.description || procedure.description,
+          charge: scheduled ? String(scheduled.fee) : "",
+          diagnoses: codes,
+        };
+      }),
     ]);
     setSelectedProcedures([]);
     setError("");
@@ -135,7 +139,7 @@ export function ClaimForm() {
     }
     const nextLines = parsedLines().filter((line) => line.cpt || status === "held");
     if (status !== "held" && nextLines.some((line) => !line.cpt || !Number.isFinite(line.units) || !Number.isFinite(line.charge))) {
-      setError("Each line needs a CPT, units, and a charge you enter. This desk does not invent a fee.");
+      setError("Each line needs a CPT and units. Use the practice fee, or enter a charge if the code is not on the schedule. This desk does not invent an allowed amount.");
       return;
     }
     if (status === "ready" && !nextLines.some((line) => line.includeOnBill)) {
@@ -226,7 +230,15 @@ export function ClaimForm() {
           <fieldset key={index} className="grid gap-3 rounded-2xl border border-line bg-card p-4 shadow-[0_16px_36px_-28px_rgb(7_30_54_/_0.45)] sm:grid-cols-2">
             <legend className="px-1 font-display text-xl">Line {index + 1}</legend>
             <Field label="CPT">
-              <input className={fieldClass} value={line.cpt} onChange={(event) => updateLine(index, { cpt: event.target.value })} />
+              <input
+                className={fieldClass}
+                value={line.cpt}
+                onChange={(event) => {
+                  const cpt = event.target.value;
+                  const scheduled = lookupFee(fees, cpt);
+                  updateLine(index, scheduled ? { cpt, description: scheduled.description, charge: String(scheduled.fee) } : { cpt });
+                }}
+              />
             </Field>
             <Field label="Diagnoses">
               <input className={fieldClass} value={line.diagnoses} onChange={(event) => updateLine(index, { diagnoses: event.target.value })} placeholder="M54.50" />
@@ -253,7 +265,7 @@ export function ClaimForm() {
             <Field label="Units">
               <input className={fieldClass} value={line.units} onChange={(event) => updateLine(index, { units: event.target.value })} />
             </Field>
-            <Field label="Charge">
+            <Field label="Practice fee">
               <input className={fieldClass} value={line.charge} onChange={(event) => updateLine(index, { charge: event.target.value })} />
             </Field>
             <label className="flex items-center gap-2 text-sm">

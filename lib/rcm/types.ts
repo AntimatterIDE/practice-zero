@@ -35,6 +35,8 @@ export type CoverageRank = "primary" | "secondary";
 
 export type SubscriberRelation = "self" | "spouse" | "child" | "other";
 
+export type BenefitsPayee = "practice" | "patient";
+
 export type DocumentStatus = "missing" | "received" | "signed";
 
 export type PatientRegistration = {
@@ -63,7 +65,17 @@ export type Coverage = {
   relationship: SubscriberRelation;
   effectiveDate: string;
   copay: number;
+  outOfNetwork: boolean;
+  benefitsPaidTo: BenefitsPayee;
   tradingPartnerId?: string;
+};
+
+export type FeeScheduleRow = {
+  id: string;
+  cpt: string;
+  description: string;
+  fee: number;
+  effectiveDate: string;
 };
 
 export type Problem = {
@@ -228,9 +240,15 @@ export type Claim = {
   holdReason?: string;
   returnReason?: string;
   attachmentId?: string;
+  payerNote?: string;
+  attachmentName?: string;
+  attachmentRequired?: boolean;
   demoScenario?: DemoScenario;
   events: ClaimEvent[];
   paymentAmount?: number | null;
+  collectedAmount?: number | null;
+  allowedAmount?: number | null;
+  remitReason?: string;
   adjustmentAmount?: number | null;
   patientResponsibility?: number | null;
   remitOutcome?: RemitOutcome;
@@ -264,6 +282,10 @@ export type ClaimInput = {
   holdReason?: string;
   demoScenario?: DemoScenario;
   idempotencyKey?: string;
+  payerNote?: string;
+  attachmentName?: string;
+  attachmentRequired?: boolean;
+  collectedAmount?: number | null;
 };
 
 export type Vitals = {
@@ -319,6 +341,7 @@ export type EligibilityResult = {
   coinsurance: number | null;
   deductibleRemaining: number | null;
   priorAuthRequired: boolean;
+  serviceBenefit: boolean | null;
   summary: string;
   source?: "stedi" | "discovery";
 };
@@ -418,4 +441,5 @@ export type RcmState = {
   visitNotes: VisitNote[];
   requests: DemoRequest[];
   packets: DemoPacket[];
+  fees: FeeScheduleRow[];
 };

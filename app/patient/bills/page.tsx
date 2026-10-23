@@ -7,12 +7,12 @@ import { pageOpenGraph } from "@/lib/open-graph";
 export const metadata: Metadata = {
   title: "What you owe",
   description:
-    "Paul Wallace’s $25 copay at Southeast Medical, with a receipt and a pay-in-the-browser demo. Nothing is charged.",
+    "Paul Wallace’s $185 practice fee at Southeast Medical, collected, with the claim filed out of network. Nothing is charged.",
   alternates: { canonical: "/patient/bills" },
   openGraph: pageOpenGraph({
     title: "What you owe · practice zero",
     description:
-      "Paul Wallace’s $25 copay at Southeast Medical, with a receipt and a pay-in-the-browser demo. Nothing is charged.",
+      "Paul Wallace’s $185 practice fee at Southeast Medical, collected, with the claim filed out of network. Nothing is charged.",
     url: "/patient/bills",
   }),
 };

@@ -23,8 +23,8 @@ const threads = [
     id: "m3",
     from: "Billing desk",
     when: "Mon",
-    subject: "Copay receipt",
-    body: "Your $25 copay posted successfully. A receipt is attached for your records.",
+    subject: "Practice fee receipt",
+    body: "Your $185 practice fee posted. The claim was filed out of network. A receipt is attached for your records.",
     unread: false,
   },
 ];

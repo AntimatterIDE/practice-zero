@@ -21,7 +21,7 @@ export default function ClaimPrintPage() {
       <h1 className="mt-2 font-display text-4xl">Claim preview</h1>
       <p className="mt-2 text-sm text-muted">A local preview. It stays in this browser.</p>
       <dl className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
-        <div><dt className="text-muted">Practice</dt><dd>{practice.legalName}</dd></div>
+        <div><dt className="text-muted">Billing provider</dt><dd>{practice.legalName}</dd></div>
         <div><dt className="text-muted">NPI</dt><dd>{practice.npi || "Not on file"}</dd></div>
         <div><dt className="text-muted">Patient</dt><dd>{patientName(patient)}</dd></div>
         <div><dt className="text-muted">Payer</dt><dd>{claim.payerName}</dd></div>
@@ -31,12 +31,18 @@ export default function ClaimPrintPage() {
       <ul className="mt-6 divide-y divide-line border-y border-line">
         {claim.lines.filter((line) => line.includeOnBill).map((line) => (
           <li key={line.id} className="flex justify-between py-3 text-sm">
-            <span>{line.cpt}{line.modifiers.length ? ` ${line.modifiers.join(" ")}` : ""} · {line.diagnoses.join(", ")}</span>
+            <span>
+              {line.cpt}{line.modifiers.length ? ` ${line.modifiers.join(" ")}` : ""} · {line.description}
+              {line.physician ? ` · ${line.physician}` : ""}
+              {line.diagnoses.length ? ` · ${line.diagnoses.join(", ")}` : ""}
+            </span>
             <span>{money(line.charge * line.units)}</span>
           </li>
         ))}
       </ul>
-      <p className="mt-4 text-sm">Total {money(claimTotal(claim))}</p>
+      <p className="mt-4 text-sm">Practice fee {money(claimTotal(claim))}</p>
+      {claim.payerNote ? <p className="mt-4 text-sm">Note to the payer: {claim.payerNote}</p> : null}
+      {claim.attachmentName ? <p className="mt-2 text-sm">Attachment: {claim.attachmentName}</p> : null}
       <div className="mt-6 flex gap-3 print:hidden">
         <button type="button" className="rounded-full bg-oxide px-4 py-2 text-sm text-white" onClick={() => window.print()}>Print</button>
         <Link href={`/try/claims/${claim.id}`} className="text-sm underline">Back</Link>

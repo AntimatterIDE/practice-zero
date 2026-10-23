@@ -9,7 +9,9 @@ export function DemographicsSection() {
     <CategorySection
       eyebrow="Coverage from demographics"
       title="A name and a birthday are enough to start."
-      body="Paul Wallace. March 14, 1988. The member ID can come after. The match on this morning is still Pinetree Health."
+      body="Paul Wallace. March 14, 1988. The member ID can come after. The match on this morning is Pinetree Health, and this practice is out of network for that plan."
+      href="/try/patients/pt-hale"
+      action="Open the chart"
     >
       <div className="relative h-80">
         <motion.article
@@ -31,7 +33,7 @@ export function DemographicsSection() {
         >
           <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Match</p>
           <p className="mt-3 font-display text-3xl">Pinetree Health</p>
-          <p className="mt-1 text-sm text-paper/55">Choice PPO · PT-44021</p>
+          <p className="mt-1 text-sm text-paper/55">Choice PPO · out of network</p>
         </motion.article>
       </div>
     </CategorySection>

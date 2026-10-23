@@ -60,11 +60,11 @@ export function HomeHero() {
           </div>
           <div className="pointer-events-none absolute left-0 top-full z-20 hidden max-w-[12.5rem] -translate-x-3 -translate-y-3 rounded-2xl border border-line bg-card p-3 shadow-xl sm:block lg:-translate-x-5">
             <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-graphite">Eligibility</p>
-            <p className="mt-1 text-sm font-medium text-ink">Pinetree Health · Active</p>
+            <p className="mt-1 text-sm font-medium text-ink">Pinetree · out of network</p>
           </div>
           <div className="pointer-events-none absolute bottom-full right-0 z-20 hidden translate-x-3 translate-y-3 rounded-2xl bg-slash px-4 py-3 text-paper shadow-xl sm:block lg:translate-x-5">
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-paper">Copay</p>
-            <p className="mt-1 font-sans text-2xl font-semibold tracking-tight">$25</p>
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-paper">Practice fee</p>
+            <p className="mt-1 font-sans text-2xl font-semibold tracking-tight">$185</p>
           </div>
         </div>
       </div>
