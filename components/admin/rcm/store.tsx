@@ -374,6 +374,7 @@ export function RcmProvider({ children }: { children: React.ReactNode }) {
           vitals: emptyVitals(),
           copayCollected: null,
           scheduledProcedures: [],
+          addOns: [],
           opNoteStatus: "not_required",
           unableToCode: false,
           codingFlag: "",

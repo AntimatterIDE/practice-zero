@@ -243,6 +243,9 @@ export function normalizeAppointment(appointment: Appointment): Appointment {
     copayCollected: stored.copayCollected ?? null,
     vitals: { ...emptyVitals(), ...stored.vitals },
     scheduledProcedures: stored.scheduledProcedures ?? [],
+    addOns: Array.isArray(stored.addOns)
+      ? stored.addOns.filter((item) => item && typeof item.fee === "number" && item.description)
+      : [],
     opNoteStatus: stored.opNoteStatus ?? "not_required",
     unableToCode: stored.unableToCode ?? false,
     codingFlag: stored.codingFlag ?? "",

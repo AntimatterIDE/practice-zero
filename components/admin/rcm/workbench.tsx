@@ -4,7 +4,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DaySheet } from "@/components/admin/rcm/day-sheet";
 import { chartGaps, focusClinicDay } from "@/lib/rcm/chart";
-import { formatClinicDay, formatTime, formatWhen, patientName } from "@/lib/rcm/format";
+import { checkoutBrief } from "@/lib/rcm/checkout";
+import { formatClinicDay, formatTime, formatWhen, money, patientName } from "@/lib/rcm/format";
 import { recordVisitHref } from "@/lib/rcm/record-visit";
 import { MetricTile } from "@/components/admin/bits/surface";
 import { LoadingDesk, PageHeader, useClinicToday } from "@/components/admin/rcm/ui";
@@ -12,7 +13,7 @@ import { useRcm } from "@/components/admin/rcm/store";
 import { cn } from "@/lib/utils";
 
 export function Workbench() {
-  const { ready, patients, appointments, tasks, agentRuns } = useRcm();
+  const { ready, patients, appointments, tasks, agentRuns, claims, visitNotes } = useRcm();
   const today = useClinicToday();
   if (!ready) return <LoadingDesk />;
 
@@ -33,7 +34,20 @@ export function Workbench() {
     .filter((item) => item.gaps.length > 0);
   const gaps = unfinished.slice(0, 4);
 
+  const counter = dayVisits
+    .map((visit) => ({ visit, brief: checkoutBrief({ visit, claims, notes: visitNotes, appointments }) }))
+    .filter((item) => item.brief.atCounter && (item.brief.collectNow > 0 || item.brief.needsBooking));
+
   const queue = [
+    ...counter.map(({ visit, brief }) => ({
+      key: `desk-${visit.id}`,
+      href: "/try/desk",
+      kicker: "Desk",
+      title: names.get(visit.patientId) ?? "Unknown patient",
+      detail: [brief.collectNow > 0 ? `Collect ${money(brief.collectNow)}` : "", brief.needsBooking ? "Return not booked" : ""]
+        .filter(Boolean)
+        .join(" · "),
+    })),
     ...toConfirm.map((appointment) => ({
       key: `call-${appointment.id}`,
       href: `/try/patients/${appointment.patientId}`,
@@ -110,7 +124,13 @@ export function Workbench() {
       </section>
       <div className="mt-6 grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
         <div className="min-w-0 max-w-full">
-          <DaySheet visits={dayVisits} names={names} empty="The schedule is clear." recordHref={recordVisitHref} />
+          <DaySheet
+            visits={dayVisits}
+            names={names}
+            empty="The schedule is clear."
+            recordHref={recordVisitHref}
+            checkout={(visit) => checkoutBrief({ visit, claims, notes: visitNotes, appointments })}
+          />
         </div>
         <aside className="min-w-0 max-w-full overflow-hidden rounded-[var(--rb-r-2xl,14px)] border border-neutral-200/80 bg-white">
           <div className="flex items-end justify-between gap-3 border-b border-neutral-200 px-5 py-4">

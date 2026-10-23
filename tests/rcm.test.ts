@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { checkoutBrief } from "@/lib/rcm/checkout";
 import { accountBalance, patientBalance } from "@/lib/rcm/format";
 import { parsePracticeCsv } from "@/lib/rcm/import";
 import { summarizeClaims } from "@/lib/rcm/metrics";
@@ -62,6 +63,17 @@ describe("practice desk fixture", () => {
     expect(hale?.medications[0]?.eRxStatus).toBe("sent");
     expect(hale?.labs.some((lab) => lab.status === "resulted")).toBe(true);
     expect(state.visitNotes[0]?.revealed).toBe(false);
+    const haleVisit = state.appointments.find((visit) => visit.id === "appt-hale");
+    const haleCheckout = checkoutBrief({
+      visit: haleVisit!,
+      claims: state.claims,
+      notes: state.visitNotes,
+      appointments: state.appointments,
+    });
+    expect(haleCheckout.collectNow).toBe(75);
+    expect(haleCheckout.addOns[0]?.description).toMatch(/electrocardiogram/i);
+    expect(haleCheckout.needsBooking).toBe(true);
+    expect(patientBalance(haleClaim!)).toBe(0);
   });
 
   it("summarizes the fixture claims", () => {

@@ -7,18 +7,19 @@ import { focusClinicDay, visitTypeLabel } from "@/lib/rcm/chart";
 import { formatClinicDay, patientName } from "@/lib/rcm/format";
 import type { AppointmentStatus, ConfirmationStatus, VisitType } from "@/lib/rcm/types";
 import { DaySheet } from "@/components/admin/rcm/day-sheet";
+import { checkoutBrief } from "@/lib/rcm/checkout";
 import { recordVisitHref } from "@/lib/rcm/record-visit";
 import { Field, LoadingDesk, PageHeader, fieldClass, useClinicToday, visitLabel } from "@/components/admin/rcm/ui";
 import { useRcm } from "@/components/admin/rcm/store";
 
 const statuses: AppointmentStatus[] = ["scheduled", "arrived", "in_progress", "completed", "cancelled", "no_show"];
 const visitTypes: VisitType[] = ["new", "follow_up", "procedure", "imaging_review", "post_op"];
-const rooms = ["Room 1", "Room 2", "Procedure"];
+const rooms = ["Room 1", "Room 2", "Room 3"];
 
 export function ScheduleDesk() {
   const params = useSearchParams();
   const today = useClinicToday();
-  const { ready, appointments, patients, practice, addAppointment, updateAppointment, removeAppointment } = useRcm();
+  const { ready, appointments, patients, practice, claims, visitNotes, addAppointment, updateAppointment, removeAppointment } = useRcm();
   const [patientId, setPatientId] = useState(params.get("patient") ?? "");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("09:00");
@@ -69,6 +70,7 @@ export function ScheduleDesk() {
             title={formatClinicDay(focus)}
             empty="No visits on this day."
             recordHref={recordVisitHref}
+            checkout={(visit) => checkoutBrief({ visit, claims, notes: visitNotes, appointments })}
             renderExtra={(appointment) => (
                 <div className="grid min-w-0 gap-1.5">
                   {appointment.confirmation !== "confirmed" && appointment.status !== "cancelled" ? (

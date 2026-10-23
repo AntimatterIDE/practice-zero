@@ -1,12 +1,16 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useRef, useState, type CSSProperties, type ReactNode } from "react";
 import Link from "next/link";
-import { visitTypeLabel } from "@/lib/rcm/chart";
-import { formatTime } from "@/lib/rcm/format";
-import type { Appointment } from "@/lib/rcm/types";
+import { CheckoutPanel } from "@/components/admin/rcm/checkout-panel";
 import { visitLabel } from "@/components/admin/rcm/ui";
+import { visitTypeLabel } from "@/lib/rcm/chart";
+import type { CheckoutBrief } from "@/lib/rcm/checkout";
+import { money, formatTime } from "@/lib/rcm/format";
+import type { Appointment } from "@/lib/rcm/types";
 import { cn } from "@/lib/utils";
 
-const practiceRooms = ["Room 1", "Room 2", "Procedure"];
+const practiceRooms = ["Room 1", "Room 2", "Room 3"];
 
 /** Rem per hour row — tall enough that short visits stay readable. */
 const HOUR_REM = 12;
@@ -48,6 +52,7 @@ export function DaySheet({
   title = "Rooms",
   renderExtra,
   recordHref,
+  checkout,
 }: {
   visits: Appointment[];
   names: Map<string, string>;
@@ -55,6 +60,7 @@ export function DaySheet({
   title?: string;
   renderExtra?: (visit: Appointment) => ReactNode;
   recordHref?: (visit: Appointment, name: string) => string;
+  checkout?: (visit: Appointment) => CheckoutBrief;
 }) {
   const seenRooms = [...new Set(visits.map((visit) => visit.room || "Room 1"))];
   const rooms = [...practiceRooms];
@@ -165,8 +171,12 @@ export function DaySheet({
                     const openVisit = recordHref?.(visit, name);
                     const durationShare = Math.min(1, duration / Math.max(duration, minVisualMinutes));
                     return (
-                      <div
+                      <VisitCard
                         key={visit.id}
+                        visit={visit}
+                        name={name}
+                        openVisit={openVisit}
+                        brief={checkout?.(visit)}
                         className={cn(
                           "group/card absolute z-10 flex min-w-0 flex-col overflow-hidden rounded-2xl border px-3 py-2 shadow-[0_10px_24px_-18px_rgb(7_30_54_/_0.7)] transition-[box-shadow,transform] duration-200 hover:z-30 hover:shadow-[0_18px_40px_-20px_rgb(7_30_54_/_0.55)] focus-within:z-30",
                           visit.status === "in_progress" && "border-oxide bg-mint",
@@ -210,8 +220,12 @@ export function DaySheet({
                               <span className="text-muted/70"> · </span>
                               {duration} min
                             </p>
-                            {visit.reason ? (
-                              <p className="mt-1 truncate text-sm leading-snug text-ink/80">{visit.reason}</p>
+                            {visit.scheduledProcedures.length > 0 ? (
+                              <p className="mt-1 text-sm font-medium leading-snug text-ink">
+                                {visit.scheduledProcedures.map((procedure) => procedure.description).join(" · ")}
+                              </p>
+                            ) : visit.reason ? (
+                              <p className="mt-1 text-sm leading-snug text-ink/80">{visit.reason}</p>
                             ) : null}
                           </div>
                           {openVisit ? (
@@ -241,7 +255,7 @@ export function DaySheet({
                           className="pointer-events-none absolute bottom-0 left-0 top-0 w-1 rounded-bl-2xl rounded-tl-2xl bg-oxide/35"
                           style={{ height: `${Math.max(18, durationShare * 100)}%` }}
                         />
-                      </div>
+                      </VisitCard>
                     );
                   })}
                 </div>
@@ -251,5 +265,64 @@ export function DaySheet({
         </div>
       </div>
     </section>
+  );
+}
+
+function VisitCard({
+  visit,
+  name,
+  openVisit,
+  brief,
+  className,
+  style,
+  children,
+}: {
+  visit: Appointment;
+  name: string;
+  openVisit?: string;
+  brief?: CheckoutBrief;
+  className: string;
+  style: CSSProperties;
+  children: ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState({ top: 8, left: 8 });
+
+  function show() {
+    if (!brief?.atCounter) return;
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    const width = 288;
+    const left = rect.right + 12 + width > window.innerWidth ? Math.max(8, rect.left - width - 12) : rect.right + 12;
+    setPos({ top: Math.max(8, rect.top), left });
+    setOpen(true);
+  }
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={style}
+      onMouseEnter={show}
+      onMouseLeave={() => setOpen(false)}
+    >
+      {children}
+      {brief?.atCounter && (brief.collectNow > 0 || brief.needsBooking) ? (
+        <p className={cn("relative z-10 mt-1 text-xs font-semibold leading-snug text-oxide", openVisit && "pointer-events-none")}>
+          {brief.collectNow > 0 ? `Collect ${money(brief.collectNow)}` : "At the counter"}
+          {brief.needsBooking ? " · Return not booked" : ""}
+        </p>
+      ) : null}
+      {open && brief?.atCounter ? (
+        <div
+          role="tooltip"
+          className="fixed z-50 w-72 rounded-2xl border border-line bg-card p-4 shadow-[0_18px_40px_-20px_rgb(7_30_54_/_0.55)]"
+          style={{ top: pos.top, left: pos.left }}
+        >
+          <CheckoutPanel brief={brief} patientName={name} patientId={visit.patientId} />
+        </div>
+      ) : null}
+    </div>
   );
 }

@@ -206,6 +206,14 @@ export type ScheduledProcedure = {
   physician: string;
 };
 
+/** Something performed during the visit that was not on the original schedule. */
+export type VisitAddOn = {
+  id: string;
+  cpt: string;
+  description: string;
+  fee: number;
+};
+
 export type ClaimEvent = {
   id: string;
   at: string;
@@ -313,6 +321,7 @@ export type Appointment = {
   vitals: Vitals;
   copayCollected: number | null;
   scheduledProcedures: ScheduledProcedure[];
+  addOns: VisitAddOn[];
   opNoteStatus: OpNoteStatus;
   unableToCode: boolean;
   codingFlag: string;
@@ -399,6 +408,8 @@ export type VisitNote = {
   note: string;
   codes: VisitCodeLine[];
   revealed: boolean;
+  /** Return the clinician asked for, when the note names one. */
+  followUp?: string;
 };
 
 export type DemoRequestStatus = "new" | "reached" | "closed";
