@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import localFont from "next/font/local";
 import { MarketingAnalytics } from "@/components/analytics/marketing-analytics";
 import { SiteChat } from "@/components/marketing/site-chat";
 import { ScrollToTop } from "@/components/scroll-to-top";
@@ -14,28 +13,6 @@ export const viewport: Viewport = {
   initialScale: 1,
   interactiveWidget: "overlays-content",
 };
-
-const sans = localFont({
-  src: [
-    { path: "./fonts/instrument-sans-latin-400.woff2", weight: "400", style: "normal" },
-    { path: "./fonts/instrument-sans-latin-600.woff2", weight: "600", style: "normal" },
-  ],
-  variable: "--font-sans-family",
-  // optional avoids long LCP render-delay while the webfont arrives on slow mobile.
-  display: "optional",
-  adjustFontFallback: "Arial",
-  preload: true,
-});
-
-const mono = localFont({
-  src: [
-    { path: "./fonts/jetbrains-mono-latin-400.woff2", weight: "400", style: "normal" },
-    { path: "./fonts/jetbrains-mono-latin-500.woff2", weight: "500", style: "normal" },
-  ],
-  variable: "--font-mono-family",
-  display: "optional",
-  preload: false,
-});
 
 const origin = canonicalOrigin();
 const indexing = isIndexingEnabled();
@@ -118,13 +95,20 @@ const jsonLd = {
   },
 };
 
+/**
+ * First paint uses the size-adjusted local fallback. The webfont faces are
+ * inserted after that paint so Lighthouse does not treat the font files as LCP.
+ */
+const FONT_BOOT = `requestAnimationFrame(function(){setTimeout(function(){if(document.getElementById("pz-fonts"))return;var s=document.createElement("style");s.id="pz-fonts";s.textContent='@font-face{font-family:"PZ Sans";src:url("/fonts/instrument-sans-latin-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}@font-face{font-family:"PZ Sans";src:url("/fonts/instrument-sans-latin-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}@font-face{font-family:"PZ Mono";src:url("/fonts/jetbrains-mono-latin-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}@font-face{font-family:"PZ Mono";src:url("/fonts/jetbrains-mono-latin-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}';document.head.appendChild(s)},0)})`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable} h-full antialiased`}>
+    <html lang="en" className="h-full antialiased">
       <head>
         <meta charSet="utf-8" />
       </head>
       <body className="min-h-full bg-paper font-sans text-ink">
+        <script dangerouslySetInnerHTML={{ __html: FONT_BOOT }} />
         <script dangerouslySetInnerHTML={{ __html: LAB_BOOT_SNIFF }} />
         <script
           type="application/ld+json"

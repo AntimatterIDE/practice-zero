@@ -23,11 +23,33 @@
   --color-mint: #d5dbff;
   --color-foam: #a8b5f8;
   --shadow-card: 0 18px 40px -28px rgb(17 20 24 / 0.35);
-  --font-display: var(--font-sans-family), "Instrument Sans", system-ui, sans-serif;
-  --font-sans: var(--font-sans-family), "Instrument Sans", system-ui, sans-serif;
-  --font-mono: var(--font-mono-family), "JetBrains Mono", ui-monospace, monospace;
+  --font-display: "PZ Sans", "PZ Sans Fallback", system-ui, sans-serif;
+  --font-sans: "PZ Sans", "PZ Sans Fallback", system-ui, sans-serif;
+  --font-mono: "PZ Mono", "PZ Mono Fallback", ui-monospace, monospace;
   --color-rb-accent-fg: var(--rb-accent-fg);
   --color-rb-accent: var(--rb-accent);
+}
+
+@font-face {
+  font-family: "PZ Sans Fallback";
+  src: local("Arial");
+  ascent-override: 93.97%;
+  descent-override: 24.22%;
+  line-gap-override: 0%;
+  size-adjust: 103.22%;
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PZ Mono Fallback";
+  src: local("Arial");
+  ascent-override: 77.57%;
+  descent-override: 22.82%;
+  line-gap-override: 0%;
+  size-adjust: 131.49%;
+  font-weight: 100 900;
+  font-style: normal;
 }
 
 :root {
