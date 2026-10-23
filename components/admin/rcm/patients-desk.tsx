@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ageFromDob, chartGaps, withChart } from "@/lib/rcm/chart";
@@ -32,6 +31,7 @@ export function PatientsDesk() {
   const today = useClinicToday();
   const [query, setQuery] = useState("");
   const [form, setForm] = useState<PatientInput>(emptyForm);
+  const [adding, setAdding] = useState(false);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -93,8 +93,8 @@ export function PatientsDesk() {
         title="Patients"
         lede="Charts in this demo stay in the browser."
         action={
-          <Button asChild variant="secondary">
-            <Link href="/try/intake">Intake form</Link>
+          <Button type="button" variant="secondary" onClick={() => setAdding((open) => !open)}>
+            {adding ? "Close" : "New patient"}
           </Button>
         }
       />
@@ -103,50 +103,12 @@ export function PatientsDesk() {
           {syncError}
         </p>
       ) : null}
-      <div className="mt-8 grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
-        <section>
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search name, date of birth, phone, or MRN"
-            className={fieldClass}
-            aria-label="Search patients"
-          />
-          <ul className="mt-4 grid gap-4 sm:grid-cols-2">
-            {rows.length === 0 ? (
-              <li className="px-4 py-5 text-sm text-neutral-500">{query.trim() ? "No charts match that search." : "No charts yet. Send an intake link, or add a walk-in."}</li>
-            ) : null}
-            {rows.map((patient) => {
-              const upcoming = appointments
-                .filter(
-                  (appointment) =>
-                    appointment.patientId === patient.id &&
-                    appointment.status !== "cancelled" &&
-                    appointment.start.slice(0, 10) >= today,
-                )
-                .sort((a, b) => a.start.localeCompare(b.start))[0];
-              const gaps = chartGaps(patient);
-              const age = ageFromDob(patient.dateOfBirth, today);
-              const initials = `${patient.firstName.slice(0, 1)}${patient.lastName.slice(0, 1)}`.toUpperCase();
-              return (
-                <MemberCard
-                  key={patient.id}
-                  href={`/try/patients/${patient.id}`}
-                  initials={initials}
-                  name={patientName(patient)}
-                  meta={`MRN ${patient.mrn || "new"} · ${patient.phone || "No phone"}`}
-                  note={`${formatDay(patient.dateOfBirth)}${age !== null ? ` · ${age} yrs` : ""} · ${upcoming ? `Next ${formatDay(upcoming.start)} ${formatTime(upcoming.start)}` : "No visit booked"}`}
-                  live={gaps.length === 0}
-                />
-              );
-            })}
-          </ul>
-        </section>
-        <form onSubmit={onSubmit} className={`${panelClass} grid h-fit gap-4`}>
-          <div>
-            <h2 className="font-display text-2xl tracking-tight">Walk-in chart</h2>
+      {adding ? (
+        <form onSubmit={onSubmit} className={`${panelClass} mt-8 grid gap-4 sm:grid-cols-2`}>
+          <div className="sm:col-span-2">
+            <h2 className="font-display text-2xl tracking-tight">New patient</h2>
             <p className="mt-1 text-sm leading-relaxed text-muted">
-              Use this when the patient is here. The chart is saved for the whole practice, and email, address, and the attorney case can be added after.
+              Fill this out at the desk. The chart is saved in this browser. Email and address can be added on the chart after.
             </p>
           </div>
           <Field label="First name">
@@ -178,11 +140,53 @@ export function PatientsDesk() {
           <Field label="Email">
             <input className={fieldClass} type="email" value={form.email} onChange={(event) => update("email", event.target.value)} />
           </Field>
-          {error ? <p className="text-sm text-emergency">{error}</p> : null}
-          <Button type="submit" disabled={saving}>
-            {saving ? "Saving…" : "Save patient"}
-          </Button>
+          {error ? <p className="text-sm text-emergency sm:col-span-2">{error}</p> : null}
+          <div className="sm:col-span-2">
+            <Button type="submit" disabled={saving}>
+              {saving ? "Saving…" : "Add patient"}
+            </Button>
+          </div>
         </form>
+      ) : null}
+      <div className="mt-8">
+        <section>
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search name, date of birth, phone, or MRN"
+            className={fieldClass}
+            aria-label="Search patients"
+          />
+          <ul className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {rows.length === 0 ? (
+              <li className="px-4 py-5 text-sm text-neutral-500">{query.trim() ? "No charts match that search." : "No charts yet. Add a new patient."}</li>
+            ) : null}
+            {rows.map((patient) => {
+              const upcoming = appointments
+                .filter(
+                  (appointment) =>
+                    appointment.patientId === patient.id &&
+                    appointment.status !== "cancelled" &&
+                    appointment.start.slice(0, 10) >= today,
+                )
+                .sort((a, b) => a.start.localeCompare(b.start))[0];
+              const gaps = chartGaps(patient);
+              const age = ageFromDob(patient.dateOfBirth, today);
+              const initials = `${patient.firstName.slice(0, 1)}${patient.lastName.slice(0, 1)}`.toUpperCase();
+              return (
+                <MemberCard
+                  key={patient.id}
+                  href={`/try/patients/${patient.id}`}
+                  initials={initials}
+                  name={patientName(patient)}
+                  meta={`MRN ${patient.mrn || "new"} · ${patient.phone || "No phone"}`}
+                  note={`${formatDay(patient.dateOfBirth)}${age !== null ? ` · ${age} yrs` : ""} · ${upcoming ? `Next ${formatDay(upcoming.start)} ${formatTime(upcoming.start)}` : "No visit booked"}`}
+                  live={gaps.length === 0}
+                />
+              );
+            })}
+          </ul>
+        </section>
       </div>
     </main>
   );

@@ -381,7 +381,7 @@ function Demographics({
       }}
     >
       <p className="text-sm text-muted sm:col-span-2">
-        Change any field on this chart, including an email or address added after the walk-in, then save.
+        Change any field on this chart, then save.
       </p>
       <h2 className="font-display text-2xl sm:col-span-2">Identity</h2>
       <Field label="First name">
