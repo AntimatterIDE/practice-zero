@@ -1,6 +1,6 @@
 "use client";
 
-import { CategorySection, Drift, TiltFrame } from "@/components/marketing/depth";
+import { CategorySection } from "@/components/marketing/depth";
 import CreditCard from "@/components/ui/credit-card";
 
 function PineMark({ className }: { className?: string }) {
@@ -115,40 +115,24 @@ export function PatientsSection() {
       title="Paul Wallace is already on the chart."
       body="Demographics, coverage, medications for e-prescribing, and the problem list are in the room before anyone asks for them. MRN 100481. March 14, 1988."
     >
-      <TiltFrame className="relative mx-auto w-full max-w-md">
-        <Drift dx={22} dy={12} className="absolute inset-x-10 top-8">
-          <article className="rotate-[-7deg] rounded-2xl border border-line bg-mist p-5 shadow-lg">
-            <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Problem list</p>
-            <p className="mt-3 font-display text-2xl text-ink">Essential hypertension</p>
-            <p className="mt-1 text-sm text-graphite">I10 · active since September</p>
-          </article>
-        </Drift>
-        <Drift dx={12} dy={8} className="absolute inset-x-5 top-14">
-          <article className="rotate-[4deg] rounded-2xl border border-line bg-white p-5 shadow-xl">
-            <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Coverage</p>
-            <p className="mt-3 text-lg font-medium text-ink">Pinetree Health</p>
-            <p className="text-sm text-graphite">Choice PPO · out of network · PT-44021</p>
-          </article>
-        </Drift>
-        <Drift dx={4} dy={3} className="relative z-10">
-          <CreditCard
-            fluid
-            className="w-full"
-            ariaLabel="Pinetree Health Choice PPO card for Paul Wallace, member PT-44021, born March 14, 1988, 18 Hope Street, Providence. Activate to turn the card over."
-            background="#f6f4ee"
-            borderRadius={16}
-            rotationIntensity={0.85}
-            parallaxIntensity={0.65}
-            scaleOnHover={1.03}
-            textColor="#14241c"
-            showShine
-            showShadow
-            cardClassName="ring-1 ring-black/10"
-            front={<InsuranceFront />}
-            back={<InsuranceBack />}
-          />
-        </Drift>
-      </TiltFrame>
+      <div className="mx-auto w-full max-w-md">
+        <CreditCard
+          fluid
+          className="w-full"
+          ariaLabel="Pinetree Health Choice PPO card for Paul Wallace, member PT-44021, born March 14, 1988, 18 Hope Street, Providence. Activate to turn the card over."
+          background="#f6f4ee"
+          borderRadius={16}
+          rotationIntensity={0.32}
+          parallaxIntensity={0.2}
+          scaleOnHover={1.012}
+          textColor="#14241c"
+          showShine
+          showShadow
+          cardClassName="ring-1 ring-black/10"
+          front={<InsuranceFront />}
+          back={<InsuranceBack />}
+        />
+      </div>
     </CategorySection>
   );
 }
