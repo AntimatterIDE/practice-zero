@@ -11,6 +11,7 @@ const rooms = [
 export function VisitsSection() {
   return (
     <CategorySection
+      id="visits"
       flip
       eyebrow="Visits"
       title="Three rooms, one morning."

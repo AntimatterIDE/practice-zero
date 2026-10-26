@@ -89,6 +89,7 @@ export function CategoryIntro({ kicker, title, lede }: { kicker: string; title: 
 }
 
 export function CategorySection({
+  id,
   eyebrow,
   title,
   body,
@@ -97,6 +98,7 @@ export function CategorySection({
   href,
   action = "Open the demo",
 }: {
+  id?: string;
   eyebrow: string;
   title: string;
   body: string;
@@ -107,7 +109,7 @@ export function CategorySection({
 }) {
   const reduce = useReducedMotion();
   return (
-    <section className="border-t border-line">
+    <section id={id} className="scroll-mt-8 border-t border-line">
       <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 lg:grid-cols-2 lg:gap-20 lg:py-28">
         <motion.div
           className={flip ? "lg:order-2" : undefined}

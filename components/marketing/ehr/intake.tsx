@@ -14,6 +14,7 @@ export function IntakeSection() {
   const reduce = useReducedMotion();
   return (
     <CategorySection
+      id="intake"
       flip
       eyebrow="Intake"
       title="The answers arrived last night."

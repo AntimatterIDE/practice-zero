@@ -7,6 +7,7 @@ export function RequestsSection() {
   const reduce = useReducedMotion();
   return (
     <CategorySection
+      id="requests"
       eyebrow="Requests"
       title="A morning, asked for."
       body="Morgan Lee wrote in at 7:40. A new-patient visit for blood pressure. Mornings work best. The request is still new."

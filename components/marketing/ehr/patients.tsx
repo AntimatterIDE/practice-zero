@@ -110,6 +110,7 @@ function InsuranceBack() {
 export function PatientsSection() {
   return (
     <CategorySection
+      id="patients"
       eyebrow="Patients"
       title="Paul Wallace is already on the chart."
       body="Demographics, coverage, medications for e-prescribing, and the problem list are in the room before anyone asks for them. MRN 100481. March 14, 1988."

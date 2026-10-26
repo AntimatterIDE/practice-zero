@@ -7,7 +7,8 @@ import { RequestsSection } from "@/components/marketing/ehr/requests";
 import { ScribeSection } from "@/components/marketing/ehr/scribe";
 import { TasksSection } from "@/components/marketing/ehr/tasks";
 import { VisitsSection } from "@/components/marketing/ehr/visits";
-import { CategoryClose, CategoryIntro } from "@/components/marketing/depth";
+import { CategoryClose } from "@/components/marketing/depth";
+import { EhrHero } from "@/components/marketing/ehr/hero";
 import { SiteHeader } from "@/components/marketing/site-header";
 import { pageOpenGraph } from "@/lib/open-graph";
 
@@ -30,11 +31,7 @@ export default function EhrPage() {
       <div className="mx-auto w-full max-w-[1400px] px-4 pt-6 sm:px-6 lg:px-8">
         <SiteHeader />
       </div>
-      <CategoryIntro
-        kicker="EHR"
-        title="the chart is already in the room."
-        lede="Patients, visits, the scribe, e-prescribing, labs and results, intake, agreements, tasks, and requests. Wednesday morning is already underway."
-      />
+      <EhrHero />
       <PatientsSection />
       <VisitsSection />
       <ScribeSection />

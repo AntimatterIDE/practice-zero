@@ -7,6 +7,7 @@ export function AgreementsSection() {
   const reduce = useReducedMotion();
   return (
     <CategorySection
+      id="agreements"
       eyebrow="Agreements"
       title="The consent is already signed."
       body="Paul signed the consent to evaluate and treat. Garrett Holliday’s records release is the one still missing."

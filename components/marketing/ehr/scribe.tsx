@@ -13,6 +13,7 @@ export function ScribeSection() {
   const reduce = useReducedMotion();
   return (
     <CategorySection
+      id="scribe"
       eyebrow="Scribe"
       title="The visit becomes the note."
       body="The 9:00 transcript stays with the chart. The assessment is essential hypertension note, labs, and e-prescribe stay with the visit until someone asks to see them."

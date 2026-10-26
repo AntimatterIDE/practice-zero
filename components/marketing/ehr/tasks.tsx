@@ -12,6 +12,7 @@ export function TasksSection() {
   const reduce = useReducedMotion();
   return (
     <CategorySection
+      id="tasks"
       flip
       eyebrow="Tasks"
       title="Two things are still open."
