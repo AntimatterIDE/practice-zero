@@ -6,18 +6,18 @@ import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
 const surfaces = [
-  { id: "text", label: "Text" },
   { id: "page", label: "Page" },
   { id: "post", label: "Post" },
+  { id: "schedule", label: "Schedule" },
 ] as const;
 
 type Surface = (typeof surfaces)[number]["id"];
 
 export function MarketingHero() {
   const reduce = useReducedMotion();
-  const [surface, setSurface] = useState<Surface>("text");
-  const [sent, setSent] = useState(false);
+  const [surface, setSurface] = useState<Surface>("page");
   const [posted, setPosted] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
 
   return (
     <section className="mx-auto grid max-w-6xl items-center gap-12 px-6 pb-16 pt-16 lg:grid-cols-2 lg:gap-16 lg:pb-24 lg:pt-24">
@@ -28,11 +28,11 @@ export function MarketingHero() {
       >
         <p className="kicker">Marketing</p>
         <h1 className="mt-6 max-w-xl font-sans text-5xl font-semibold lowercase leading-[1.05] tracking-[-0.04em] text-ink sm:text-6xl">
-          the practice reaches out.
+          found, then booked.
         </h1>
         <p className="mt-6 max-w-md text-lg leading-relaxed text-graphite">
-          A text waiting to be sent, the follow-up after a visit, a schedule still missing a confirmation, and pages
-          plus reviews a new patient can find.
+          A page someone can search, a post the practice can put up, and a morning that still has a slot to confirm.
+          The follow-up text comes after they are already on the chart.
         </p>
       </motion.div>
 
@@ -44,9 +44,9 @@ export function MarketingHero() {
       >
         <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
           <div>
-            <p className="text-sm font-medium text-ink">Wednesday reach</p>
+            <p className="text-sm font-medium text-ink">How they arrive</p>
             <p className="text-xs text-graphite" aria-live="polite">
-              {sent ? "Text sent" : "Text waiting"} · {posted ? "Post is public" : "Post is a draft"}
+              Page is up · {posted ? "Post is public" : "Post is a draft"} · {confirmed ? "10:30 confirmed" : "10:30 open"}
             </p>
           </div>
           <div className="flex rounded-lg bg-paper p-1">
@@ -65,7 +65,7 @@ export function MarketingHero() {
                 >
                   {selected && (
                     <motion.span
-                      layoutId="reach-tab"
+                      layoutId="arrive-tab"
                       className="absolute inset-0 rounded-md bg-white shadow-sm"
                       transition={{ type: "spring", stiffness: 420, damping: 34 }}
                     />
@@ -78,15 +78,6 @@ export function MarketingHero() {
         </div>
 
         <div className="min-h-64 p-5">
-          {surface === "text" && (
-            <div className="mx-auto flex h-56 max-w-[16rem] flex-col rounded-[1.6rem] bg-ink p-3 text-paper">
-              <p className="text-center text-[10px] tracking-wide text-white/50">Anas Khan · 401-555-0174</p>
-              <p className="mt-auto rounded-2xl rounded-bl-md bg-white px-3 py-3 text-sm leading-relaxed text-ink">
-                Anas, $40 is still due from the June visit. Reply if you want a statement.
-              </p>
-              <p className="mt-3 text-center text-[10px] text-white/50">{sent ? "Sent" : "Not sent"}</p>
-            </div>
-          )}
           {surface === "page" && (
             <div className="flex h-56 flex-col justify-center">
               <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Search · blood pressure</p>
@@ -107,25 +98,30 @@ export function MarketingHero() {
               <p className={cn("text-[11px] uppercase tracking-[0.16em]", posted ? "text-white/50" : "text-graphite/70")}>
                 {posted ? "Public" : "Draft"}
               </p>
-              <p className="mt-3 font-display text-3xl">Mornings</p>
-              <p className={cn("mt-2 text-sm", posted ? "text-paper/70" : "text-graphite")}>Wednesday visits, from 8:40.</p>
+              <p className="mt-3 font-display text-3xl">Mornings are open</p>
+              <p className={cn("mt-2 text-sm", posted ? "text-paper/70" : "text-graphite")}>
+                New patients welcome. Wednesday visits, from 8:40.
+              </p>
+            </div>
+          )}
+          {surface === "schedule" && (
+            <div className="flex h-56 flex-col justify-center">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-graphite/70">Wednesday, October 14</p>
+              <p className="mt-3 font-display text-4xl text-ink">10:30</p>
+              <p className="mt-2 text-sm font-medium text-ink">Garrett Holliday</p>
+              <p className="mt-2 max-w-sm text-sm leading-relaxed text-graphite">
+                {confirmed
+                  ? "Confirmed. The morning can keep that slot."
+                  : "Still unconfirmed. The slot is on the board, waiting for a yes."}
+              </p>
             </div>
           )}
         </div>
 
         <div className="flex items-center justify-between gap-3 border-t border-line px-4 py-3">
-          {surface === "text" && (
-            <button
-              type="button"
-              onClick={() => setSent((value) => !value)}
-              className="inline-flex rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper hover:bg-ink/90"
-            >
-              {sent ? "Back to the outbox" : "Send the text"}
-            </button>
-          )}
           {surface === "page" && (
             <Link href="/marketing#seo" className="inline-flex rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper hover:bg-ink/90">
-              Open the page
+              Open search
             </Link>
           )}
           {surface === "post" && (
@@ -137,8 +133,20 @@ export function MarketingHero() {
               {posted ? "Take it down" : "Post it"}
             </button>
           )}
-          <Link href="/marketing#outreach" className="text-sm font-medium text-slash underline-offset-4 hover:underline">
-            The outbox
+          {surface === "schedule" && (
+            <button
+              type="button"
+              onClick={() => setConfirmed((value) => !value)}
+              className="inline-flex rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper hover:bg-ink/90"
+            >
+              {confirmed ? "Undo the confirmation" : "Confirm 10:30"}
+            </button>
+          )}
+          <Link
+            href={surface === "page" ? "/marketing#seo" : surface === "post" ? "/marketing#social" : "/marketing#scheduling"}
+            className="text-sm font-medium text-slash underline-offset-4 hover:underline"
+          >
+            {surface === "page" ? "The pages" : surface === "post" ? "The posts" : "The board"}
           </Link>
         </div>
       </motion.div>

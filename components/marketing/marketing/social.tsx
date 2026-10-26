@@ -43,6 +43,7 @@ export function SocialSection() {
   return (
     <CategorySection
       id="social"
+      flip
       eyebrow="Social"
       title="The practice, in public."
       body="Two notes the practice can post: mornings are open, and new patients are welcome. Reputation and reviews stay part of how the practice shows up counts stay off the page."

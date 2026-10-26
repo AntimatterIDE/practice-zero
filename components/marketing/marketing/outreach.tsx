@@ -29,6 +29,7 @@ export function OutreachSection() {
   return (
     <CategorySection
       id="outreach"
+      flip
       eyebrow="Outreach"
       title="The text is written. It has not been sent."
       body="Anas Khan has a balance from the June visit. The message is sitting in the outbox, in this browser, waiting."

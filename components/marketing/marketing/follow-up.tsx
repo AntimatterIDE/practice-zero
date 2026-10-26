@@ -28,7 +28,6 @@ export function FollowUpSection() {
   return (
     <CategorySection
       id="follow-up"
-      flip
       eyebrow="Follow-up"
       title="The next touch is already chosen."
       body="The June visit was paid. A balance remains. The follow-up is a text, and it waits until someone sends it."

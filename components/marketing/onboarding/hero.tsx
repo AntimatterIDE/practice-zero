@@ -23,9 +23,9 @@ const phases = [
   {
     step: "03",
     title: "Website",
-    body: "A practice site is included. New patients, the visit they need, and when the door is open.",
+    body: "A practice site is included. The Alignment Clinic is one that is already live.",
     href: "/onboarding#website",
-    proof: "southeast.example",
+    proof: "thealignmentclinic.com",
   },
   {
     step: "04",

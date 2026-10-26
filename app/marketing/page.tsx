@@ -13,12 +13,12 @@ import { pageOpenGraph } from "@/lib/open-graph";
 export const metadata: Metadata = {
   title: "Marketing",
   description:
-    "Outreach, follow-up, scheduling, search, social, and reputation for an independent practice.",
+    "Search, social, and scheduling bring a patient in. Outreach and follow-up pick up after the visit.",
   alternates: { canonical: "/marketing" },
   openGraph: pageOpenGraph({
     title: "Marketing · practice zero",
     description:
-      "Outreach, follow-up, scheduling, search, social, and reputation for an independent practice.",
+      "Search, social, and scheduling bring a patient in. Outreach and follow-up pick up after the visit.",
     url: "/marketing",
   }),
 };
@@ -30,12 +30,15 @@ export default function MarketingPage() {
         <SiteHeader />
       </div>
       <MarketingHero />
-      <OutreachSection />
-      <FollowUpSection />
-      <SchedulingSection />
       <SeoSection />
       <SocialSection />
-      <CategoryClose title="open the morning." body="Garrett Holliday is still unconfirmed at 10:30. Anas’s balance text is still in the outbox." />
+      <SchedulingSection />
+      <OutreachSection />
+      <FollowUpSection />
+      <CategoryClose
+        title="then the practice follows up."
+        body="The page and the post brought them in. Anas’s balance text is still in the outbox."
+      />
       <Footer11 />
     </div>
   );
