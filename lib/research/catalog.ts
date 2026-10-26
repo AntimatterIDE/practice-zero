@@ -1077,6 +1077,355 @@ const specs: CatalogSpec[] = [
       },
     ],
   },
+  // 20
+  {
+    key: "practice-fee-at-visit",
+    headline: "The practice fee is collected at the visit",
+    publishedAt: "2026-10-18T12:00:00.000Z",
+    photo: "photo-1516574187841-cb9cc2ca948b",
+    excerpt:
+      "The practice charges its own cash fee, collects that fee, and files the claim out of network. There is no contracted fee schedule and no automatic write-off.",
+    searchTitle: "The practice fee is collected at the visit",
+    searchDescription:
+      "How Practice Zero collects the practice fee at the visit and files the claim out of network, with no contracted fee schedule and no automatic write-off.",
+    keywords: ["practice fee", "out of network claim", "collected at visit", "Practice Zero", "no write-off"],
+    topic: "out-of-network billing",
+    readMinutes: 5,
+    bodies: [
+      [
+        "Many billing tools assume a contracted fee schedule. They post a second allowed amount and write off the difference before anyone at the desk has collected the practice's own fee.",
+        "Practice Zero keeps the practice fee as the charge. The practice collects that fee, and the claim goes out of network.",
+      ],
+      [
+        "Out-of-network benefits often pay the patient, not the practice. A contracted allowed amount does not describe that path, and an automatic write-off can hide what the patient still owes.",
+        "Practices that name their own fee, collect it, and file the claim without a second price spend less time explaining a number the contract never set.",
+      ],
+      [
+        "For a practice, the visit should end with a clear cash position. The fee is collected, the claim is a draft until it is filed, and the balance is what is still due.",
+        "Staff should not have to reconcile a payer's allowed amount against a fee the practice never agreed to discount.",
+      ],
+      [
+        "Practice Zero lets the practice charge its own cash fee, collect that fee, and file the claim out of network. There is no contracted fee schedule, no second allowed amount, and no automatic write-off.",
+        "Eligibility, the draft claim, and the collected fee stay on the same visit, so the balance is the remainder, not a contractual adjustment.",
+      ],
+      [
+        "Open /try/claims/clm-hale and /billing. Paul Wallace is a sample patient in the browser demo, not a real person. On 14 Oct 2026 the practice fee for CPT 99203 is $185, collected at the visit. The claim is still a draft and the balance is $0. Pinetree Choice PPO is out of network, and benefits pay the patient.",
+        "This note is general product information, not clinical advice.",
+      ],
+    ],
+    sources: [
+      {
+        kind: "Brief",
+        year: "2026",
+        title: "Industry reporting on out-of-network patient payments in independent practices",
+      },
+      {
+        kind: "Report",
+        year: "2024",
+        title: "Commonwealth Fund research on administrative costs of billing and payment",
+      },
+    ],
+  },
+  // 21
+  {
+    key: "outstanding-balance-across-visits",
+    headline: "One outstanding balance across visits",
+    publishedAt: "2026-10-19T12:00:00.000Z",
+    photo: "photo-1582719471384-894fbb16e074",
+    excerpt:
+      "A ledger can hold more than one visit. Practice Zero keeps one outstanding balance, and a waiting text names only the amount that message is about.",
+    searchTitle: "One outstanding balance across visits",
+    searchDescription:
+      "How Practice Zero shows one outstanding balance across visits, and why a waiting balance text names only the amount it covers.",
+    keywords: ["outstanding balance", "patient ledger", "balance text", "Practice Zero", "multiple visits"],
+    topic: "patient balances",
+    readMinutes: 5,
+    bodies: [
+      [
+        "Patient balances get confusing when each visit is a separate bill and nobody adds them up. A text about one visit can look like the whole account, or the whole account can be sent when only one visit is ready to discuss.",
+        "Practice Zero keeps one outstanding balance across visits, and the outbox message stays specific.",
+      ],
+      [
+        "Industry reporting on patient responsibility describes the same failure: statements that mix a denied claim with a small remainder, so the patient cannot tell what to pay.",
+        "A clear ledger separates what the plan paid the practice, what the patient still owes on that visit, and what a denial left open.",
+      ],
+      [
+        "For a practice, the account total is the sum of what is still due. A message can name one visit without pretending that visit is the whole balance.",
+        "Staff can open the chart and see every visit before they talk to the patient.",
+      ],
+      [
+        "Practice Zero posts each visit on one ledger. The outstanding balance is every amount still due. A balance text waits in the outbox and names only the amount that text is about. It is not sent until the practice sends it.",
+        "Plan payment and patient remainder stay distinct, so a partial payment is not shown as the full charge.",
+      ],
+      [
+        "Open /try/patients/pt-voss. Anas Khan is a sample patient in the browser demo, not a real person. The ledger is two visits. June CPT 99213 is a charge of $180. The plan paid the practice $140, and the patient owes $40. August CPT 99214 is $210, denied, so that balance is $210. Outstanding on the account is $250. The outbox text is only the $40. It is waiting and has not been sent.",
+        "This note is general product information, not clinical advice.",
+      ],
+    ],
+    sources: [
+      {
+        kind: "Brief",
+        year: "2025",
+        title: "Industry reporting on patient responsibility and statements across multiple visits",
+      },
+      {
+        kind: "Report",
+        year: "2024",
+        title: "Commonwealth Fund research on administrative costs of billing and collections",
+      },
+    ],
+  },
+  // 22
+  {
+    key: "desk-collects-before-leaving",
+    headline: "What the desk collects before someone leaves",
+    publishedAt: "2026-10-20T12:00:00.000Z",
+    photo: "photo-1579154204601-01588f351e67",
+    excerpt:
+      "A charge added in the room is not on the bill until the desk collects it. Practice Zero shows that amount before the patient leaves.",
+    searchTitle: "What the desk collects before someone leaves",
+    searchDescription:
+      "How the Practice Zero desk shows a charge added in the room so the practice can collect it before the patient leaves.",
+    keywords: ["front desk", "checkout", "room charge", "electrocardiogram", "Practice Zero"],
+    topic: "desk checkout",
+    readMinutes: 5,
+    bodies: [
+      [
+        "A visit fee can be collected while a charge added in the room never reaches the bill. The patient leaves, and the practice discovers the gap after the day is over.",
+        "Practice Zero puts that room charge on the desk before the patient leaves.",
+      ],
+      [
+        "Industry reporting on checkout in ambulatory practices points to the same handoff: the room and the desk do not share one list of what is owed today.",
+        "When the added charge stays off the bill, staff either miss it or ask for it later, when the visit is no longer in front of them.",
+      ],
+      [
+        "For a practice, collected and still due are different facts. A fee already collected should not be asked for again. A charge that is not on the bill should be named at the counter.",
+        "The desk needs one instruction: collect this amount before the person leaves.",
+      ],
+      [
+        "Practice Zero shows the visit fee that is already collected and any charge added in the room that is not yet on the bill. The desk collects that added amount before the patient leaves.",
+        "The claim and the counter stay tied to the same visit, so a room add-on does not wait for a later statement.",
+      ],
+      [
+        "Open /try/desk. Paul Wallace is a sample patient in the browser demo, not a real person. The $185 practice fee is already collected. An electrocardiogram, CPT 93000, at $75 was added in the room and is not on the bill. The desk says collect $75 before he leaves.",
+        "This note is general product information, not clinical advice.",
+      ],
+    ],
+    sources: [
+      {
+        kind: "Brief",
+        year: "2025",
+        title: "Industry reporting on checkout handoffs in ambulatory practices",
+      },
+      {
+        kind: "Report",
+        year: "2024",
+        title: "Commonwealth Fund research on administrative burden in outpatient practices",
+      },
+    ],
+  },
+  // 23
+  {
+    key: "book-return-from-note",
+    headline: "Book the return from the note",
+    publishedAt: "2026-10-21T12:00:00.000Z",
+    photo: "photo-1530497610245-94d3c16cda28",
+    excerpt:
+      "A return named in the note is not a booked visit until the desk puts it on the schedule. Practice Zero asks for that booking before the patient leaves.",
+    searchTitle: "Book the return from the note",
+    searchDescription:
+      "How Practice Zero turns a return named in the visit note into a booking before the patient leaves the office.",
+    keywords: ["return visit", "scheduling", "visit note", "front desk", "Practice Zero"],
+    topic: "scheduling",
+    readMinutes: 5,
+    bodies: [
+      [
+        "A note can say when the patient should return, and the schedule can still be empty. The plan lives in the chart. The next visit was never booked.",
+        "Practice Zero treats that gap as desk work that has to happen before the patient leaves.",
+      ],
+      [
+        "Recall systems often start after the patient has gone home. By then the note is one more message to send, and the open slot may already be gone.",
+        "Booking from the note while the person is still in the office keeps the return on the schedule instead of on a list.",
+      ],
+      [
+        "For a practice, the note is the instruction and the schedule is the result. If the note says return in one month and no visit is booked, the morning is unfinished.",
+        "The desk should be able to book that return without retyping the plan.",
+      ],
+      [
+        "Practice Zero reads the return from the note and asks the desk to book it before the patient leaves. The scheduling view opens with that patient so the visit can be placed.",
+        "An unbooked return stays visible at the counter until someone books it or chooses to stay on the desk.",
+      ],
+      [
+        "Open /try/desk and /try/scheduling. Paul Wallace is a sample patient in the browser demo, not a real person. The note says return in one month. That visit is not booked.",
+        "This note is general product information, not clinical advice.",
+      ],
+    ],
+    sources: [
+      {
+        kind: "Brief",
+        year: "2025",
+        title: "Industry reporting on follow-up scheduling before the patient leaves",
+      },
+      {
+        kind: "Report",
+        year: "2024",
+        title: "Commonwealth Fund research on administrative workload in outpatient practices",
+      },
+    ],
+  },
+  // 24
+  {
+    key: "claim-sent-or-pending",
+    headline: "A completed visit shows claim sent or claim pending send",
+    publishedAt: "2026-10-22T12:00:00.000Z",
+    photo: "photo-1504439468489-c8920d796a29",
+    excerpt:
+      "When a visit is completed, Practice Zero shows one claim label: Claim sent or Claim pending send. The label is how the desk sees whether the claim has left.",
+    searchTitle: "A completed visit shows claim sent or claim pending send",
+    searchDescription:
+      "How a completed visit in Practice Zero shows Claim sent or Claim pending send, so the desk can see whether the claim has left.",
+    keywords: ["claim sent", "claim pending send", "completed visit", "Practice Zero", "visit status"],
+    topic: "claims",
+    readMinutes: 5,
+    bodies: [
+      [
+        "A finished visit can look done in the room and still have a claim that has not left. If the board only says completed, the desk cannot tell which claims are waiting.",
+        "Practice Zero adds one claim label once the visit is completed.",
+      ],
+      [
+        "Revenue cycle teams describe the same blind spot: clinical status and claim status live in different lists, so a completed day still hides unsent claims.",
+        "One label on the completed visit closes that gap without a second work queue.",
+      ],
+      [
+        "For a practice, Claim sent means the claim has left. Claim pending send means the visit is finished and the claim has not.",
+        "Visits that are still in progress do not wear that label. The claim status appears when the visit is completed.",
+      ],
+      [
+        "Practice Zero shows Claim sent or Claim pending send on a completed visit. Sent covers a claim that has been submitted, is processing, or has been accepted, paid, denied, or rejected. Anything else on a completed visit is Claim pending send.",
+        "The label sits on the visit list, next to the room and the note, so the desk does not open each claim to learn whether it has gone out.",
+      ],
+      [
+        "Open /try/visits. Paul Wallace and Anas Khan are sample patients in the browser demo, not real people. A completed visit shows Claim sent or Claim pending send. Only a completed visit gets one of those two labels.",
+        "This note is general product information, not clinical advice.",
+      ],
+    ],
+    sources: [
+      {
+        kind: "Brief",
+        year: "2026",
+        title: "Industry reporting on claim submission status in ambulatory revenue cycle work",
+      },
+      {
+        kind: "Report",
+        year: "2025",
+        title: "Industry reporting on claim rework and unsent claims after the visit",
+      },
+    ],
+  },
+  // 25
+  {
+    key: "new-patient-from-chart-list",
+    headline: "The practice adds a new patient from the chart list",
+    publishedAt: "2026-10-23T12:00:00.000Z",
+    photo: "photo-1559839734-2b71ea197ec2",
+    excerpt:
+      "A new patient is a form the practice fills out from the chart list. Practice Zero does not keep a separate walk-in panel for that step.",
+    searchTitle: "The practice adds a new patient from the chart list",
+    searchDescription:
+      "How a practice adds a new patient from the chart list in Practice Zero, using a form the practice fills out.",
+    keywords: ["new patient", "chart list", "patient registration", "Practice Zero", "front desk"],
+    topic: "patients",
+    readMinutes: 5,
+    bodies: [
+      [
+        "Registration often starts in a side panel that never becomes the chart. The desk types the person once to check them in and again to open a record.",
+        "Practice Zero starts the new patient from the chart list.",
+      ],
+      [
+        "Industry reporting on digital intake still assumes a patient-facing form for people who have time before they arrive. A person standing at the desk needs the practice to enter the chart.",
+        "A second walk-in list splits that work. The chart list should be the place a new patient is added.",
+      ],
+      [
+        "For a practice, adding a patient is chart work. Name, coverage, and contact belong on the record the rest of the morning already uses.",
+        "Staff should not hunt for a separate panel once the person is in the office.",
+      ],
+      [
+        "Practice Zero opens a new patient form from the chart list. The practice fills it out. There is no walk-in panel beside it.",
+        "The new chart is then the same chart the desk uses for coverage, visits, and the balance.",
+      ],
+      [
+        "Open /try/patients. Paul Wallace and Anas Khan are sample patients in the browser demo, not real people. New patient is a form the practice fills out from the chart list.",
+        "This note is general product information, not clinical advice.",
+      ],
+    ],
+    sources: [
+      {
+        kind: "Brief",
+        year: "2025",
+        title: "Industry reporting on digital intake and registration in ambulatory practices",
+      },
+      {
+        kind: "Report",
+        year: "2024",
+        title: "Commonwealth Fund research on administrative burden and patient paperwork",
+      },
+    ],
+  },
+  // 26
+  {
+    key: "five-specialty-landers",
+    headline: "Five specialty landers, one morning board",
+    publishedAt: "2026-10-24T12:00:00.000Z",
+    photo: "photo-1622253692010-333f2da6031d",
+    excerpt:
+      "Ophthalmology, orthopedics, primary care, dermatology, and OB-GYN each have a morning on /specialties. The board lines differ. The platform stays one.",
+    searchTitle: "Five specialty landers, one morning board",
+    searchDescription:
+      "What the ophthalmology, orthopedics, primary care, dermatology, and OB-GYN mornings show on Practice Zero specialty landers.",
+    keywords: [
+      "ophthalmology morning board",
+      "orthopedics morning board",
+      "primary care morning board",
+      "dermatology morning board",
+      "OB-GYN morning board",
+    ],
+    topic: "specialty landers",
+    readMinutes: 6,
+    bodies: [
+      [
+        "A specialty page is useful when it shows that specialty's morning, not a generic list with the name swapped. Ophthalmology, orthopedics, primary care, dermatology, and OB-GYN do not open the day the same way.",
+        "Practice Zero publishes those five mornings on /specialties and keeps one product underneath them.",
+      ],
+      [
+        "Ambulatory specialties describe different first-hour work. Procedure lanes and medical visits share an ophthalmology day. Orthopedics starts with authorizations and high-dollar visits. Primary care starts with panel volume. Dermatology mixes medical visits and procedure days. OB-GYN starts with scheduling intensity, coverage, and follow-up.",
+        "A lander that names those mornings gives a buyer a board they recognize before they open the demo.",
+      ],
+      [
+        "For a practice, the lander is a reading of the morning, not a separate system. Eligibility, claims, and outreach still land on one board.",
+        "Where the lander states a fee rule, that rule should match the product. Where it does not, the note should not invent one.",
+      ],
+      [
+        "On the ophthalmology and orthopedics boards, out-of-network claims say the visit fee is collected at the practice, and the claim is filed out of network. On the dermatology board, eligibility and balances say the fee is collected at the visit, and the claim is filed out of network.",
+        "Primary care keeps today's panel flow, coverage checks, revenue follow-through for claims that need action and unpaid balances, and care gaps and outreach. OB-GYN keeps schedule truth, coverage early, claims and balances for action-needed revenue work and patient pay, and patient outreach. Those two boards do not use the out-of-network fee sentence.",
+      ],
+      [
+        "Browse /specialties and open each lander. Paul Wallace and Anas Khan are sample patients in the browser demo, not real people. The five mornings are ophthalmology, orthopedics, primary care, dermatology, and OB-GYN.",
+        "This note is general product information, not clinical advice.",
+      ],
+    ],
+    sources: [
+      {
+        kind: "Brief",
+        year: "2026",
+        title: "Industry reporting on specialty-specific ambulatory morning workflows",
+      },
+      {
+        kind: "Report",
+        year: "2025",
+        title: "Industry reporting on independent specialty clinics sharing one practice platform",
+      },
+    ],
+  },
 ];
 
 /** Published Practice Zero research notes, ordered by topic and staggered by publish date. */

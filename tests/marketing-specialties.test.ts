@@ -46,4 +46,21 @@ describe("SEO research briefs", () => {
     expect(slugs.some((slug) => slug.includes("beyond-per-seat"))).toBe(true);
     expect(slugs.some((slug) => slug.includes("specialty-mornings"))).toBe(true);
   });
+
+  it("keeps the original notes and adds the seven product headlines", () => {
+    expect(publishedResearchCatalog).toHaveLength(26);
+    const titles = publishedResearchCatalog.map((article) => article.title);
+    for (const headline of [
+      "The practice fee is collected at the visit",
+      "One outstanding balance across visits",
+      "What the desk collects before someone leaves",
+      "Book the return from the note",
+      "A completed visit shows claim sent or claim pending send",
+      "The practice adds a new patient from the chart list",
+      "Five specialty landers, one morning board",
+    ]) {
+      expect(titles.some((title) => title.startsWith(headline))).toBe(true);
+    }
+    expect(titles.some((title) => title.startsWith("Specialty mornings on a horizontal agentic EHR"))).toBe(true);
+  });
 });

@@ -20,7 +20,7 @@ const features = [
   {
     icon: Database,
     title: "Route billing through the platform",
-    body: "Eligibility, claims, remittances, and payer work in one place from the visit to the deposit.",
+    body: "Eligibility, claims, and remittances stay in one place. The practice fee is collected at the visit, and the balance is what is still due.",
   },
   {
     icon: FileText,
@@ -160,7 +160,6 @@ function PlatformPreview() {
   const rooms = [
     { time: "9:00", name: "Paul Wallace", room: "Room 2", state: "In progress", live: true },
     { time: "9:30", name: "Anas Khan", room: "Room 1", state: "Checked in", live: false },
-    { time: "10:00", name: "Marcus Chen", room: "Room 3", state: "Confirmed", live: false },
   ];
 
   return (
@@ -213,7 +212,7 @@ function PlatformPreview() {
               <div className="rounded-lg border border-paper/8 bg-paper/[0.04] p-2.5">
                 <div className="flex items-center justify-between">
                   <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-paper/45">Today’s rooms</p>
-                  <p className="font-mono text-[8px] text-foam">3 live</p>
+                  <p className="font-mono text-[8px] text-foam">Sample practice</p>
                 </div>
                 <div className="mt-2 space-y-1.5">
                   {rooms.map((visit) => (
@@ -240,15 +239,12 @@ function PlatformPreview() {
                   <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-paper/45">Claims queue</p>
                   <div className="mt-1.5 space-y-1">
                     {[
-                      ["Wallace · 99203", "$185", "Queued"],
-                      ["Khan · 99213", "$140", "Paid"],
-                      ["Chen · 99214", "$145", "Draft"],
-                    ].map(([label, amount, status]) => (
-                      <div key={label} className="flex items-center justify-between text-[9px]">
-                        <span className="text-paper/80">{label}</span>
-                        <span className="text-paper/45">
-                          {amount} · <span className={status === "Queued" ? "text-foam" : ""}>{status}</span>
-                        </span>
+                      ["Wallace · 99203", "Draft · $185 collected · balance $0"],
+                      ["Khan · 99213", "Charge $180 · plan paid $140 · $40 due"],
+                    ].map(([label, detail]) => (
+                      <div key={label} className="flex items-start justify-between gap-2 text-[9px]">
+                        <span className="shrink-0 text-paper/80">{label}</span>
+                        <span className="text-right text-paper/45">{detail}</span>
                       </div>
                     ))}
                   </div>
@@ -279,11 +275,11 @@ function PlatformPreview() {
           {[
             ["Scribe", "Listening"],
             ["Codes", "I10 · 99203"],
-            ["Claim", "Draft · $185"],
+            ["Claim", "Draft · $185 collected · balance $0"],
           ].map(([label, detail]) => (
-            <div key={label} className="flex items-center justify-between rounded-md bg-paper/[0.05] px-2 py-1">
-              <span className="text-[9px] font-medium text-paper">{label}</span>
-              <span className="text-[8px] text-paper/50">{detail}</span>
+            <div key={label} className="flex items-start justify-between gap-2 rounded-md bg-paper/[0.05] px-2 py-1">
+              <span className="shrink-0 text-[9px] font-medium text-paper">{label}</span>
+              <span className="min-w-0 text-right text-[8px] leading-snug text-paper/50">{detail}</span>
             </div>
           ))}
         </div>
