@@ -1,47 +1,81 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
-import { CategorySection, Drift, TiltFrame } from "@/components/marketing/depth";
+import { useState } from "react";
+import { CategorySection } from "@/components/marketing/depth";
+import { cn } from "@/lib/utils";
 
 const slots = [
-  { time: "8:40", name: "Anas Khan", state: "Completed" },
-  { time: "9:00", name: "Paul Wallace", state: "In room 2" },
-  { time: "10:30", name: "Garrett Holliday", state: "Unconfirmed" },
+  { time: "8:40", name: "Anas Khan", state: "Completed", note: "The visit is finished. The claim is queued." },
+  { time: "9:00", name: "Paul Wallace", state: "In room 2", note: "New-patient checkup. Labs are ordered." },
+  {
+    time: "10:30",
+    name: "Garrett Holliday",
+    state: "Unconfirmed",
+    note: "A follow-up is on the board. Nobody has confirmed it yet.",
+  },
 ];
 
 export function SchedulingSection() {
-  const reduce = useReducedMotion();
+  const [selected, setSelected] = useState(2);
+  const [confirmed, setConfirmed] = useState(false);
+
   return (
     <CategorySection
+      id="scheduling"
       eyebrow="Scheduling"
       title="10:30 is still unconfirmed."
       body="The board already holds the morning. Garrett Holliday has a follow-up at 10:30, and nobody has confirmed it yet."
     >
-      <TiltFrame className="relative pl-8">
-        <div className="absolute bottom-2 left-3 top-2 w-px bg-neutral-200" />
-        <div className="grid gap-4">
-          {slots.map((slot, index) => (
-            <Drift key={slot.time} dx={6 + index * 4} dy={4}>
-              <motion.div
-                initial={reduce ? false : { opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-                className={`relative rounded-2xl border px-4 py-3 ${
-                  slot.state === "Unconfirmed" ? "border-neutral-950 bg-ink text-white" : "border-line bg-white"
-                }`}
-              >
-                <span className="absolute -left-[1.85rem] top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-ink" />
-                <div className="flex items-baseline justify-between gap-3">
-                  <p className="font-display text-2xl">{slot.time}</p>
-                  <p className={`text-xs ${slot.state === "Unconfirmed" ? "text-paper/55" : "text-graphite"}`}>{slot.state}</p>
-                </div>
-                <p className="text-sm">{slot.name}</p>
-              </motion.div>
-            </Drift>
-          ))}
+      <div className="overflow-hidden rounded-3xl border border-line bg-white shadow-xl shadow-ink/10">
+        <div className="flex items-center justify-between gap-4 border-b border-line px-5 py-4">
+          <div>
+            <p className="text-sm font-medium text-ink">Wednesday, October 14</p>
+            <p className="text-xs text-graphite">Southeast Medical</p>
+          </div>
+          <p className="text-[11px] uppercase tracking-[0.16em] text-slash">{confirmed ? "Confirmed" : "Unconfirmed"}</p>
         </div>
-      </TiltFrame>
+        <div>
+          {slots.map((slot, index) => {
+            const open = index === selected;
+            const state = slot.time === "10:30" && confirmed ? "Confirmed" : slot.state;
+            return (
+              <button
+                key={slot.time}
+                type="button"
+                aria-pressed={open}
+                onClick={() => setSelected(index)}
+                className={cn(
+                  "block w-full border-t border-line px-5 py-4 text-left first:border-t-0",
+                  open ? "bg-mist" : "hover:bg-paper",
+                )}
+              >
+                <div className="flex items-baseline justify-between gap-4">
+                  <p className="font-display text-3xl text-ink">{slot.time}</p>
+                  <p className="text-[11px] uppercase tracking-[0.14em] text-graphite">{state}</p>
+                </div>
+                <p className="mt-2 text-sm font-medium text-ink">{slot.name}</p>
+                {open && (
+                  <p className="mt-2 max-w-sm text-sm leading-relaxed text-graphite">
+                    {slot.time === "10:30" && confirmed ? "Confirmed for Wednesday morning." : slot.note}
+                  </p>
+                )}
+              </button>
+            );
+          })}
+        </div>
+        <div className="border-t border-line px-5 py-4">
+          <button
+            type="button"
+            onClick={() => {
+              setSelected(2);
+              setConfirmed((value) => !value);
+            }}
+            className="inline-flex rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink/90"
+          >
+            {confirmed ? "Undo the confirmation" : "Confirm 10:30"}
+          </button>
+        </div>
+      </div>
     </CategorySection>
   );
 }

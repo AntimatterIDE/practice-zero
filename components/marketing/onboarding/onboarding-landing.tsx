@@ -1,75 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Headphones,
-  Infinity,
-  Layers,
-  Rocket,
-  ShieldCheck,
-  Users,
-  Wrench,
-  Globe,
-} from "lucide-react";
+import { ShieldCheck, Wrench } from "lucide-react";
 import { motion } from "motion/react";
+import { OnboardingBuild } from "@/components/marketing/onboarding/build";
+import { OnboardingDiscovery } from "@/components/marketing/onboarding/discovery";
+import { OnboardingSite } from "@/components/marketing/onboarding/website";
+import { OnboardingSupport } from "@/components/marketing/onboarding/support";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
-
-const pillars = [
-  {
-    icon: Users,
-    title: "Engineers and managers, on your side",
-    body: "A dedicated team of engineers and managers runs your custom integration not a ticket queue and a FAQ. We stay with the practice until the cutover is clean.",
-  },
-  {
-    icon: Infinity,
-    title: "Unlimited onboarding hours",
-    body: "There is no hour cap on onboarding. We work until your practice’s needs are met workflows, payers, rooms, and the exceptions that make your morning unique.",
-  },
-  {
-    icon: Rocket,
-    title: "Light-speed feature turnaround",
-    body: "Need something during go-live? Feature requests move at lightspeed. We can customize the platform in the onboarding window to fit how you already practice.",
-  },
-  {
-    icon: Layers,
-    title: "Practice-specific components",
-    body: "Bring the pieces you already rely on specialty forms, e-prescribing, labs, checklists, reporting, or stacked operational components. We wire them in so nothing you trust gets left behind.",
-  },
-  {
-    icon: Globe,
-    title: "Custom practice website, included",
-    body: "A custom website for the practice is included at no extra charge patient-facing pages, reputation, and reviews that match your brand and point into intake, portal, and scheduling.",
-  },
-  {
-    icon: Headphones,
-    title: "24/7 for the life of the contract",
-    body: "After go-live: 24/7 support, uptime, and maintenance for the full term of your agreement same team posture, not a handoff to a distant helpdesk.",
-  },
-];
-
-const phases = [
-  {
-    step: "01",
-    title: "Discovery",
-    body: "Map rooms, payers, staffing, and the stacks you already run. Engineers and managers sit with your leads until the plan is concrete.",
-  },
-  {
-    step: "02",
-    title: "Build & customize",
-    body: "Integrate, configure, and ship practice-specific components. Feature requests during this phase are first-class not backlog fodder.",
-  },
-  {
-    step: "03",
-    title: "Go-live",
-    body: "We stay until the morning board works the way your practice works. No artificial hour limit; done means done.",
-  },
-  {
-    step: "04",
-    title: "Ongoing",
-    body: "24/7 support, uptime, and maintenance for the life of the contract plus continued customization when the practice evolves.",
-  },
-];
 
 export function OnboardingLanding() {
   return (
@@ -130,68 +69,10 @@ export function OnboardingLanding() {
         </div>
       </section>
 
-      <section className="border-b border-line px-6 py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-slash">
-            What you get
-          </p>
-          <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-4xl">
-            custom integration without the hour clock.
-          </h2>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {pillars.map((item, i) => {
-              const Icon = item.icon;
-              return (
-                <motion.article
-                  key={item.title}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-8%" }}
-                  transition={{ delay: i * 0.04, duration: 0.5, ease: EASE }}
-                  className="rounded-3xl border border-line bg-card p-6 shadow-[var(--shadow-card)]"
-                >
-                  <span className="grid size-10 place-items-center rounded-xl bg-slash/10 text-slash">
-                    <Icon className="size-5" aria-hidden />
-                  </span>
-                  <h3 className="mt-4 text-lg font-semibold tracking-[-0.02em] text-ink">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-graphite">{item.body}</p>
-                </motion.article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="border-b border-line bg-mist/40 px-6 py-20 sm:py-24">
-        <div className="mx-auto max-w-6xl">
-          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-slash">
-            How it runs
-          </p>
-          <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-[-0.03em] text-ink sm:text-4xl">
-            from discovery to lifetime support.
-          </h2>
-          <ol className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {phases.map((phase, i) => (
-              <motion.li
-                key={phase.step}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-8%" }}
-                transition={{ delay: i * 0.05, duration: 0.45, ease: EASE }}
-                className="rounded-3xl border border-line bg-paper p-5"
-              >
-                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-slash">
-                  {phase.step}
-                </p>
-                <h3 className="mt-3 text-lg font-semibold text-ink">{phase.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-graphite">{phase.body}</p>
-              </motion.li>
-            ))}
-          </ol>
-        </div>
-      </section>
+      <OnboardingDiscovery />
+      <OnboardingBuild />
+      <OnboardingSite />
+      <OnboardingSupport />
 
       <section className="px-6 py-20 sm:py-24">
         <div className="mx-auto flex max-w-6xl flex-col gap-8 rounded-[2rem] border border-line bg-ink px-8 py-12 text-paper sm:flex-row sm:items-center sm:justify-between sm:px-12">

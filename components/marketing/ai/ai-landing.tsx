@@ -2,48 +2,10 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import {
-  Building2,
-  CalendarClock,
-  Cpu,
-  FileText,
-  Mic2,
-  ShieldCheck,
-  Wallet,
-} from "lucide-react";
-
-const pillars = [
-  {
-    icon: Building2,
-    title: "Space, not a front desk army",
-    body: "If you want, you do not need a traditional office manager stacking every queue. Practice Zero agents own the loops that used to live on clipboards and sticky notes.",
-  },
-  {
-    icon: Mic2,
-    title: "Hardware in the room",
-    body: "Install capture in exam rooms when you are ready. Visits are recorded, summarized, and handed to agents that schedule follow-ups before anyone walks back to a desk.",
-  },
-  {
-    icon: CalendarClock,
-    title: "Scheduling that keeps moving",
-    body: "Recalls, confirms, and next open slots stay autonomous under your rules. Agents propose; you approve the exceptions.",
-  },
-  {
-    icon: FileText,
-    title: "Claims without the chase",
-    body: "Claims agents and payment tracking sit on one loop: check benefits, hold a claim that needs a record, and post the EOB.",
-  },
-  {
-    icon: Wallet,
-    title: "Payment tracking that is already open",
-    body: "Patient pay, balances, remits, and statements stay visible without another spreadsheet owner.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "You keep the keys",
-    body: "Agents act inside practice policy. Approvals, overrides, and audit stay on your side of the desk.",
-  },
-];
+import { AiBoardSection } from "@/components/marketing/ai/board";
+import { AiCaptureSection } from "@/components/marketing/ai/capture";
+import { AiClaimSection } from "@/components/marketing/ai/claim";
+import { AiPaymentsSection } from "@/components/marketing/ai/payments";
 
 export function AiLanding() {
   return (
@@ -108,84 +70,10 @@ export function AiLanding() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
-        <div className="flex items-start gap-4">
-          <span className="mt-1 grid size-10 place-items-center rounded-2xl bg-slash/10 text-slash">
-            <Cpu className="size-5" aria-hidden />
-          </span>
-          <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
-              What agentic means here
-            </h2>
-            <p className="mt-3 max-w-2xl text-base leading-relaxed text-graphite">
-              Not a chatbot bolted on. Practice Zero agents take the work that
-              used to sit with an office manager then leave you the exceptions,
-              clinical judgment, and the practice voice.
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {pillars.map((pillar, i) => {
-            const Icon = pillar.icon;
-            return (
-              <motion.div
-                key={pillar.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ delay: i * 0.04 }}
-                className="rounded-2xl border border-line bg-card p-6"
-              >
-                <Icon className="size-5 text-slash" aria-hidden />
-                <h3 className="mt-4 text-lg font-semibold text-ink">
-                  {pillar.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-graphite">
-                  {pillar.body}
-                </p>
-              </motion.div>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="border-y border-line bg-mist/60">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 sm:py-20 lg:grid-cols-2 lg:gap-16">
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-slash">
-              Room capture
-            </p>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
-              Hardware in the rooms. Agents after the visit.
-            </h2>
-            <p className="mt-4 text-base leading-relaxed text-graphite">
-              Optional capture devices in practice rooms record the encounter.
-              Practice Zero agents turn that into the note draft, the follow-up
-              slot, the claim path, and payment tracking without another person
-              retyping the morning.
-            </p>
-          </div>
-          <ol className="space-y-4">
-            {[
-              "Visit captured in the room (optional hardware)",
-              "Agent drafts note + proposes follow-up",
-              "Scheduling, claims, and payments move under your rules",
-              "You approve exceptions not every keystroke",
-            ].map((step, i) => (
-              <li
-                key={step}
-                className="flex gap-4 rounded-2xl border border-line bg-card px-5 py-4"
-              >
-                <span className="font-mono text-sm text-slash">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="text-sm font-medium text-ink">{step}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
+      <AiBoardSection />
+      <AiCaptureSection />
+      <AiClaimSection />
+      <AiPaymentsSection />
 
       <section className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
         <div className="rounded-3xl border border-line bg-ink px-8 py-12 text-paper sm:px-12 sm:py-16">
