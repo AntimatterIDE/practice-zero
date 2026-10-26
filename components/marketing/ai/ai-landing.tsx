@@ -67,7 +67,7 @@ export function AiLanding() {
             transition={{ delay: 0.05 }}
             className="mt-4 max-w-3xl text-4xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl md:text-6xl"
           >
-            practice zero agents run the practice—so you can run the rooms.
+            practice zero agents run the practice so you can run the rooms.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -77,7 +77,7 @@ export function AiLanding() {
           >
             Agentic EHR means scheduling, claims, payment tracking, and
             follow-ups keep moving without a full front-office stack. Need only
-            space—and optional room hardware that records visits and feeds the
+            space and optional room hardware that records visits and feeds the
             agents automatically.
           </motion.p>
           <motion.div
@@ -119,7 +119,7 @@ export function AiLanding() {
             </h2>
             <p className="mt-3 max-w-2xl text-base leading-relaxed text-graphite">
               Not a chatbot bolted on. Practice Zero agents take the work that
-              used to sit with an office manager—then leave you the exceptions,
+              used to sit with an office manager then leave you the exceptions,
               clinical judgment, and the practice voice.
             </p>
           </div>
@@ -162,7 +162,7 @@ export function AiLanding() {
             <p className="mt-4 text-base leading-relaxed text-graphite">
               Optional capture devices in practice rooms record the encounter.
               Practice Zero agents turn that into the note draft, the follow-up
-              slot, the claim path, and payment tracking—without another person
+              slot, the claim path, and payment tracking without another person
               retyping the morning.
             </p>
           </div>
@@ -171,7 +171,7 @@ export function AiLanding() {
               "Visit captured in the room (optional hardware)",
               "Agent drafts note + proposes follow-up",
               "Scheduling, claims, and payments move under your rules",
-              "You approve exceptions—not every keystroke",
+              "You approve exceptions not every keystroke",
             ].map((step, i) => (
               <li
                 key={step}
@@ -190,7 +190,7 @@ export function AiLanding() {
       <section className="mx-auto max-w-6xl px-6 py-16 sm:py-24">
         <div className="rounded-3xl border border-line bg-ink px-8 py-12 text-paper sm:px-12 sm:py-16">
           <h2 className="max-w-xl text-2xl font-semibold tracking-tight sm:text-3xl">
-            See agents on your workflows—or read how we think about them.
+            See agents on your workflows or read how we think about them.
           </h2>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link

@@ -20,17 +20,17 @@ const features = [
   {
     icon: Database,
     title: "Route billing through the platform",
-    body: "Eligibility, claims, remittances, and payer work in one place — from the visit to the deposit.",
+    body: "Eligibility, claims, remittances, and payer work in one place from the visit to the deposit.",
   },
   {
     icon: FileText,
     title: "Enterprise EHR included",
-    body: "Charting, scribe, e-prescribing, labs, scheduling, intake, and the patient portal — free with the agreement.",
+    body: "Charting, scribe, e-prescribing, labs, scheduling, intake, and the patient portal free with the agreement.",
   },
   {
     icon: ShieldCheck,
     title: "Fully compliant & secure",
-    body: "Built for HIPAA-minded practices with writes that stay in the browser for the demo — and controls that scale.",
+    body: "Built for HIPAA-minded practices with writes that stay in the browser for the demo and controls that scale.",
   },
   {
     icon: Settings2,
@@ -45,7 +45,7 @@ const features = [
   {
     icon: Users,
     title: "Scales with you",
-    body: "Solo or multi-provider — the same platform, one-year billing agreement sized to the practice.",
+    body: "Solo or multi-provider the same platform, one-year billing agreement sized to the practice.",
   },
 ];
 

@@ -11,7 +11,7 @@ export function HomeHero() {
             chart, claim, and collect on one surface.
           </h2>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-graphite">
-            Open a live visit, watch the scribe land codes, and queue the claim — without leaving the morning board.
+            Open a live visit, watch the scribe land codes, and queue the claim without leaving the morning board.
           </p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Link

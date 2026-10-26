@@ -260,7 +260,7 @@ export function describeLanes(
 ) {
   return lanes
     .map((lane) => {
-      const lines = lane.checks.map((check) => `- [${check.state}] ${check.label} — ${check.detail}`);
+      const lines = lane.checks.map((check) => `- [${check.state}] ${check.label} ${check.detail}`);
       return `${lane.title} (${lane.href})\n${lane.headline}\n${lines.join("\n")}`;
     })
     .join("\n\n");

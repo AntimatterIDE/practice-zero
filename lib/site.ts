@@ -3,7 +3,7 @@ import { product as brandProduct } from "@/lib/brand";
 export const product = {
   name: brandProduct.displayName,
   description:
-    "practice zero is an agentic EHR for independent practices — chart, billing, and outreach in one morning board.",
+    "practice zero is an agentic EHR for independent practices chart, billing, and outreach in one morning board.",
 } as const;
 
 export function canonicalOrigin() {

@@ -7,7 +7,7 @@ import { pageOpenGraph } from "@/lib/open-graph";
 export const metadata: Metadata = {
   title: "Find a physician",
   description:
-    "Search Southeast Medical by problem, insurance, or name. Paul Wallace’s plan is not contracted. He pays the practice fee. Illustrative demo — the live patient experience is the portal.",
+    "Search Southeast Medical by problem, insurance, or name. Paul Wallace’s plan is not contracted. He pays the practice fee. Illustrative demo the live patient experience is the portal.",
   alternates: { canonical: "/patient/find" },
   openGraph: pageOpenGraph({
     title: "Find a physician · practice zero",

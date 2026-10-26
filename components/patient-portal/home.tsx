@@ -31,7 +31,7 @@ export function PatientHome() {
           hello, {patient.preferredName || patient.firstName}.
         </h1>
         <p className="mt-3 max-w-2xl text-base leading-relaxed text-graphite">
-          This is how {patientName(patient)} sees {samplePractice.legalName} — profile, messages, documents, and updates
+          This is how {patientName(patient)} sees {samplePractice.legalName} profile, messages, documents, and updates
           from the same record the practice uses.
         </p>
       </div>

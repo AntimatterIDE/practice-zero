@@ -32,7 +32,7 @@ const bodySchema = z.object({
 function taskCatalog() {
   return GOLIVE_TASKS.map((task) => {
     const steps = task.steps
-      .map((step, i) => `  ${task.number}.${i + 1} [${step.id}] ${step.title} — ${step.detail}`)
+      .map((step, i) => `  ${task.number}.${i + 1} [${step.id}] ${step.title} ${step.detail}`)
       .join("\n");
     return `Task ${task.number} [${task.id}] ${task.title}\n${task.summary}${
       task.docs ? `\nDocs: ${task.docs}` : ""
@@ -44,7 +44,7 @@ const SYSTEM = `You are the Practice Zero marketing go-live assistant inside the
 Your only job: help the operator complete the numbered tasks and their separate steps so acquisition is live.
 
 Rules:
-- Refer to tasks by number and title (e.g. Task 3 — GA4, GTM & Search Console) and steps as N.M (e.g. 3.2).
+- Refer to tasks by number and title (e.g. Task 3 GA4, GTM & Search Console) and steps as N.M (e.g. 3.2).
 - Give the next concrete action for the incomplete step they ask about; one decision at a time when blocked.
 - Never invent secrets, Measurement IDs, or spend numbers.
 - Never request PHI or patient lists with clinical fields.
@@ -63,7 +63,7 @@ function fallbackAnswer(lastUser: string, progress?: z.infer<typeof bodySchema>[
   if (q.includes("next") || q.includes("what’s next") || q.includes("whats next")) {
     if (progress?.nextTaskNumber && progress.nextStepTitle) {
       return [
-        `Next up: Task ${progress.nextTaskNumber} — ${progress.nextTaskTitle}.`,
+        `Next up: Task ${progress.nextTaskNumber} ${progress.nextTaskTitle}.`,
         `Step: ${progress.nextStepTitle}`,
         `You're ${progress.completedSteps}/${progress.totalSteps} steps done. Open that task on the left, or ask for a walkthrough of that step.`,
       ].join("\n");
@@ -72,7 +72,7 @@ function fallbackAnswer(lastUser: string, progress?: z.infer<typeof bodySchema>[
   }
   if (q.includes("supabase") || q.includes("migration") || q.includes("column")) {
     return [
-      "Task 1 — Supabase attribution migration:",
+      "Task 1 Supabase attribution migration:",
       "1.1 Open Supabase SQL editor",
       "1.2 Run supabase/migrations/002_consultation_leads_attribution.sql",
       "1.3 Confirm specialty / campaign / utm_* columns",
@@ -89,7 +89,7 @@ function fallbackAnswer(lastUser: string, progress?: z.infer<typeof bodySchema>[
   }
   if (q.includes("instantly") || q.includes("cold") || q.includes("email") || q.includes("domain")) {
     return [
-      "Tasks 7–9 — cold email:",
+      "Tasks 7–9 cold email:",
       "7: sending domains, DNS, Instantly warmup 14–21 days",
       "8: verify list, load sequence.md + specialty variants, UTMs, ramp",
       "9: webhook POST /api/webhooks/instantly with Bearer INSTANTLY_WEBHOOK_SECRET",
@@ -97,7 +97,7 @@ function fallbackAnswer(lastUser: string, progress?: z.infer<typeof bodySchema>[
   }
   if (q.includes("ads") || q.includes("google")) {
     return [
-      "Task 5 — Google Ads Wave 1:",
+      "Task 5 Google Ads Wave 1:",
       "5.1 Account ready",
       "5.2 Link GA4; import contact_submit + demo_open",
       "5.3 Brand Search",
@@ -129,7 +129,7 @@ export async function POST(request: Request) {
   const progressBlock = progress
     ? `\n\nOPERATOR PROGRESS SNAPSHOT:\n- Steps done: ${progress.completedSteps}/${progress.totalSteps}\n- Next: ${
         progress.nextTaskNumber
-          ? `Task ${progress.nextTaskNumber} — ${progress.nextTaskTitle} / step “${progress.nextStepTitle}”`
+          ? `Task ${progress.nextTaskNumber} ${progress.nextTaskTitle} / step “${progress.nextStepTitle}”`
           : "all steps marked complete"
       }`
     : "";

@@ -48,7 +48,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "eligibility before the patient is dilated",
-        body: "coverage and prior auth status land early enough to protect injections, lasers, and workups — not after the claim comes back unpaid.",
+        body: "coverage and prior auth status land early enough to protect injections, lasers, and workups not after the claim comes back unpaid.",
       },
       {
         title: "claims attached to the visit",
@@ -56,11 +56,11 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "recall and confirm without a second stack",
-        body: "outreach for overdue exams, postop checks, and open slots runs from the same practice surface as chart and billing — including reputation and reviews.",
+        body: "outreach for overdue exams, postop checks, and open slots runs from the same practice surface as chart and billing including reputation and reviews.",
       },
       {
         title: "specialty forms in onboarding",
-        body: "consent, procedure agreements, and practice-specific intake come in during white-glove build — not as a generic template you fight later.",
+        body: "consent, procedure agreements, and practice-specific intake come in during white-glove build not as a generic template you fight later.",
       },
     ],
     board: [
@@ -92,7 +92,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "missed eligibility",
-        body: "coverage checks land before the patient is in the chair — not after a high-cost visit becomes a denial.",
+        body: "coverage checks land before the patient is in the chair not after a high-cost visit becomes a denial.",
       },
       {
         title: "payer phone tag",
@@ -118,11 +118,11 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         q: "Do you understand procedure-heavy ophthalmology days?",
-        a: "That’s the point of this lander. The morning board is built for clinics where medical visits and procedures share the same schedule — eligibility, chart, claim, and outreach in one place.",
+        a: "That’s the point of this lander. The morning board is built for clinics where medical visits and procedures share the same schedule eligibility, chart, claim, and outreach in one place.",
       },
       {
         q: "Can we try it before a consultation?",
-        a: "Open the live demo at /try — then request a consultation when you want a walkthrough framed for your practice.",
+        a: "Open the live demo at /try then request a consultation when you want a walkthrough framed for your practice.",
       },
     ],
     searchTitle: "Ophthalmology EHR & billing for independent practices",
@@ -141,7 +141,7 @@ export const specialties: SpecialtyContent[] = [
     kicker: "Orthopedics",
     headline: "prior auth, high-dollar visits, and remits. still one morning.",
     support:
-      "independent ortho practices live in prior auth loops, imaging coordination, and claims that matter when they stall. practice zero keeps documentation, authorizations, claims, and outreach on one morning board so your team spends mornings on rooms — not payer inboxes.",
+      "independent ortho practices live in prior auth loops, imaging coordination, and claims that matter when they stall. practice zero keeps documentation, authorizations, claims, and outreach on one morning board so your team spends mornings on rooms not payer inboxes.",
     reality: {
       title: "ortho admin isn’t paperwork. it’s blocked care and delayed cash.",
       body: "surgeries and injections wait on authorizations. imaging and therapy orders need follow-through. high-dollar claims get stuck when documentation and coding drift apart. the front desk confirms a schedule that the OR and clinic both depend on. unpaid remits and denial work often sit with one burned-out person while providers keep seeing volume. none of that should require three softwares and a shared spreadsheet.",
@@ -153,7 +153,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "documentation that survives the claim",
-        body: "notes, coding support, and claim drafts stay connected from the room to the remittance — less leakage on high-dollar work.",
+        body: "notes, coding support, and claim drafts stay connected from the room to the remittance less leakage on high-dollar work.",
       },
       {
         title: "mornings that start confirmed",
@@ -232,7 +232,7 @@ export const specialties: SpecialtyContent[] = [
     ],
     searchTitle: "Orthopedic practice EHR, RCM & prior auth",
     searchDescription:
-      "Agentic EHR for independent orthopedics — prior auth, claims, and outreach on one morning board with a one-year billing agreement.",
+      "Agentic EHR for independent orthopedics prior auth, claims, and outreach on one morning board with a one-year billing agreement.",
     keywords: [
       "orthopedic EHR",
       "orthopedic practice management",
@@ -246,7 +246,7 @@ export const specialties: SpecialtyContent[] = [
     kicker: "Primary care",
     headline: "panel volume without the evening charting tax.",
     support:
-      "family and internal medicine mornings are eligibility, chronic care, same-day sick visits, and a phone that never stops. practice zero agents clear the admin loops — chart, coverage, claims, and follow-up — so independent primary care teams can run the rooms.",
+      "family and internal medicine mornings are eligibility, chronic care, same-day sick visits, and a phone that never stops. practice zero agents clear the admin loops chart, coverage, claims, and follow-up so independent primary care teams can run the rooms.",
     reality: {
       title: "primary care fails quietly when admin outruns the panel.",
       body: "you’re managing volume, not one blockbuster procedure. missed eligibility becomes walkouts and write-offs. notes spill into evenings because the visit never had room to finish them. denials and unpaid claims cluster until someone has a “billing day.” outreach for annuals, labs, and gaps in care usually sits in a portal or spreadsheet nobody trusts. independent practices feel this harder because there isn’t a hospital army behind the desk.",
@@ -254,7 +254,7 @@ export const specialties: SpecialtyContent[] = [
     howWeHelp: [
       {
         title: "notes drafted in the visit",
-        body: "documentation support keeps panels from spilling into nights — the note, e-prescribe, and labs move while the patient is still in the room.",
+        body: "documentation support keeps panels from spilling into nights the note, e-prescribe, and labs move while the patient is still in the room.",
       },
       {
         title: "eligibility before the waiting room fills",
@@ -266,7 +266,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "outreach that matches the chart",
-        body: "recalls, confirms, and follow-ups run from the practice surface — not a separate growth product that invents its own patient list.",
+        body: "recalls, confirms, and follow-ups run from the practice surface not a separate growth product that invents its own patient list.",
       },
       {
         title: "built for independents",
@@ -310,13 +310,13 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "enterprise-only software",
-        body: "practice zero is built for independent primary care — not a hospital rollout you can’t staff.",
+        body: "practice zero is built for independent primary care not a hospital rollout you can’t staff.",
       },
     ],
     faq: [
       {
         q: "Is this only for large groups?",
-        a: "No. Practice Zero is built for independent practices — solo through multi-provider primary care.",
+        a: "No. Practice Zero is built for independent practices solo through multi-provider primary care.",
       },
       {
         q: "What about our existing billing company?",
@@ -324,7 +324,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         q: "Can patients still use a portal?",
-        a: "Yes. The patient experience sits beside the morning board — forms, messages, and balances stay in sync.",
+        a: "Yes. The patient experience sits beside the morning board forms, messages, and balances stay in sync.",
       },
       {
         q: "How is this different from another EHR seat tax?",
@@ -347,7 +347,7 @@ export const specialties: SpecialtyContent[] = [
     kicker: "Dermatology",
     headline: "medical visits and cash-pay days. same practice surface.",
     support:
-      "independent derm practices mix medical dermatology with procedure and cash-pay days — and usually end up with three tools that never agree. practice zero puts chart, claim, and outreach on one morning board so clinical, billing, and follow-up share the same patient.",
+      "independent derm practices mix medical dermatology with procedure and cash-pay days and usually end up with three tools that never agree. practice zero puts chart, claim, and outreach on one morning board so clinical, billing, and follow-up share the same patient.",
     reality: {
       title: "derm admin breaks when medical and cash-pay don’t share a brain.",
       body: "you’re coding medical visits next to procedure days, managing biopsies and pathology follow-up, and trying to keep recall full without a marketing stack that invents its own CRM. claim rework starts when documentation and coding drift. no-shows and unfinished balances eat margin. staff bounce between EHR, billing software, and a growth tool that doesn’t know what happened in the room.",
@@ -359,11 +359,11 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "claims that restart less often",
-        body: "codes and claim drafts stay with the visit — including pathology follow-up — so denials don’t send someone back to square one.",
+        body: "codes and claim drafts stay with the visit including pathology follow-up so denials don’t send someone back to square one.",
       },
       {
         title: "recall without a bolt-on CRM",
-        body: "follow-ups, recalls, and open-slot outreach wait in the outbox — tied to the chart, not a spreadsheet export.",
+        body: "follow-ups, recalls, and open-slot outreach wait in the outbox tied to the chart, not a spreadsheet export.",
       },
       {
         title: "optional ads, included platform",
@@ -411,7 +411,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "growth tools that invent patients",
-        body: "outreach uses the real practice list — not a bolted-on CRM that drifts from the chart.",
+        body: "outreach uses the real practice list not a bolted-on CRM that drifts from the chart.",
       },
     ],
     faq: [
@@ -425,16 +425,16 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         q: "Will this replace our separate marketing tool?",
-        a: "Outreach and recall sit on the same morning board as chart and billing — so you aren’t maintaining a second patient universe for growth.",
+        a: "Outreach and recall sit on the same morning board as chart and billing so you aren’t maintaining a second patient universe for growth.",
       },
       {
         q: "Where do we start?",
-        a: "Try the demo, then request a consultation — or come straight from a specialty email to this page.",
+        a: "Try the demo, then request a consultation or come straight from a specialty email to this page.",
       },
     ],
     searchTitle: "Dermatology EHR, billing & patient outreach",
     searchDescription:
-      "Agentic EHR for independent dermatology practices — chart, claims, and outreach on one morning board.",
+      "Agentic EHR for independent dermatology practices chart, claims, and outreach on one morning board.",
     keywords: [
       "dermatology EHR",
       "dermatology practice management",
@@ -448,7 +448,7 @@ export const specialties: SpecialtyContent[] = [
     kicker: "OB-GYN",
     headline: "scheduling intensity, coverage, and follow-up. cleared by morning.",
     support:
-      "independent OB-GYN practices run dense schedules, sensitive intake, and payer complexity that doesn’t forgive a sloppy front desk. practice zero clears confirmations, eligibility, charting, claims, and outreach on one morning board so the day stays on care — not coordination.",
+      "independent OB-GYN practices run dense schedules, sensitive intake, and payer complexity that doesn’t forgive a sloppy front desk. practice zero clears confirmations, eligibility, charting, claims, and outreach on one morning board so the day stays on care not coordination.",
     reality: {
       title: "OB-GYN mornings are coordination under time pressure.",
       body: "the schedule is dense. confirmations and no-shows reshape the day before first light. eligibility surprises at check-in waste chair time and trust. specialty intake and consents have to be right. claims and unpaid balances stack while the phone keeps ringing. after-hours admin becomes normal because the visit never had a clean place to finish documentation and claim prep. independent practices feel every miss because there isn’t a hospital buffer.",
@@ -460,7 +460,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "eligibility before check-in",
-        body: "coverage and prior auth status are checked early enough to protect the visit — not turned into a waiting-room negotiation.",
+        body: "coverage and prior auth status are checked early enough to protect the visit not turned into a waiting-room negotiation.",
       },
       {
         title: "specialty intake in the build",
@@ -500,7 +500,7 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         title: "eligibility surprises",
-        body: "coverage is checked early so visits aren’t turned away — or argued over — at check-in.",
+        body: "coverage is checked early so visits aren’t turned away or argued over at check-in.",
       },
       {
         title: "after-hours admin",
@@ -526,11 +526,11 @@ export const specialties: SpecialtyContent[] = [
       },
       {
         q: "Is support available after go-live?",
-        a: "Support stays 24/7 for the life of the contract — not only during onboarding.",
+        a: "Support stays 24/7 for the life of the contract not only during onboarding.",
       },
       {
         q: "Will this help with no-shows and dense schedules?",
-        a: "Confirmations and reminders run before first light from the morning board so the schedule starts closer to true — not rebuilt after patients arrive.",
+        a: "Confirmations and reminders run before first light from the morning board so the schedule starts closer to true not rebuilt after patients arrive.",
       },
     ],
     searchTitle: "OB-GYN EHR & practice billing for independents",

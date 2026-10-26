@@ -87,7 +87,7 @@ const practiceSections: Section[] = [
     blurb: "Patients, visits, scribe, e-prescribing, and labs on one morning board.",
     feature: "scribe",
     items: [
-      { title: "Patients", body: "The chart, already open — meds for e-prescribe", icon: User },
+      { title: "Patients", body: "The chart, already open meds for e-prescribe", icon: User },
       { title: "Visits", body: "Rooms, labs, and e-prescribe mid-morning", icon: Stethoscope },
       { title: "Scribe", body: "Dictation settling into the note", icon: Mic },
       { title: "Intake", body: "Answers on file before the visit", icon: ClipboardList },
@@ -124,7 +124,7 @@ const practiceSections: Section[] = [
       { title: "Follow-up", body: "The next touch after the visit", icon: Bell },
       { title: "Scheduling", body: "Who is still unconfirmed", icon: Calendar },
       { title: "SEO", body: "Pages and reputation a new patient can find", icon: Search },
-      { title: "Social", body: "How the practice shows up — including reviews", icon: Share2 },
+      { title: "Social", body: "How the practice shows up including reviews", icon: Share2 },
     ],
   },
   {
@@ -132,7 +132,7 @@ const practiceSections: Section[] = [
     label: "AI",
     href: "/ai",
     kicker: "Agentic EHR",
-    blurb: "Agents own the loops — scheduling, prior auth, claims, payments, follow-ups.",
+    blurb: "Agents own the loops scheduling, prior auth, claims, payments, follow-ups.",
     feature: "agents",
     items: [
       { title: "Agentic EHR", body: "Space and hardware, not a front-desk army", icon: Cpu },
@@ -148,7 +148,7 @@ const practiceSections: Section[] = [
     label: "Onboarding",
     href: "/onboarding",
     kicker: "Go-live",
-    blurb: "Unlimited hours until the practice is ready — then 24/7 for the contract.",
+    blurb: "Unlimited hours until the practice is ready then 24/7 for the contract.",
     feature: "onboarding",
     items: [
       { title: "Engineers & managers", body: "A team on your integration, not a ticket queue", icon: Users },
@@ -278,7 +278,7 @@ const patientSections: Section[] = [
       },
       {
         title: "Before you arrive",
-        body: "Thursday 9:00 — sign, upload, arrive early",
+        body: "Thursday 9:00 sign, upload, arrive early",
         icon: ClipboardList,
         href: "/patient/prepare",
       },

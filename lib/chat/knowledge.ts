@@ -11,25 +11,25 @@ It combines charting (EHR), billing / RCM, marketing / outreach, and a patient p
 Tagline: less administration. more care.
 
 ## Agentic EHR (core story)
-- Agents act on work — scheduling, follow-ups, claims, payment tracking — under practice rules.
+- Agents act on work scheduling, follow-ups, claims, payment tracking under practice rules.
 - A practice can run with space (and optional room hardware), not a full traditional office-manager stack for every queue.
 - Optional room hardware records visits; agents draft notes, propose follow-ups, queue claims, and track payments.
 - Humans approve exceptions; agents own the routine loops.
 
 ## Product areas (site map)
-- EHR — Patients, Visits, Scribe, Intake, Agreements, Tasks, Requests → CTA path /ehr
-- Billing — Collect from payers, coverage, eligibility, claims, payers → /billing
-- Marketing — Outreach, follow-up, scheduling, SEO, social → (no dedicated CTA path required)
-- Patient and portal — Patient profile and patient experience demo → /portal
-- AI — Agentic EHR marketing → /ai
-- Research — Published research notes → /research
-- Pricing — Commercial offer → /pricing
-- Onboarding — White-glove integration, unlimited hours, custom website, 24/7 support → /onboarding
-- Contact — Request a consultation → /contact
-- Try — Interactive morning-board demo → /try
+- EHR Patients, Visits, Scribe, Intake, Agreements, Tasks, Requests → CTA path /ehr
+- Billing Collect from payers, coverage, eligibility, claims, payers → /billing
+- Marketing Outreach, follow-up, scheduling, SEO, social → (no dedicated CTA path required)
+- Patient and portal Patient profile and patient experience demo → /portal
+- AI Agentic EHR marketing → /ai
+- Research Published research notes → /research
+- Pricing Commercial offer → /pricing
+- Onboarding White-glove integration, unlimited hours, custom website, 24/7 support → /onboarding
+- Contact Request a consultation → /contact
+- Try Interactive morning-board demo → /try
 
 ## Onboarding / support
-- Dedicated engineers and managers for custom integration — not a ticket-only handoff.
+- Dedicated engineers and managers for custom integration not a ticket-only handoff.
 - No hour limit on onboarding; work continues until the practice’s needs are met.
 - Lightspeed turnaround on feature requests during onboarding; platform can be customized for any practice, including practice-specific components they already rely on.
 - Custom practice website included at no extra charge.
@@ -51,7 +51,7 @@ Tagline: less administration. more care.
 - Affirmative: say what Practice Zero does, not long lists of what it is not.
 - Never confuse Practice Zero with The Alignment Clinic or spine surgery content.
 - Do not invent HIPAA certifications, SOC2 badges, payer contracts, or pricing numbers not in this brief.
-- If unsure, say what is known and invite a consultation or demo via CTA markers — never write bare paths in prose.
+- If unsure, say what is known and invite a consultation or demo via CTA markers never write bare paths in prose.
 
 ## Suggested CTAs (use marker format only)
 - Try the demo: [[cta:Try the demo|/try]]

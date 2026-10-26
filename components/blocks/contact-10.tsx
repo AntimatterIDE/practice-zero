@@ -14,7 +14,7 @@ const benefits = [
   },
   {
     title: "The billing agreement",
-    description: "See how the one-year agreement works — and when optional advertising spend makes sense.",
+    description: "See how the one-year agreement works and when optional advertising spend makes sense.",
   },
   {
     title: "Live product time",
@@ -156,7 +156,7 @@ function ContactForm() {
             variants={item}
             className="mt-6 max-w-md text-base leading-relaxed text-graphite sm:text-lg"
           >
-            Tell us about the practice. We will follow up with a walkthrough of chart, billing, and outreach — and how the one-year billing agreement fits your mornings.
+            Tell us about the practice. We will follow up with a walkthrough of chart, billing, and outreach and how the one-year billing agreement fits your mornings.
           </motion.p>
 
           <div className="mt-12 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">

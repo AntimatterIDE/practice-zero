@@ -16,7 +16,7 @@ export function SeoSection() {
       flip
       eyebrow="SEO"
       title="Pages a person can find."
-      body="Search is a set of plain pages: new patients, the visit they need, and when the door is open. Reputation and reviews help them choose — no ranking is promised here."
+      body="Search is a set of plain pages: new patients, the visit they need, and when the door is open. Reputation and reviews help them choose no ranking is promised here."
     >
       <div className="grid gap-3">
         {pages.map((page, index) => (

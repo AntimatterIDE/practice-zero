@@ -14,7 +14,7 @@ export function VisitsSection() {
       flip
       eyebrow="Visits"
       title="Three rooms, one morning."
-      body="Anas is finished in room 1. Paul is in room 2 for a new-patient checkup — labs ordered, e-prescribe ready if the visit needs it. Garrett is still on the board at 10:30."
+      body="Anas is finished in room 1. Paul is in room 2 for a new-patient checkup labs ordered, e-prescribe ready if the visit needs it. Garrett is still on the board at 10:30."
     >
       <TiltFrame className="relative h-[26rem]">
         {rooms.map((room) => (

@@ -7,12 +7,12 @@ import { pageOpenGraph } from "@/lib/open-graph";
 export const metadata: Metadata = {
   title: "Patient profile",
   description:
-    "The patient portal and profile — login, messages, documents, updates, and a clear view of personal health information.",
+    "The patient portal and profile login, messages, documents, updates, and a clear view of personal health information.",
   alternates: { canonical: "/patient" },
   openGraph: pageOpenGraph({
     title: "Patient profile · practice zero",
     description:
-      "The patient portal and profile — login, messages, documents, updates, and a clear view of personal health information.",
+      "The patient portal and profile login, messages, documents, updates, and a clear view of personal health information.",
     url: "/patient",
   }),
 };

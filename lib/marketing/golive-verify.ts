@@ -127,7 +127,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
       "supabase-open",
       signals.attributionColumns ? "pass" : "fail",
       signals.attributionColumns
-        ? "Attribution columns detected — migration appears applied."
+        ? "Attribution columns detected migration appears applied."
         : supabase.error ?? "Run migration 002 in the Supabase SQL editor.",
     ),
     step(
@@ -170,7 +170,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
       signals.gtmId ? "optional_pass" : "pending",
       signals.gtmId
         ? `NEXT_PUBLIC_GTM_ID is set (${gtm}).`
-        : "Optional — add NEXT_PUBLIC_GTM_ID when you create a GTM container.",
+        : "Optional add NEXT_PUBLIC_GTM_ID when you create a GTM container.",
     ),
     step(
       "env",
@@ -186,7 +186,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
       signals.gscVerification ? "optional_pass" : "pending",
       signals.gscVerification
         ? "NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION is set."
-        : "Free next step — add Search Console HTML verification token when ready.",
+        : "Free next step add Search Console HTML verification token when ready.",
     ),
     step(
       "env",
@@ -223,7 +223,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
       "env-redeploy",
       signals.gaMeasurementId || signals.posthogKey ? "pass" : "fail",
       signals.gaMeasurementId || signals.posthogKey
-        ? "Public marketing env vars are present on this deployment — redeploy already applied them."
+        ? "Public marketing env vars are present on this deployment redeploy already applied them."
         : "Redeploy after setting NEXT_PUBLIC_* vars.",
     ),
 
@@ -240,7 +240,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
       "ga4",
       "ga4-gtm",
       signals.gtmId ? "optional_pass" : "pending",
-      signals.gtmId ? "GTM container ID present." : "Optional — skip for now if using direct GA4.",
+      signals.gtmId ? "GTM container ID present." : "Optional skip for now if using direct GA4.",
     ),
     step(
       "ga4",
@@ -248,19 +248,19 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
       signals.gscVerification ? "optional_pass" : "pending",
       signals.gscVerification
         ? "Verification token present (confirm Verify clicked in Search Console)."
-        : "Free — verify www.practicezero.com in Search Console.",
+        : "Free verify www.practicezero.com in Search Console.",
     ),
     step(
       "ga4",
       "ga4-sitemap",
       "pending",
-      "Free — in Search Console → Sitemaps submit https://www.practicezero.com/sitemap.xml",
+      "Free in Search Console → Sitemaps submit https://www.practicezero.com/sitemap.xml",
     ),
     step(
       "ga4",
       "ga4-conversions",
       "pending",
-      "Free — in GA4 mark contact_submit and demo_open as key events / conversions.",
+      "Free in GA4 mark contact_submit and demo_open as key events / conversions.",
     ),
     step(
       "ga4",
@@ -280,7 +280,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
       "posthog",
       "posthog-funnel",
       "pending",
-      "Free — in PostHog create funnel page_view → demo_open → contact_submit.",
+      "Free in PostHog create funnel page_view → demo_open → contact_submit.",
     ),
     step(
       "posthog",
@@ -298,7 +298,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
           "ads",
           id,
           "deferred",
-          "Requires Google Ads budget — deferred until you’re ready to spend.",
+          "Requires Google Ads budget deferred until you’re ready to spend.",
         ),
     ),
 
@@ -308,7 +308,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
         "semrush",
         id,
         "deferred",
-        "Requires Semrush subscription — deferred (use free trial later if needed).",
+        "Requires Semrush subscription deferred (use free trial later if needed).",
       ),
     ),
 
@@ -324,7 +324,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
         "domains",
         id,
         "deferred",
-        "Requires domains + Workspace + Instantly Growth — deferred until cold email budget.",
+        "Requires domains + Workspace + Instantly Growth deferred until cold email budget.",
       ),
     ),
 
@@ -341,7 +341,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
         "list",
         id,
         "deferred",
-        "Requires list verification credits + Instantly sending — deferred.",
+        "Requires list verification credits + Instantly sending deferred.",
       ),
     ),
 
@@ -358,7 +358,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
       "webhook",
       "webhook-url",
       "deferred",
-      "Instantly native webhooks require Hypergrowth (~$97/mo) — deferred. Endpoint is ready at /api/webhooks/instantly.",
+      "Instantly native webhooks require Hypergrowth (~$97/mo) deferred. Endpoint is ready at /api/webhooks/instantly.",
     ),
     step(
       "webhook",
@@ -380,7 +380,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
       "qa",
       "qa-specialty-utm",
       "pending",
-      "Free — submit /contact?specialty=orthopedics&utm_source=test&utm_medium=qa&utm_campaign=golive",
+      "Free submit /contact?specialty=orthopedics&utm_source=test&utm_medium=qa&utm_campaign=golive",
     ),
     step(
       "qa",
@@ -394,7 +394,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
       "qa",
       "qa-demo",
       "pending",
-      "Free — open /try then check GA4 Realtime / PostHog for demo_open.",
+      "Free open /try then check GA4 Realtime / PostHog for demo_open.",
     ),
     step(
       "qa",
@@ -411,7 +411,7 @@ export async function verifyGoliveStatus(): Promise<GoliveStatusReport> {
       const key = goliveStepKey(task.id, s.id);
       if (!byKey.has(key)) {
         steps.push(
-          step(task.id, s.id, "pending", "Not yet covered by auto-verify — ask the assistant."),
+          step(task.id, s.id, "pending", "Not yet covered by auto-verify ask the assistant."),
         );
       }
     }

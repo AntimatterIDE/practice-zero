@@ -34,7 +34,7 @@ export function PatientProfile() {
           your information.
         </h1>
         <p className="mt-3 max-w-xl text-base text-graphite">
-          Demographics, coverage, and preferences the practice uses at check-in — editable from the portal when
+          Demographics, coverage, and preferences the practice uses at check-in editable from the portal when
           something changes.
         </p>
       </div>

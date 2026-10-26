@@ -28,7 +28,7 @@ Never ask for or store PHI. Cold email must stay CAN-SPAM compliant (physical ad
 - vs athenahealth: collections-aligned commercial shape + agentic morning board + white-glove onboarding
 - vs Tebra: no extra license fee under one-year billing agreement; chart+RCM+outreach one surface
 - vs scribe-only AI: Practice Zero IS the EHR+RCM+outreach, not an overlay
-- Wave 1 specialties only — defer dental/vet/med-spa/psychiatry
+- Wave 1 specialties only defer dental/vet/med-spa/psychiatry
 
 ## Task model (UI source of truth)
 

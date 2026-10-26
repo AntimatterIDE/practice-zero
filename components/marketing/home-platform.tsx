@@ -37,7 +37,7 @@ export function HomePlatform() {
           every workflow. one morning.
         </h2>
         <p className="mt-5 max-w-2xl text-lg text-graphite">
-          practice zero connects clinical, financial, and operational workflows with agents — from patient encounters to reimbursements.
+          practice zero connects clinical, financial, and operational workflows with agents from patient encounters to reimbursements.
         </p>
 
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

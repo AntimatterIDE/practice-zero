@@ -16,7 +16,7 @@ const threads = [
     from: "Dr. Wallace",
     when: "Yesterday",
     subject: "Lab results available",
-    body: "Your basic metabolic panel is in your record. Message us if anything looks unclear — happy to walk through it.",
+    body: "Your basic metabolic panel is in your record. Message us if anything looks unclear happy to walk through it.",
     unread: false,
   },
   {
@@ -42,7 +42,7 @@ export function PatientMessages() {
           talk with the practice.
         </h1>
         <p className="mt-3 max-w-xl text-base text-graphite">
-          Secure threads for refills, questions, and follow-ups — without phone tag.
+          Secure threads for refills, questions, and follow-ups without phone tag.
         </p>
       </div>
 

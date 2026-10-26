@@ -124,7 +124,7 @@ export function SpecialtyLanding({ specialty }: { specialty: SpecialtyContent })
               what your team opens before first light.
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-paper/65 sm:text-base">
-              chart, eligibility, claims, and outreach on one surface — framed for{" "}
+              chart, eligibility, claims, and outreach on one surface framed for{" "}
               {specialty.label.toLowerCase()}, not a generic hospital EHR.
             </p>
           </FadeIn>
@@ -165,7 +165,7 @@ export function SpecialtyLanding({ specialty }: { specialty: SpecialtyContent })
               every workflow. one morning.
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-graphite sm:text-base">
-              same practice zero platform for every specialty — clinical, revenue, and
+              same practice zero platform for every specialty clinical, revenue, and
               operations under a one-year billing agreement with no extra license fee.
             </p>
           </FadeIn>

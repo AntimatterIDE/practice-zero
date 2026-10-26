@@ -331,7 +331,7 @@ export const GOLIVE_TASKS: GoliveTask[] = [
         id: "qa-specialty-utm",
         title: "Specialty lander with UTMs",
         detail:
-          "Open /specialties/orthopedics?utm_source=test&utm_medium=qa&utm_campaign=golive — Request consultation.",
+          "Open /specialties/orthopedics?utm_source=test&utm_medium=qa&utm_campaign=golive Request consultation.",
       },
       {
         id: "qa-lead",

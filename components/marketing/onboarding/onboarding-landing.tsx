@@ -19,12 +19,12 @@ const pillars = [
   {
     icon: Users,
     title: "Engineers and managers, on your side",
-    body: "A dedicated team of engineers and managers runs your custom integration — not a ticket queue and a FAQ. We stay with the practice until the cutover is clean.",
+    body: "A dedicated team of engineers and managers runs your custom integration not a ticket queue and a FAQ. We stay with the practice until the cutover is clean.",
   },
   {
     icon: Infinity,
     title: "Unlimited onboarding hours",
-    body: "There is no hour cap on onboarding. We work until your practice’s needs are met — workflows, payers, rooms, and the exceptions that make your morning unique.",
+    body: "There is no hour cap on onboarding. We work until your practice’s needs are met workflows, payers, rooms, and the exceptions that make your morning unique.",
   },
   {
     icon: Rocket,
@@ -34,17 +34,17 @@ const pillars = [
   {
     icon: Layers,
     title: "Practice-specific components",
-    body: "Bring the pieces you already rely on — specialty forms, e-prescribing, labs, checklists, reporting, or stacked operational components. We wire them in so nothing you trust gets left behind.",
+    body: "Bring the pieces you already rely on specialty forms, e-prescribing, labs, checklists, reporting, or stacked operational components. We wire them in so nothing you trust gets left behind.",
   },
   {
     icon: Globe,
     title: "Custom practice website, included",
-    body: "A custom website for the practice is included at no extra charge — patient-facing pages, reputation, and reviews that match your brand and point into intake, portal, and scheduling.",
+    body: "A custom website for the practice is included at no extra charge patient-facing pages, reputation, and reviews that match your brand and point into intake, portal, and scheduling.",
   },
   {
     icon: Headphones,
     title: "24/7 for the life of the contract",
-    body: "After go-live: 24/7 support, uptime, and maintenance for the full term of your agreement — same team posture, not a handoff to a distant helpdesk.",
+    body: "After go-live: 24/7 support, uptime, and maintenance for the full term of your agreement same team posture, not a handoff to a distant helpdesk.",
   },
 ];
 
@@ -57,7 +57,7 @@ const phases = [
   {
     step: "02",
     title: "Build & customize",
-    body: "Integrate, configure, and ship practice-specific components. Feature requests during this phase are first-class — not backlog fodder.",
+    body: "Integrate, configure, and ship practice-specific components. Feature requests during this phase are first-class not backlog fodder.",
   },
   {
     step: "03",
@@ -67,7 +67,7 @@ const phases = [
   {
     step: "04",
     title: "Ongoing",
-    body: "24/7 support, uptime, and maintenance for the life of the contract — plus continued customization when the practice evolves.",
+    body: "24/7 support, uptime, and maintenance for the life of the contract plus continued customization when the practice evolves.",
   },
 ];
 
@@ -94,7 +94,7 @@ export function OnboardingLanding() {
             transition={{ delay: 0.05, ease: EASE }}
             className="mt-4 max-w-3xl text-4xl font-semibold tracking-[-0.03em] text-ink sm:text-5xl md:text-6xl"
           >
-            we stay until the practice is ready — then we stay for the contract.
+            we stay until the practice is ready then we stay for the contract.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -203,7 +203,7 @@ export function OnboardingLanding() {
               </span>
             </div>
             <h2 className="mt-4 text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
-              24/7 support, uptime, and maintenance — post-onboarding, for the life of the
+              24/7 support, uptime, and maintenance post-onboarding, for the life of the
               contract.
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-paper/65 sm:text-base">

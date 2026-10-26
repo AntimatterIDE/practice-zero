@@ -36,12 +36,12 @@ function taskCatalog() {
       .map((step, i) => {
         const links =
           step.links?.map((l) => `${l.label}<${l.href}>`).join("; ") ?? "";
-        return `  ${track.number}.${i + 1} [${step.id}] ${step.title} — ${step.detail}${
+        return `  ${track.number}.${i + 1} [${step.id}] ${step.title} ${step.detail}${
           step.cost ? ` Cost: ${step.cost}.` : ""
         }${links ? ` Links: ${links}` : ""}`;
       })
       .join("\n");
-    return `Track ${track.number} [${track.id}] ${track.badge} — ${track.title}\n${track.summary}\nSteps:\n${steps}`;
+    return `Track ${track.number} [${track.id}] ${track.badge} ${track.title}\n${track.summary}\nSteps:\n${steps}`;
   }).join("\n\n");
 }
 
@@ -49,7 +49,7 @@ const SYSTEM = `You are the Practice Zero compliance assistant inside the admin 
 Your only job: help the operator complete the numbered compliance tracks and steps so marketing claims (HIPAA, SOC 2 Type II, AES-256, BAA available, 99.9% uptime) are backed by real evidence.
 
 Rules:
-- Refer to tracks by number and title (e.g. Track 1 — Quick wins) and steps as N.M (e.g. 1.4).
+- Refer to tracks by number and title (e.g. Track 1 Quick wins) and steps as N.M (e.g. 1.4).
 - Give the next concrete action for the incomplete step they ask about; one decision at a time when blocked.
 - Never invent BAA signatures, SOC 2 report dates, uptime %, or certifications.
 - Never request PHI or patient lists.
@@ -72,7 +72,7 @@ function fallbackAnswer(
   if (q.includes("next") || q.includes("what’s next") || q.includes("whats next")) {
     if (progress?.nextTrackNumber && progress.nextStepTitle) {
       return [
-        `Next up: Track ${progress.nextTrackNumber} — ${progress.nextTrackTitle}.`,
+        `Next up: Track ${progress.nextTrackNumber} ${progress.nextTrackTitle}.`,
         `Step: ${progress.nextStepTitle}`,
         `You're ${progress.completedSteps}/${progress.totalSteps} steps checked. Open that track on the left, or ask for a walkthrough.`,
       ].join("\n");
@@ -81,14 +81,14 @@ function fallbackAnswer(
   }
   if (q.includes("vercel") || q.includes("host")) {
     return [
-      "Track 1 step 1.4 / Track 3 — Vercel HIPAA BAA:",
+      "Track 1 step 1.4 / Track 3 Vercel HIPAA BAA:",
       "Pro team → Settings → Billing → Add-ons → HIPAA BAA ($350/mo).",
       "Docs: https://vercel.com/kb/guide/hipaa-compliance-guide-vercel",
     ].join("\n");
   }
   if (q.includes("openai") || q.includes("baa") && q.includes("ai")) {
     return [
-      "Track 1 — OpenAI API BAA:",
+      "Track 1 OpenAI API BAA:",
       "Email baa@openai.com with company + use case.",
       "Request Modified Retention / ZDR before any PHI in models.",
       "https://help.openai.com/en/articles/8660679",
@@ -104,7 +104,7 @@ function fallbackAnswer(
   }
   if (q.includes("uptime") || q.includes("99.9") || q.includes("sla")) {
     return [
-      "Track 4 — 99.9% uptime:",
+      "Track 4 99.9% uptime:",
       "1) Define SLA scope",
       "2) Better Stack monitors + status page (start history now)",
       "3) On-call + monthly uptime export",
@@ -113,15 +113,15 @@ function fallbackAnswer(
   }
   if (q.includes("soc") || q.includes("vanta") || q.includes("drata") || q.includes("sprinto")) {
     return [
-      "Track 6 — SOC 2 Type II:",
+      "Track 6 SOC 2 Type II:",
       "Pick GRC (Secureframe / Sprinto / Vanta), connect GitHub+Vercel+Workspace,",
       "run controls 6–12 months, then CPA Type II ($15–30k typical).",
-      "Tooling ≠ the certificate — the auditor issues the report.",
+      "Tooling ≠ the certificate the auditor issues the report.",
     ].join("\n");
   }
   if (q.includes("aes") || q.includes("encrypt")) {
     return [
-      "Track 2 — AES-256:",
+      "Track 2 AES-256:",
       "Cite Vercel + Supabase at-rest encryption on a Security page.",
       "TLS in transit via HTTPS/HSTS already.",
       "App-level KMS only when real PHI columns exist.",
@@ -150,7 +150,7 @@ export async function POST(request: Request) {
   const progressBlock = progress
     ? `\n\nOPERATOR PROGRESS SNAPSHOT:\n- Steps done: ${progress.completedSteps}/${progress.totalSteps}\n- Next: ${
         progress.nextTrackNumber
-          ? `Track ${progress.nextTrackNumber} — ${progress.nextTrackTitle} / step “${progress.nextStepTitle}”`
+          ? `Track ${progress.nextTrackNumber} ${progress.nextTrackTitle} / step “${progress.nextStepTitle}”`
           : "all steps marked complete"
       }${
         progress.incompleteKeys?.length

@@ -44,7 +44,7 @@ export const COMPLIANCE_TRACKS: ComplianceTrack[] = [
     id: "quick-wins",
     number: 1,
     badge: "This week",
-    title: "Quick wins — enable now",
+    title: "Quick wins enable now",
     summary:
       "MFA, BAAs you can click/email today, uptime monitors, and secret hygiene. Highest impact before big spend.",
     why: "Practice Zero is still marketing + demo-first. Collect evidence and vendor BAAs before claiming certifications on the site.",
@@ -191,7 +191,7 @@ export const COMPLIANCE_TRACKS: ComplianceTrack[] = [
         id: "qw-marketing-honesty",
         title: "Align site badges with chat knowledge (no invented certs)",
         detail:
-          "Compliance badges on marketing must match signed BAAs / evidence. Site assistant already forbids inventing HIPAA/SOC 2 — keep that rule until Type II + program exist.",
+          "Compliance badges on marketing must match signed BAAs / evidence. Site assistant already forbids inventing HIPAA/SOC 2 keep that rule until Type II + program exist.",
         effort: "~30 min",
         cost: "$0",
         docs: [
@@ -208,7 +208,7 @@ export const COMPLIANCE_TRACKS: ComplianceTrack[] = [
     title: "AES-256 encryption (at rest + transit)",
     summary:
       "Document vendor encryption, enforce TLS, optionally add app-level crypto for high-sensitivity fields later.",
-    why: "AES-256 is not a certificate — it is how data is encrypted. Vercel and Supabase already encrypt at rest with AES-256; claim it only with a security page that cites sources.",
+    why: "AES-256 is not a certificate it is how data is encrypted. Vercel and Supabase already encrypt at rest with AES-256; claim it only with a security page that cites sources.",
     steps: [
       {
         id: "aes-vercel",
@@ -270,7 +270,7 @@ export const COMPLIANCE_TRACKS: ComplianceTrack[] = [
       {
         id: "baa-vercel",
         title: "Vercel BAA signed (Pro add-on)",
-        detail: "Same as quick win — keep executed PDF/screenshot in trust folder.",
+        detail: "Same as quick win keep executed PDF/screenshot in trust folder.",
         cost: "$350/mo",
         links: [
           {
@@ -315,7 +315,7 @@ export const COMPLIANCE_TRACKS: ComplianceTrack[] = [
         id: "baa-email",
         title: "Replace Resend for PHI email (Paubox or Twilio HIPAA-eligible)",
         detail:
-          "Resend is SOC 2 Type II but has no public HIPAA BAA. Keep Resend for consult leads (non-PHI). Use Paubox (BAA on free tier) or Twilio HIPAA-eligible products for clinical email/SMS — not SendGrid.",
+          "Resend is SOC 2 Type II but has no public HIPAA BAA. Keep Resend for consult leads (non-PHI). Use Paubox (BAA on free tier) or Twilio HIPAA-eligible products for clinical email/SMS not SendGrid.",
         cost: "Paubox $0–paid",
         links: [
           { label: "Paubox", href: "https://www.paubox.com/" },
@@ -362,7 +362,7 @@ export const COMPLIANCE_TRACKS: ComplianceTrack[] = [
     title: "99.9% uptime SLA & Availability",
     summary:
       "~8.76 hours downtime/year. Needs monitoring history, on-call, incident process, and usually SOC 2 Availability.",
-    why: "Marketing and onboarding already promise uptime. Auditors compare claims to measured uptime — start collecting evidence now.",
+    why: "Marketing and onboarding already promise uptime. Auditors compare claims to measured uptime start collecting evidence now.",
     steps: [
       {
         id: "up-define-sla",
@@ -400,7 +400,7 @@ export const COMPLIANCE_TRACKS: ComplianceTrack[] = [
         id: "up-sentry",
         title: "Error monitoring with PII scrubbing",
         detail:
-          "Sentry Team+. Scrub emails/phones. BAA only on Business+ if errors could contain PHI — prefer scrubbing so free/Team stays safe.",
+          "Sentry Team+. Scrub emails/phones. BAA only on Business+ if errors could contain PHI prefer scrubbing so free/Team stays safe.",
         cost: "~$26/mo",
         links: [{ label: "Sentry pricing", href: "https://sentry.io/pricing/" }],
       },
@@ -575,7 +575,7 @@ export const COMPLIANCE_TRACKS: ComplianceTrack[] = [
     number: 7,
     badge: "Budget",
     title: "Vendor cost bands (reference)",
-    summary: "Use as a buying guide — confirm quotes. Mark steps done when budget approved / purchased.",
+    summary: "Use as a buying guide confirm quotes. Mark steps done when budget approved / purchased.",
     why: "Founders need a single place for what to buy now vs later for Practice Zero’s stack.",
     steps: [
       {

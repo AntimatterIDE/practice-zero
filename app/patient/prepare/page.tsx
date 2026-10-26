@@ -7,12 +7,12 @@ import { pageOpenGraph } from "@/lib/open-graph";
 export const metadata: Metadata = {
   title: "Before you arrive",
   description:
-    "Thursday at 9:00 for Paul Wallace at Southeast Medical — sign the open agreement, confirm intake, upload the insurance card, and arrive early.",
+    "Thursday at 9:00 for Paul Wallace at Southeast Medical sign the open agreement, confirm intake, upload the insurance card, and arrive early.",
   alternates: { canonical: "/patient/prepare" },
   openGraph: pageOpenGraph({
     title: "Before you arrive · practice zero",
     description:
-      "Thursday at 9:00 for Paul Wallace at Southeast Medical — sign the open agreement, confirm intake, upload the insurance card, and arrive early.",
+      "Thursday at 9:00 for Paul Wallace at Southeast Medical sign the open agreement, confirm intake, upload the insurance card, and arrive early.",
     url: "/patient/prepare",
   }),
 };

@@ -42,7 +42,7 @@ export function PatientUpdates() {
           what changed.
         </h1>
         <p className="mt-3 max-w-xl text-base text-graphite">
-          Appointments, lab results, and patient pay balances as they move — so you are not waiting on a callback for
+          Appointments, lab results, and patient pay balances as they move so you are not waiting on a callback for
           status.
         </p>
       </div>

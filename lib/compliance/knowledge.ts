@@ -16,10 +16,10 @@ Never ask for or store PHI. Never tell them to paste patient data into chat tool
 
 - Practice Zero today: marketing site + browser-local EHR/RCM demo (/try, /portal).
 - Real server persistence: consultation_leads (sales PII) + research_articles on Supabase.
-- Demo clinical data lives in localStorage (practice-zero-demo) — not production PHI.
+- Demo clinical data lives in localStorage (practice-zero-demo) not production PHI.
 - Stack: Vercel, Supabase (service role admin), OpenAI, Resend, PostHog (marketing only), Instantly.
 - Marketing UI shows compliance badges; site chat knowledge forbids inventing certifications.
-- Shared ADMIN_PASSWORD cookie auth for /admin — not multi-tenant HIPAA auth.
+- Shared ADMIN_PASSWORD cookie auth for /admin not multi-tenant HIPAA auth.
 
 ## What each claim means
 
@@ -27,11 +27,11 @@ Never ask for or store PHI. Never tell them to paste patient data into chat tool
 - SOC 2 Type II: CPA attestation over an observation period (typically 6–12 months). Security required; add Availability for uptime SLAs.
 - AES-256: encryption algorithm (usually vendor at-rest). Document Vercel + Supabase; optional app-level KMS later.
 - BAA available: BAAs with subprocessors AND a customer BAA you offer practices.
-- 99.9% uptime: ~8.76h downtime/year — needs monitoring history matching the written SLA.
+- 99.9% uptime: ~8.76h downtime/year needs monitoring history matching the written SLA.
 
 ## Track model (UI source of truth)
 
-1 Quick wins — This week
+1 Quick wins This week
 2 AES-256 encryption
 3 BAA available
 4 99.9% uptime
@@ -52,7 +52,7 @@ pen test, full Type II observation. Keep Resend for non-PHI consult emails only.
 ## Key vendor links (recite when helpful)
 
 - Vercel HIPAA: https://vercel.com/kb/guide/hipaa-compliance-guide-vercel ($350/mo Pro add-on)
-- OpenAI BAA: baa@openai.com — https://help.openai.com/en/articles/8660679
+- OpenAI BAA: baa@openai.com https://help.openai.com/en/articles/8660679
 - Supabase HIPAA: https://supabase.com/docs/guides/security/hipaa-compliance (Team+)
 - PostHog HIPAA: https://posthog.com/docs/privacy/hipaa-compliance
 - Better Stack: https://betterstack.com/

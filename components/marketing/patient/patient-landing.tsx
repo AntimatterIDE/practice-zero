@@ -26,7 +26,7 @@ const capabilities = [
   {
     icon: MessageSquare,
     title: "Talk with the practice",
-    body: "Secure messages for refill requests, questions, and follow-ups — without phone tag.",
+    body: "Secure messages for refill requests, questions, and follow-ups without phone tag.",
   },
   {
     icon: Bell,
@@ -36,12 +36,12 @@ const capabilities = [
   {
     icon: FolderOpen,
     title: "Records you can reach",
-    body: "Visit summaries, labs, imaging, and statements stay available whenever you need them — including online patient pay.",
+    body: "Visit summaries, labs, imaging, and statements stay available whenever you need them including online patient pay.",
   },
   {
     icon: Upload,
     title: "Upload what the office needs",
-    body: "Insurance cards, ID, referral letters, and forms go straight to your chart before the visit — no fax chase.",
+    body: "Insurance cards, ID, referral letters, and forms go straight to your chart before the visit no fax chase.",
   },
   {
     icon: ShieldCheck,
@@ -211,7 +211,7 @@ export function PatientLanding() {
               your care. your record. always with you.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-graphite">
-              Give patients a clear view of their profile, visits, messages, documents, and updates — the same chart the
+              Give patients a clear view of their profile, visits, messages, documents, and updates the same chart the
               practice works from, without the noise of the back office.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
@@ -261,7 +261,7 @@ export function PatientLanding() {
               everything a patient needs between visits.
             </h2>
             <p className="mt-5 max-w-2xl text-lg text-graphite">
-              Profile details, secure messaging, document uploads, and practice updates — one login for the whole
+              Profile details, secure messaging, document uploads, and practice updates one login for the whole
               relationship.
             </p>
           </FadeIn>
@@ -294,7 +294,7 @@ export function PatientLanding() {
               the patient record they recognize.
             </h2>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-graphite">
-              Contact details, coverage, pharmacy, and upcoming care — the same facts the front desk uses, presented for
+              Contact details, coverage, pharmacy, and upcoming care the same facts the front desk uses, presented for
               the patient.
             </p>
             <div className="mt-8">
@@ -308,7 +308,7 @@ export function PatientLanding() {
               a clear line to the practice.
             </h2>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-graphite">
-              Confirmations, clinical notes, and billing questions stay threaded — so nothing gets lost in voicemail.
+              Confirmations, clinical notes, and billing questions stay threaded so nothing gets lost in voicemail.
             </p>
             <div className="mt-8 space-y-3">
               {messages.map((item, index) => (
@@ -389,7 +389,7 @@ export function PatientLanding() {
               know what changed. without calling.
             </h2>
             <p className="mt-5 max-w-md text-lg leading-relaxed text-graphite">
-              Appointments, results, and balances surface as they move — so patients stay informed and the front desk
+              Appointments, results, and balances surface as they move so patients stay informed and the front desk
               fields fewer “any update?” calls.
             </p>
             <div className="mt-8 space-y-3">

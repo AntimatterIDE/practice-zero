@@ -19,7 +19,7 @@ export function ExitToHome({ className, size = "sm", tone = "light" }: Props) {
     <Link
       href="/"
       prefetch={false}
-      aria-label="Home — practice zero"
+      aria-label="Home practice zero"
       className={cn(
         "inline-flex items-center gap-2 rounded-full border px-2.5 py-1.5 transition-colors",
         dark

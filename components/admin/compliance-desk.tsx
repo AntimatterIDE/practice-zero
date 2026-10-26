@@ -82,7 +82,7 @@ export function ComplianceDesk() {
     {
       role: "assistant",
       content:
-        "I’ll walk you through BAAs, AES-256, uptime evidence, HIPAA, and SOC 2 Type II for Practice Zero. Check off steps as you finish them — progress stays in this browser. Ask “what’s next” for the first unchecked item.",
+        "I’ll walk you through BAAs, AES-256, uptime evidence, HIPAA, and SOC 2 Type II for Practice Zero. Check off steps as you finish them progress stays in this browser. Ask “what’s next” for the first unchecked item.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -163,7 +163,7 @@ export function ComplianceDesk() {
             totalSteps,
             nextTrackNumber: nextIncomplete?.track.number,
             nextTrackTitle: nextIncomplete
-              ? `${nextIncomplete.track.badge} — ${nextIncomplete.track.title}`
+              ? `${nextIncomplete.track.badge} ${nextIncomplete.track.title}`
               : undefined,
             nextStepTitle: nextIncomplete?.step.title,
             incompleteKeys: incompleteKeys.slice(0, 40),
@@ -243,7 +243,7 @@ export function ComplianceDesk() {
             Next unchecked step
           </p>
           <p className="mt-1 text-sm font-medium text-ink">
-            Track {nextIncomplete.track.number} — {nextIncomplete.step.title}
+            Track {nextIncomplete.track.number} {nextIncomplete.step.title}
           </p>
           <p className="mt-1 text-xs leading-relaxed text-graphite">
             {nextIncomplete.step.detail}

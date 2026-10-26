@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: pageOpenGraph({
     title: "Specialties · practice zero",
     description:
-      "Agentic EHR for independent specialties — chart, billing, and outreach on one morning board.",
+      "Agentic EHR for independent specialties chart, billing, and outreach on one morning board.",
     url: "/specialties",
   }),
 };
@@ -28,10 +28,10 @@ export default function SpecialtiesIndexPage() {
       <main className="mx-auto w-full max-w-[1400px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
         <p className="kicker">Specialties</p>
         <h1 className="mt-5 max-w-3xl font-sans text-4xl font-semibold lowercase leading-[1.05] tracking-[-0.035em] sm:text-5xl">
-          built for independent practices — framed for your specialty.
+          built for independent practices framed for your specialty.
         </h1>
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-graphite sm:text-lg">
-          Same agentic EHR. Specialty-specific mornings — how the day actually breaks, how
+          Same agentic EHR. Specialty-specific mornings how the day actually breaks, how
           practice zero maps to it, and what goes to zero on the board.
         </p>
         <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

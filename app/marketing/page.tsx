@@ -31,7 +31,7 @@ export default function MarketingPage() {
       <CategoryIntro
         kicker="Marketing"
         title="the practice reaches out."
-        lede="A text waiting to be sent, the follow-up after a visit, a schedule still missing a confirmation, and pages — plus reviews — a new patient can find."
+        lede="A text waiting to be sent, the follow-up after a visit, a schedule still missing a confirmation, and pages plus reviews a new patient can find."
       />
       <OutreachSection />
       <FollowUpSection />

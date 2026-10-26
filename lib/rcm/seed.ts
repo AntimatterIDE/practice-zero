@@ -591,7 +591,7 @@ export function createSeedState(): RcmState {
         visitType: "new",
         room: "Room 2",
         confirmation: "unconfirmed",
-        chiefComplaint: "Anxiety — new patient",
+        chiefComplaint: "Anxiety new patient",
       }),
     ],
     tasks: [

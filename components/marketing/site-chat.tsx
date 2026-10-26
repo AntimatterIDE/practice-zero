@@ -68,7 +68,7 @@ export function SiteChat() {
     {
       role: "assistant",
       content:
-        "Hi — ask anything about Practice Zero: agentic EHR, room hardware, billing, pricing, or the demo.",
+        "Hi ask anything about Practice Zero: agentic EHR, room hardware, billing, pricing, or the demo.",
     },
   ]);
   const scrollerRef = useRef<HTMLDivElement>(null);

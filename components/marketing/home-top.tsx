@@ -30,7 +30,7 @@ export function HomeTop() {
             less administration. more care.
           </h1>
           <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-graphite">
-            practice zero connects clinical, financial, and operational work with agents — from the visit to the remittance.
+            practice zero connects clinical, financial, and operational work with agents from the visit to the remittance.
           </p>
         </div>
 

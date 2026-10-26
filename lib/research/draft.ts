@@ -35,18 +35,18 @@ function sectionId(title: string) {
 function fallbackDraft(topic: string): DraftResult {
   const clean = topic.trim() || "agentic EHR";
   const title = `${clean}: Insights from Practice Zero`;
-  const excerpt = `How Practice Zero agents handle ${clean.toLowerCase()} so a practice can run with space and hardware—not a full front-office stack—while scheduling, claims, and payment tracking stay autonomous.`;
+  const excerpt = `How Practice Zero agents handle ${clean.toLowerCase()} so a practice can run with space and hardware not a full front-office stack while scheduling, claims, and payment tracking stay autonomous.`;
 
   const sections: ResearchSection[] = [
     {
       id: sectionId(SECTION_TITLES[0]),
       title: SECTION_TITLES[0],
-      body: `Independent practices still spend most of their day on coordination: eligibility, scheduling, follow-ups, claims, and payment tracking. ${clean} is the kind of work that used to require an office manager at every desk. Practice Zero treats it as an agentic EHR problem—software that acts, not just records.`,
+      body: `Independent practices still spend most of their day on coordination: eligibility, scheduling, follow-ups, claims, and payment tracking. ${clean} is the kind of work that used to require an office manager at every desk. Practice Zero treats it as an agentic EHR problem software that acts, not just records.`,
     },
     {
       id: sectionId(SECTION_TITLES[1]),
       title: SECTION_TITLES[1],
-      body: `Recent work across ambulatory operations shows the same pattern: when intake, visit capture, and billing handoffs stay human-only, denials rise and follow-ups slip. Teams that instrument rooms and let agents own the loop—record, summarize, schedule, submit—cut cycle time without adding headcount.`,
+      body: `Recent work across ambulatory operations shows the same pattern: when intake, visit capture, and billing handoffs stay human-only, denials rise and follow-ups slip. Teams that instrument rooms and let agents own the loop record, summarize, schedule, submit cut cycle time without adding headcount.`,
     },
     {
       id: sectionId(SECTION_TITLES[2]),
@@ -56,7 +56,7 @@ function fallbackDraft(topic: string): DraftResult {
     {
       id: sectionId(SECTION_TITLES[3]),
       title: SECTION_TITLES[3],
-      body: `Practice Zero agents are built for ambulatory reality: eligibility before the visit, scheduling and recall after it, claims that leave clean, and payment tracking that does not live in a spreadsheet. The product voice stays operational and plain—no theater, no purple AI gloss.`,
+      body: `Practice Zero agents are built for ambulatory reality: eligibility before the visit, scheduling and recall after it, claims that leave clean, and payment tracking that does not live in a spreadsheet. The product voice stays operational and plain no theater, no purple AI gloss.`,
     },
     {
       id: sectionId(SECTION_TITLES[4]),
@@ -204,8 +204,8 @@ export async function draftResearchArticle(topic: string): Promise<{
   }
 
   const system = `You write research notes for Practice Zero, an agentic EHR for independent practices.
-Voice: clear, operational, confident. Promote Practice Zero—never The Alignment Clinic or spine surgery brands.
-Themes: practices may not need a traditional office manager—just space + optional room hardware; agents record visits, schedule follow-ups, run scheduling, claims, and payment tracking autonomously under practice rules.
+Voice: clear, operational, confident. Promote Practice Zero never The Alignment Clinic or spine surgery brands.
+Themes: practices may not need a traditional office manager just space + optional room hardware; agents record visits, schedule follow-ups, run scheduling, claims, and payment tracking autonomously under practice rules.
 Return ONLY valid JSON with keys:
 title, slug, excerpt, search_title, search_description, keywords (string[]),
 sections (array of {title, body}), sources (array of {kind, year, title, url?}),

@@ -102,7 +102,7 @@ export function ResearchDesk({ articles }: { articles: ResearchArticle[] }) {
         <h2 className="text-lg font-semibold text-ink">What to publish next</h2>
         <p className="mt-2 max-w-2xl text-sm text-graphite">
           Topics that explain how Practice Zero replaces front-office drag with
-          agents—good landing pages after ads or demos.
+          agents good landing pages after ads or demos.
         </p>
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           {SUGGESTIONS.map((s) => (

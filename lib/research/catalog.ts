@@ -901,7 +901,7 @@ const specs: CatalogSpec[] = [
       "athenahealth-shaped percentage-of-collections buying and per-seat stacks answer different fears. Practice Zero’s one-year billing agreement is a third path: platform included when collections route through us.",
     searchTitle: "Collections pricing vs per-seat EHR for independent practices",
     searchDescription:
-      "How percentage-of-collections EHR pricing compares to per-seat licenses — and how Practice Zero’s one-year billing agreement bundles EHR, billing, and outreach.",
+      "How percentage-of-collections EHR pricing compares to per-seat licenses and how Practice Zero’s one-year billing agreement bundles EHR, billing, and outreach.",
     keywords: [
       "percentage of collections EHR",
       "athenahealth alternative",
@@ -913,7 +913,7 @@ const specs: CatalogSpec[] = [
     readMinutes: 6,
     bodies: [
       [
-        "Independent practices evaluating a new EHR are rarely deciding on features alone. They are deciding how software gets paid for — and whether the vendor’s incentives line up with collections.",
+        "Independent practices evaluating a new EHR are rarely deciding on features alone. They are deciding how software gets paid for and whether the vendor’s incentives line up with collections.",
         "Practice Zero publishes a clear commercial frame: EHR, billing, and marketing at no additional license fee under a one-year billing agreement, with optional advertising spend on the practice’s terms.",
       ],
       [
@@ -926,7 +926,7 @@ const specs: CatalogSpec[] = [
       ],
       [
         "Practice Zero bundles the agentic EHR, RCM, and outreach on one morning board under the billing agreement. Agents clear documentation, eligibility, claims, and follow-up under practice rules; humans approve exceptions.",
-        "The consultation is where sizing happens — not a public rate card — because practice mix and payer mix change the economics.",
+        "The consultation is where sizing happens not a public rate card because practice mix and payer mix change the economics.",
       ],
       [
         "Compare the model on /pricing, then open /try to see chart → claim → collect on one surface. Request a consultation when you want the agreement walked against your specialty.",
@@ -963,7 +963,7 @@ const specs: CatalogSpec[] = [
       "Per-seat EHRs often grow a second stack for marketing and engagement. Practice Zero keeps chart, billing, and outreach on one agentic morning board.",
     searchTitle: "Beyond per-seat EHR stacks for independent practices",
     searchDescription:
-      "Why independent practices outgrow per-seat EHR plus bolt-on marketing — and how an agentic morning board collapses chart, claim, and outreach.",
+      "Why independent practices outgrow per-seat EHR plus bolt-on marketing and how an agentic morning board collapses chart, claim, and outreach.",
     keywords: [
       "tebra alternative",
       "kareo alternative",
@@ -975,7 +975,7 @@ const specs: CatalogSpec[] = [
     readMinutes: 5,
     bodies: [
       [
-        "Many independents did not choose fragmentation. They bought an EHR, then a marketing layer, then another tool for reviews or reminders — because the chart never owned the outbox.",
+        "Many independents did not choose fragmentation. They bought an EHR, then a marketing layer, then another tool for reviews or reminders because the chart never owned the outbox.",
         "Practice Zero starts from a different premise: clinical, financial, and operational work belong on one morning board.",
       ],
       [
@@ -984,7 +984,7 @@ const specs: CatalogSpec[] = [
       ],
       [
         "Bolt-on stacks create handoff failure: the note is done, the claim is late, the recall never sent. Staff time fills the gaps the software left between products.",
-        "Practices feel this as after-hours charting, missed eligibility, and phone tag with payers — the work that should not own the day.",
+        "Practices feel this as after-hours charting, missed eligibility, and phone tag with payers the work that should not own the day.",
       ],
       [
         "Practice Zero agents draft documentation and coding, keep eligibility and claims moving, and queue outreach from the same surface. Optional room hardware can capture the visit so agents start from what happened.",
@@ -1021,7 +1021,7 @@ const specs: CatalogSpec[] = [
     publishedAt: "2026-10-16T18:00:00.000Z",
     photo: "photo-1631217868264-e5b90bb7e629",
     excerpt:
-      "Independent ophthalmology, ortho, primary care, derm, and OB-GYN practices share the same admin loops — with different accents. Specialty pages frame the morning; the platform stays one board.",
+      "Independent ophthalmology, ortho, primary care, derm, and OB-GYN practices share the same admin loops with different accents. Specialty pages frame the morning; the platform stays one board.",
     searchTitle: "Specialty mornings on a horizontal agentic EHR",
     searchDescription:
       "Why Practice Zero stays specialty-agnostic as a platform while publishing specialty pages for ophthalmology, orthopedics, primary care, dermatology, and OB-GYN.",
@@ -1037,7 +1037,7 @@ const specs: CatalogSpec[] = [
     bodies: [
       [
         "A horizontal EHR fails when every specialty is forced into the same marketing sentence. It also fails when the product forks into five disconnected apps.",
-        "Practice Zero keeps one agentic platform and publishes specialty pages so buyers see their morning — prior auth in ortho, chair turnover in ophthalmology, panel volume in primary care.",
+        "Practice Zero keeps one agentic platform and publishes specialty pages so buyers see their morning prior auth in ortho, chair turnover in ophthalmology, panel volume in primary care.",
       ],
       [
         "AMA practice-ownership data shows independence is uneven across specialties. Ophthalmology and orthopedics retain higher private-practice shares than many hospital-leaning fields, while primary care remains a large absolute base of independents.",
@@ -1045,7 +1045,7 @@ const specs: CatalogSpec[] = [
       ],
       [
         "Specialty teams do not need a different definition of ‘done.’ They need the same loops cleared with the right forms, agreements, and payer reality: eligibility before the room, claims after the note, outreach before the schedule collapses.",
-        "Onboarding is where specialty forms and custom components enter — not a separate product SKU for each vertical.",
+        "Onboarding is where specialty forms and custom components enter not a separate product SKU for each vertical.",
       ],
       [
         "Wave 1 specialty pages cover ophthalmology, orthopedics, primary care, dermatology, and OB-GYN. Each page frames what goes to zero, then points to the same demo and consultation path.",
@@ -1060,7 +1060,7 @@ const specs: CatalogSpec[] = [
       {
         kind: "Report",
         year: "2024",
-        title: "AMA Physician Practice Benchmark Report — private practice shares by specialty",
+        title: "AMA Physician Practice Benchmark Report private practice shares by specialty",
         url: "https://www.ama-assn.org/system/files/2024-prp-pp-characteristics.pdf",
       },
       {

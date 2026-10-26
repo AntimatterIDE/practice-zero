@@ -101,7 +101,7 @@ export function ResearchIndex({ articles }: { articles: ResearchArticle[] }) {
             </div>
             <p className="max-w-sm text-base tracking-tight text-graphite sm:text-lg">
               Notes on agentic EHR, room hardware, and running a practice with
-              Practice Zero agents—not a full front-office stack.
+              Practice Zero agents not a full front-office stack.
             </p>
           </div>
         </div>

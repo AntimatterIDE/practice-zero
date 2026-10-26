@@ -19,7 +19,7 @@ const bodySchema = z.object({
     .max(24),
 });
 
-const SYSTEM = `You are the Practice Zero site assistant — a concise, helpful guide on the marketing site.
+const SYSTEM = `You are the Practice Zero site assistant a concise, helpful guide on the marketing site.
 Answer only from the product brief below. Prefer short paragraphs (2–4 sentences) or tight bullets.
 
 CTAs (required format):
@@ -31,7 +31,7 @@ CTAs (required format):
 - Example: [[cta:Request a consultation|/contact]]
 - Example: [[cta:Try the demo|/try]]
 
-Never collect PHI. If someone starts sharing clinical or insurance details, redirect them to contact the practice and append a consultation CTA — do not store or repeat sensitive identifiers.
+Never collect PHI. If someone starts sharing clinical or insurance details, redirect them to contact the practice and append a consultation CTA do not store or repeat sensitive identifiers.
 If the question is outside Practice Zero, say so briefly and offer a consultation CTA.
 
 PRODUCT BRIEF:
@@ -51,9 +51,9 @@ function fallbackAnswer(lastUser: string) {
     return `Open the interactive morning board, or see the patient experience. For a live walkthrough of agents on your workflows, request a consultation.\n${demo}\n${portal}\n${contact}`;
   }
   if (q.includes("office manager") || q.includes("hardware") || q.includes("agent")) {
-    return `Practice Zero is an agentic EHR: agents can own scheduling, follow-ups, claims, and payment tracking under your rules. You can run with space—and optional room hardware that records visits—without staffing every clerical loop.\n${ai}`;
+    return `Practice Zero is an agentic EHR: agents can own scheduling, follow-ups, claims, and payment tracking under your rules. You can run with space and optional room hardware that records visits without staffing every clerical loop.\n${ai}`;
   }
-  return `Practice Zero is an agentic EHR for independent practices—chart, billing, and outreach on one morning board.\n${demo}\n${contact}`;
+  return `Practice Zero is an agentic EHR for independent practices chart, billing, and outreach on one morning board.\n${demo}\n${contact}`;
 }
 
 export async function POST(request: Request) {

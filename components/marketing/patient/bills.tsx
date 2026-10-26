@@ -16,7 +16,7 @@ export function PatientBills() {
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-graphite">
               Paul Wallace paid Southeast Medical the $185 practice fee. The claim was filed out of network to Pinetree
-              Health, Choice PPO. This page is a demo — nothing is charged.
+              Health, Choice PPO. This page is a demo nothing is charged.
             </p>
             <div className="mt-8 flex flex-wrap gap-x-5 gap-y-2">
               <Link

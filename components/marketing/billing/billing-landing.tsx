@@ -202,7 +202,7 @@ export function BillingLanding() {
               care delivered. revenue collected.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-graphite">
-              Connect care to collections — eligibility, prior auth, claims, patient pay, and remits — without another
+              Connect care to collections eligibility, prior auth, claims, patient pay, and remits without another
               chase.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">

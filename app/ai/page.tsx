@@ -7,12 +7,12 @@ import { pageOpenGraph } from "@/lib/open-graph";
 export const metadata: Metadata = {
   title: "AI · Agentic EHR",
   description:
-    "Practice Zero agents run scheduling, claims, payment tracking, and follow-ups—so a practice can run with space and optional room hardware, not a full office-manager stack.",
+    "Practice Zero agents run scheduling, claims, payment tracking, and follow-ups so a practice can run with space and optional room hardware, not a full office-manager stack.",
   alternates: { canonical: "/ai" },
   openGraph: pageOpenGraph({
     title: "AI · Agentic EHR · practice zero",
     description:
-      "Practice Zero agents run scheduling, claims, payment tracking, and follow-ups—so a practice can run with space and optional room hardware, not a full office-manager stack.",
+      "Practice Zero agents run scheduling, claims, payment tracking, and follow-ups so a practice can run with space and optional room hardware, not a full office-manager stack.",
     url: "/ai",
   }),
 };
