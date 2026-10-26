@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -82,12 +83,22 @@ export function AiHero() {
           Scheduling, claims, payment tracking, and follow-ups keep moving. You approve the exceptions. Optional room
           hardware feeds the agents from the visit.
         </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/contact" className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper hover:bg-ink/90">
+        <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+          <Link
+            href="/contact"
+            prefetch={false}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-slash px-7 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
+          >
             Book a walkthrough
+            <ArrowRight className="h-4 w-4" />
           </Link>
-          <Link href="/try" className="rounded-full border border-line bg-white px-5 py-2.5 text-sm font-medium text-ink hover:bg-paper">
+          <Link
+            href="/try"
+            prefetch={false}
+            className="group inline-flex items-center gap-2 text-sm font-medium text-slash transition-colors hover:text-oxide-deep"
+          >
             Try the demo
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
       </motion.div>

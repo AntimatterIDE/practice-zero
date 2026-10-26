@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +35,24 @@ export function MarketingHero() {
           A page someone can search, a post the practice can put up, and a morning that still has a slot to confirm.
           The follow-up text comes after they are already on the chart.
         </p>
+        <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+          <Link
+            href="/contact"
+            prefetch={false}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-slash px-7 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
+          >
+            Book a walkthrough
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link
+            href="/marketing#seo"
+            prefetch={false}
+            className="group inline-flex items-center gap-2 text-sm font-medium text-slash transition-colors hover:text-oxide-deep"
+          >
+            See how they arrive
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </div>
       </motion.div>
 
       <motion.div

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -56,12 +57,22 @@ export function OnboardingHero() {
           Engineers and managers, unlimited hours, practice-specific work, a site included, and 24/7 support for the
           life of the agreement. The fee schedule is loaded at go-live.
         </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/contact" className="rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper hover:bg-ink/90">
+        <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
+          <Link
+            href="/contact"
+            prefetch={false}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-slash px-7 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep"
+          >
             Start onboarding
+            <ArrowRight className="h-4 w-4" />
           </Link>
-          <Link href="/pricing" className="rounded-full border border-line bg-white px-5 py-2.5 text-sm font-medium text-ink hover:bg-paper">
+          <Link
+            href="/pricing"
+            prefetch={false}
+            className="group inline-flex items-center gap-2 text-sm font-medium text-slash transition-colors hover:text-oxide-deep"
+          >
             View pricing
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
       </motion.div>
