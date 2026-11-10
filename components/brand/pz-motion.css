@@ -1,0 +1,57 @@
+/*
+  Practice Zero — motion for the brand components (Direction B).
+  Plain CSS (works with or without Tailwind). The pill and the slash carry pathLength="100",
+  so the dash math is the same at any size.
+
+  Four moves, one gesture: the pill draws, the slash lands, the wordmark settles.
+    strike   pill 1.8s  cubic-bezier(.65,0,.35,1)  →  slash .45s cubic-bezier(.7,0,.2,1)  →  word .7s cubic-bezier(.2,.8,.2,1)
+    working  the slash turns half a turn about the center in 1.4s and rests; the ring never moves
+    count    pill .6s over the dimmed zero  →  slash .36s  →  wordmark rises .6s
+    list     rows 0.6s apart: glyph wakes, a 4px bar strikes from the left in .3s, the text dims to 38%
+*/
+
+@keyframes pz-draw   { from { stroke-dasharray: 0 100; }   to { stroke-dasharray: 100 0; } }
+@keyframes pz-strike { 0% { opacity: 0; stroke-dasharray: 0 100; } 1% { opacity: 1; } 100% { opacity: 1; stroke-dasharray: 100 100; } }
+@keyframes pz-settle { from { opacity: 0; transform: translateX(-.4em); } to { opacity: 1; transform: none; } }
+@keyframes pz-rise   { from { opacity: 0; transform: translateY(.25em); } to { opacity: 1; transform: none; } }
+@keyframes pz-turn   { 0% { transform: rotate(0deg); } 72% { transform: rotate(180deg); } 100% { transform: rotate(180deg); } }
+
+/* 1 · strike: the pill draws from the top, the slash lands bottom-left to top-right, the wordmark slides in */
+.pz-anim-pill  { animation: pz-draw 1.8s cubic-bezier(.65, 0, .35, 1) both; }
+.pz-anim-slash { animation: pz-strike .45s cubic-bezier(.7, 0, .2, 1) 1.9s both; }
+.pz-anim-word  { animation: pz-settle .7s cubic-bezier(.2, .8, .2, 1) 2.4s both; display: inline-block; }
+
+/* 2 · working: put this on the slash <line> only */
+.pz-turn { transform-box: view-box; transform-origin: 50px 50px; animation: pz-turn 1.4s cubic-bezier(.65, 0, .35, 1) infinite; }
+
+/* 3 · count to zero: the mark draws over the dimmed zero */
+.pz-count-pill  { animation: pz-draw .6s cubic-bezier(.65, 0, .35, 1) both; }
+.pz-count-slash { animation: pz-strike .36s cubic-bezier(.7, 0, .2, 1) .6s both; }
+.pz-count-word  { animation: pz-rise .6s cubic-bezier(.2, .8, .2, 1) .85s both; display: inline-block; }
+
+/* 4 · the Ø list: readable from the first paint; on play each row is struck in turn, 0.6s apart */
+.pz-list-row .pz-list-text::after {
+  content: ""; position: absolute; left: -.1em; right: -.1em; top: 54%;
+  height: .1em; border-radius: 99px; background: var(--color-slash, #2D4BF0);
+  transform: scaleX(0); transform-origin: left center;
+}
+.pz-list[data-tone="dark"] .pz-list-text::after { background: var(--color-lift, #7D93FF); }
+.pz-list-row .pz-list-glyph { opacity: .25; }
+.pz-list[data-play="true"] .pz-list-text::after { animation: pz-scale .3s cubic-bezier(.6, 0, .2, 1) calc(var(--i, 0) * .6s + .35s) forwards; }
+.pz-list[data-play="true"] .pz-list-label      { animation: pz-dim .2s linear calc(var(--i, 0) * .6s + .65s) forwards; }
+.pz-list[data-play="true"] .pz-list-glyph      { animation: pz-wake .3s linear calc(var(--i, 0) * .6s + .35s) forwards; }
+.pz-list[data-enter="true"] .pz-list-row       { opacity: 0; transform: translateY(10px); }
+.pz-list[data-enter="true"][data-play="true"] .pz-list-row { animation: pz-enter .25s cubic-bezier(.2, .8, .2, 1) calc(var(--i, 0) * .6s) forwards; }
+@keyframes pz-scale { to { transform: scaleX(1); } }
+@keyframes pz-dim   { to { opacity: .38; } }
+@keyframes pz-wake  { to { opacity: 1; } }
+@keyframes pz-enter { to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .pz-anim-pill, .pz-anim-slash, .pz-anim-word, .pz-count-pill, .pz-count-slash, .pz-count-word,
+  .pz-list[data-play="true"] .pz-list-text::after, .pz-list[data-play="true"] .pz-list-label,
+  .pz-list[data-play="true"] .pz-list-glyph, .pz-list[data-enter="true"][data-play="true"] .pz-list-row {
+    animation-duration: 1ms !important; animation-delay: 0s !important;
+  }
+  .pz-turn { animation-duration: 4s; }
+}

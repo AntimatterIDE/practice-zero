@@ -1,0 +1,32 @@
+/*
+  Practice Zero — Tailwind v4 theme tokens (Direction B).
+  These match the names already used on practicezero.com (bg-ink, text-slash, bg-mist, border-line…) and add two:
+    lift  #7D93FF  the slash, the Ø glyph and mono accents on ink
+    dim   #6E6C66  the zero at rest on ink, before the mark draws over it
+  If your globals.css already has an @theme block, add --color-lift and --color-dim to it and skip this file.
+  Import order in app/globals.css:
+    @import "tailwindcss";
+    @import "../components/brand/pz-theme.css";
+    @import "../components/brand/pz-motion.css";
+*/
+@theme {
+  --color-ink: #111418;       /* text, the ring, dark sections */
+  --color-paper: #F5F4EF;     /* page background; the ring and text on ink */
+  --color-slash: #2D4BF0;     /* the slash, primary buttons, the Ø on light */
+  --color-lift: #7D93FF;      /* the slash and the Ø on ink */
+  --color-foam: #A8B5F8;      /* kept for existing site classes; prefer lift for brand accents on ink */
+  --color-mist: #ECEAE3;      /* alternate section background, row fills */
+  --color-line: #DEDBD2;      /* borders and hairlines on paper */
+  --color-graphite: #4A4F57;  /* secondary text on paper */
+  --color-card: #FFFFFF;      /* cards on paper */
+  --color-dim: #6E6C66;       /* the zero at rest on ink */
+
+  --font-sans: var(--font-sans-family, "Instrument Sans"), "Instrument Sans", system-ui, sans-serif;
+  --font-mono: var(--font-mono-family, "JetBrains Mono"), "JetBrains Mono", ui-monospace, monospace;
+
+  --shadow-card: 0 18px 40px -28px #11141859;
+
+  --ease-pz-draw: cubic-bezier(.65, 0, .35, 1);
+  --ease-pz-strike: cubic-bezier(.7, 0, .2, 1);
+  --ease-pz-settle: cubic-bezier(.2, .8, .2, 1);
+}
