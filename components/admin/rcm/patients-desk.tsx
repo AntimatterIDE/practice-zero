@@ -159,7 +159,7 @@ export function PatientsDesk() {
           />
           <ul className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {rows.length === 0 ? (
-              <li className="px-4 py-5 text-sm text-neutral-500">{query.trim() ? "No charts match that search." : "No charts yet. Add a new patient."}</li>
+              <li className="px-4 py-5 text-sm text-graphite">{query.trim() ? "No charts match that search." : "No charts yet. Add a new patient."}</li>
             ) : null}
             {rows.map((patient) => {
               const upcoming = appointments

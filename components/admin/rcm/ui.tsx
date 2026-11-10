@@ -1,15 +1,16 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { ZeroLoader } from "@/components/brand";
 import { DEMO_CLINIC_DAY, localIsoDay } from "@/lib/rcm/chart";
 import { cn } from "@/lib/utils";
 import type { ClaimStatus } from "@/lib/rcm/types";
 
 export const fieldClass =
-  "box-border w-full min-w-0 max-w-full min-h-11 rounded-[var(--rb-r-md,8px)] border border-neutral-200 bg-white px-3 py-2 text-sm text-ink outline-none transition-colors duration-150 placeholder:text-neutral-400 hover:border-neutral-300 focus:border-neutral-900 focus:ring-0 disabled:pointer-events-none disabled:opacity-50";
+  "box-border w-full min-w-0 max-w-full min-h-11 rounded-[10px] border border-line bg-card px-3 py-2 text-sm text-ink outline-none transition-colors duration-150 placeholder:text-graphite/50 hover:border-graphite/30 focus:border-ink focus:ring-0 disabled:pointer-events-none disabled:opacity-50";
 
 export const panelClass =
-  "rounded-[var(--rb-r-2xl,14px)] border border-neutral-200 bg-white p-5";
+  "rounded-[12px] border border-line bg-card p-5";
 
 export function PageHeader({
   kicker,
@@ -28,8 +29,8 @@ export function PageHeader({
     <div className="border-b border-line pb-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">{kicker}</p>
-          <h1 className="mt-2 text-xl font-medium tracking-[-0.015em] text-neutral-900">{title}</h1>
+          <p className="font-mono text-[11px] font-medium uppercase tracking-[0.06em] text-graphite">{kicker}</p>
+          <h1 className="mt-2 font-sans text-xl font-semibold tracking-[-0.03em] text-ink">{title}</h1>
           {lede ? <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">{lede}</p> : null}
         </div>
         {action}
@@ -106,17 +107,18 @@ export function useClinicToday() {
 
 export function Stat({ label, value, detail }: { label: string; value: string; detail: string }) {
   return (
-    <div className="rounded-[var(--rb-r-2xl,14px)] border border-neutral-200/80 bg-white px-4 py-4">
-      <p className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">{label}</p>
-      <p className="mt-2 text-3xl font-medium tabular-nums tracking-[-0.02em] text-neutral-900">{value}</p>
-      <p className="mt-1 text-[13px] leading-relaxed text-neutral-500">{detail}</p>
+    <div className="rounded-[12px] border border-line bg-card px-4 py-4">
+      <p className="font-mono text-[11px] font-medium uppercase tracking-[0.06em] text-graphite">{label}</p>
+      <p className="mt-2 font-mono text-3xl font-medium tabular-nums tracking-[-0.02em] text-ink">{value}</p>
+      <p className="mt-1 text-[13px] leading-relaxed text-graphite">{detail}</p>
     </div>
   );
 }
 
 export function LoadingDesk() {
   return (
-    <p className="text-sm text-muted" role="status">
+    <p className="inline-flex items-center gap-2.5 text-sm text-graphite" role="status">
+      <ZeroLoader label="" />
       Opening the desk…
     </p>
   );

@@ -1,3 +1,4 @@
+import { ZeroMark } from "@/components/brand";
 import { samplePractice } from "@/lib/rcm/seed";
 
 export function ClinicFrame({ kicker, children }: { kicker: string; children: React.ReactNode }) {
@@ -8,10 +9,12 @@ export function ClinicFrame({ kicker, children }: { kicker: string; children: Re
       </a>
       <header className="bg-pine text-paper">
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-5 py-4">
-          <span className="grid size-11 place-items-center rounded-md bg-paper text-sm font-semibold text-pine">PZ</span>
+          <span className="grid size-11 shrink-0 place-items-center rounded-[10px] bg-card">
+            <ZeroMark size={30} title="practice zero" />
+          </span>
           <div className="min-w-0">
             <p className="truncate font-display text-lg font-medium leading-tight">{samplePractice.legalName}</p>
-            <p className="text-xs text-foam">{kicker}</p>
+            <p className="text-xs text-lift">{kicker}</p>
           </div>
         </div>
       </header>

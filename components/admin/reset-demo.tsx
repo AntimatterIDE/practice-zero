@@ -6,7 +6,7 @@ export function ResetDemoButton({ className = "" }: { className?: string }) {
   return (
     <button
       type="button"
-      className={className || "text-[13px] text-neutral-600 underline decoration-neutral-300 underline-offset-4 hover:text-neutral-900"}
+      className={className || "text-[13px] text-graphite underline decoration-line underline-offset-4 hover:text-ink"}
       onClick={() => resetDemoState()}
     >
       Reset demo

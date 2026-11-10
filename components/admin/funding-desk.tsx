@@ -182,7 +182,7 @@ function CashChart({ values, breakMonth }: { values: number[]; breakMonth: numbe
       role="img"
       aria-label="Cash balance across 18 months"
     >
-      <line x1={padX} x2={width - padX} y1={zeroY} y2={zeroY} stroke="#e4e2da" strokeWidth="1" />
+      <line x1={padX} x2={width - padX} y1={zeroY} y2={zeroY} stroke="#DEDBD2" strokeWidth="1" />
       <path d={area} fill="currentColor" fillOpacity="0.12" />
       <path d={line} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
       {breakIndex !== null ? <circle cx={x(breakIndex)} cy={y(values[breakIndex])} r="4" fill="#b42318" /> : null}

@@ -113,7 +113,7 @@ export function PatientDetail({ id }: { id: string }) {
       {patient.flags.length ? (
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           {patient.flags.map((flag) => (
-            <span key={flag} className="rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-1 text-xs text-neutral-600">
+            <span key={flag} className="rounded-full border border-line bg-mist px-2.5 py-1 text-xs text-graphite">
               {flag}
             </span>
           ))}
@@ -125,10 +125,10 @@ export function PatientDetail({ id }: { id: string }) {
             ? "border-amber-200 bg-amber-50"
             : severeAllergy
               ? "border-emergency/30 bg-red-50"
-              : "border-neutral-200 bg-neutral-50"
+              : "border-line bg-mist"
         }`}
       >
-        <p className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">Allergies</p>
+        <p className="text-[11px] font-medium uppercase tracking-wider text-graphite">Allergies</p>
         <p className="mt-1 font-medium">
           {!patient.allergiesReviewed
             ? "Not reviewed. Confirm before prescribing or injecting."
@@ -137,7 +137,7 @@ export function PatientDetail({ id }: { id: string }) {
               : "No known drug allergies."}
         </p>
         {coverage ? (
-          <p className="mt-1 text-neutral-500">
+          <p className="mt-1 text-graphite">
             {coverage.payerName}
             {coverage.planName ? ` · ${coverage.planName}` : ""} · {coverage.outOfNetwork ? "Out of network" : "In network"} ·{" "}
             {coverage.benefitsPaidTo === "practice" ? "plan pays the practice" : "plan pays the patient"}

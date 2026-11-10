@@ -4,7 +4,10 @@ export const brand = {
   ink: "#111418",
   paper: "#F5F4EF",
   slash: "#2D4BF0",
+  lift: "#7D93FF",
+  dim: "#6E6C66",
   graphite: "#4A4F57",
+  line: "#DEDBD2",
 } as const;
 
 export const product = {

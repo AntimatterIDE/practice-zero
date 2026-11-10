@@ -144,37 +144,41 @@ export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
             {/* Same mark language as the social share / OG card — no horizontal cross. */}
             <motion.svg
               xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 64 80"
+              viewBox="0 0 100 100"
               fill="none"
-              className="h-20 w-16 sm:h-28 sm:w-[5.5rem]"
+              className="h-20 w-20 sm:h-28 sm:w-28"
               aria-hidden
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EASE }}
             >
-              <ellipse
-                cx="32"
-                cy="40"
-                rx="22"
-                ry="30"
+              <rect
+                x="23"
+                y="9"
+                width="54"
+                height="82"
+                rx="27"
                 stroke="#111418"
-                strokeWidth="8"
+                strokeWidth="12"
                 fill="none"
               />
-              <motion.path
-                d="M14 62 L50 18"
+              <motion.line
+                x1="42"
+                y1="60"
+                x2="58"
+                y2="40"
                 stroke="#2D4BF0"
-                strokeWidth="8"
+                strokeWidth="12"
                 strokeLinecap="round"
                 pathLength={1}
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: cleared > 0 || reduce ? 1 : 0 }}
-                transition={{ duration: 0.85, ease: EASE }}
+                transition={{ duration: 0.45, ease: EASE }}
               />
             </motion.svg>
 
             <motion.p
-              className="mt-6 font-sans text-3xl font-semibold lowercase tracking-[-0.055em] text-ink sm:text-4xl"
+              className="mt-6 font-sans text-3xl font-semibold lowercase tracking-[-0.045em] text-ink sm:text-4xl"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.12, ease: EASE }}
@@ -197,7 +201,7 @@ export function BrandIntroAnimation({ onReady }: { onReady?: () => void }) {
                     key={task}
                     className="relative flex items-center gap-3 text-sm font-medium lowercase tracking-[-0.02em] text-ink/75"
                   >
-                    <span className="font-mono text-slash">ø</span>
+                    <span className="font-mono text-slash">Ø</span>
                     <span className="relative">
                       {task}
                       <motion.span

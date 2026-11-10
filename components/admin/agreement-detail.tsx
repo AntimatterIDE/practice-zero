@@ -48,14 +48,14 @@ export function AgreementDetail({ id }: { id: string }) {
         </div>
 
         <section className={`${panelClass} mt-6`}>
-          <h2 className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">Document</h2>
+          <h2 className="text-[11px] font-medium uppercase tracking-wider text-graphite">Document</h2>
           <article className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-ink">{packet.body}</article>
         </section>
       </div>
 
       <aside className="grid h-fit gap-4 lg:sticky lg:top-6">
         <section className={panelClass}>
-          <h2 className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">Signature</h2>
+          <h2 className="text-[11px] font-medium uppercase tracking-wider text-graphite">Signature</h2>
           {packet.status === "signed" ? (
             <div className="mt-3 space-y-3">
               <p className="font-display text-2xl leading-tight text-ink">{packet.signerName || packet.patientName}</p>
@@ -102,7 +102,7 @@ export function AgreementDetail({ id }: { id: string }) {
         </section>
 
         <section className={panelClass}>
-          <h2 className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">Patient</h2>
+          <h2 className="text-[11px] font-medium uppercase tracking-wider text-graphite">Patient</h2>
           <p className="mt-3 font-semibold text-ink">{packet.patientName}</p>
           <p className="mt-1 text-sm text-muted">{packet.email}</p>
           <Button asChild variant="secondary" className="mt-4 w-full">
@@ -114,7 +114,7 @@ export function AgreementDetail({ id }: { id: string }) {
         </section>
 
         <section className={panelClass}>
-          <h2 className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">Activity</h2>
+          <h2 className="text-[11px] font-medium uppercase tracking-wider text-graphite">Activity</h2>
           <ol className="mt-3 space-y-3 text-sm">
             <li className="flex gap-3">
               <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-slash" aria-hidden />
@@ -141,7 +141,7 @@ export function AgreementDetail({ id }: { id: string }) {
               </li>
             ) : (
               <li className="flex gap-3">
-                <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-neutral-400" aria-hidden />
+                <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-graphite/60" aria-hidden />
                 <span>
                   <span className="block text-ink">Marked void</span>
                   <span className="text-muted">Not in force</span>

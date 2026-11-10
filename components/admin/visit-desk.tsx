@@ -72,7 +72,7 @@ export function VisitDesk() {
 
       <div className="mt-8 grid gap-3">
         <label className="relative min-w-0 sm:max-w-md">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" aria-hidden />
+          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-graphite/60" aria-hidden />
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}

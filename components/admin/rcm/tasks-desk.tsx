@@ -110,7 +110,7 @@ export function TasksDesk() {
         <section className="grid gap-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <label className="relative min-w-0 flex-1 sm:max-w-md">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" aria-hidden />
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-graphite/60" aria-hidden />
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
@@ -145,7 +145,7 @@ export function TasksDesk() {
           {anyMatch ? (
             groups.map(({ bucket, items }) => (
               <div key={bucket}>
-                <h2 className="mb-2 flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-neutral-500">
+                <h2 className="mb-2 flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-graphite">
                   {bucketLabel[bucket]}
                   <span className="tabular-nums">{items.length}</span>
                 </h2>

@@ -9,6 +9,7 @@ import {
   MessageSquare,
   UserRound,
 } from "lucide-react";
+import { AppBrand } from "@/components/brand";
 import { ExitToHome } from "@/components/marketing/exit-to-home";
 import { samplePractice } from "@/lib/rcm/seed";
 import { useHideOnScroll } from "@/lib/use-hide-on-scroll";
@@ -36,14 +37,8 @@ export function PatientPortalShell({ children }: { children: React.ReactNode }) 
         <div className="flex h-14 shrink-0 items-center border-b border-line px-3">
           <ExitToHome className="w-full justify-start" />
         </div>
-        <div className="flex items-center gap-2.5 border-b border-line px-4 py-3">
-          <span className="grid size-8 place-items-center rounded-lg bg-slash text-[11px] font-semibold text-paper">
-            PZ
-          </span>
-          <div className="min-w-0">
-            <p className="truncate text-[13px] font-semibold text-ink">{samplePractice.legalName}</p>
-            <p className="text-[11px] text-graphite">Patient experience · demo</p>
-          </div>
+        <div className="border-b border-line px-4 py-3">
+          <AppBrand practiceName={samplePractice.legalName} subtitle="Patient experience · demo" />
         </div>
         <nav className="flex-1 space-y-1 p-3" aria-label="Patient portal">
           {nav.map(({ href, label, icon: Icon }) => {

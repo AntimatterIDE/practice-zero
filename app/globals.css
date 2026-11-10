@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "../components/brand/pz-motion.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -6,9 +7,11 @@
   --color-paper: #f5f4ef;
   --color-ink: #111418;
   --color-slash: #2d4bf0;
+  --color-lift: #7d93ff;
+  --color-dim: #6e6c66;
   --color-graphite: #4a4f57;
   --color-muted: #4a4f57;
-  --color-line: #e4e2da;
+  --color-line: #dedbd2;
   --color-card: #ffffff;
   --color-oxide: #2d4bf0;
   --color-oxide-deep: #1f38c7;
@@ -265,7 +268,7 @@ body {
 :where(.admin-canvas) :where(.rounded-2xl.border),
 :where(.admin-canvas) :where(.rounded-3xl.border) {
   border-radius: var(--rb-r-2xl, 14px);
-  border-color: rgb(229 229 229 / 0.85);
+  border-color: #dedbd2;
   box-shadow: none;
   background: #fff;
 }

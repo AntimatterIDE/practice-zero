@@ -8,9 +8,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "min-h-11 rounded-[var(--rb-r-lg,10px)] bg-[var(--rb-accent,#0a6e66)] px-5 py-3 text-[var(--rb-accent-fg,#f3f7fb)] hover:bg-oxide-ink active:scale-[0.99]",
+          "min-h-11 rounded-[10px] bg-slash px-5 py-3 text-paper hover:bg-oxide-deep active:scale-[0.99]",
         secondary:
-          "min-h-11 rounded-[var(--rb-r-lg,10px)] border border-neutral-200 bg-white px-5 py-3 text-ink hover:bg-neutral-50",
+          "min-h-11 rounded-[10px] border border-line bg-card px-5 py-3 text-ink hover:bg-mist",
         ghost: "text-ink underline decoration-neutral-300 underline-offset-4 hover:decoration-neutral-900",
       },
     },

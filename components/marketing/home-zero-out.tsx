@@ -1,3 +1,4 @@
+import { ZeroList } from "@/components/brand";
 import { ZeroDevice } from "@/components/marketing/brand-mark";
 
 const lines = [
@@ -25,20 +26,7 @@ export function HomeZeroOut() {
           <p className="mt-4 max-w-md text-base text-graphite">
             Agents clear the backlog so the morning starts at <span className="font-medium text-slash">zero</span>.
           </p>
-          <ul className="mt-10 space-y-5">
-            {lines.map((line) => (
-              <li
-                key={line}
-                className="relative flex items-center gap-3 text-2xl font-semibold lowercase tracking-[-0.03em] text-graphite sm:text-3xl"
-              >
-                <span className="font-mono text-slash">ø</span>
-                <span className="relative">
-                  {line}
-                  <span aria-hidden="true" className="absolute left-0 right-0 top-1/2 h-[3px] -translate-y-1/2 bg-slash" />
-                </span>
-              </li>
-            ))}
-          </ul>
+          <ZeroList items={lines} className="mt-10" />
         </div>
         <div className="grid gap-4">
           {tiles.map((tile) => (
@@ -52,10 +40,7 @@ export function HomeZeroOut() {
                     : "border border-line bg-paper text-ink"
               }`}
             >
-              <ZeroDevice
-                tone={tile.tone === "ink" ? "ink" : "default"}
-                className={tile.tone === "slash" ? "text-paper" : undefined}
-              />
+              <ZeroDevice tone={tile.tone === "ink" ? "ink" : tile.tone === "slash" ? "slash" : "default"} />
               <p className="font-sans text-xl font-semibold lowercase leading-tight tracking-[-0.03em]">{tile.title}</p>
             </article>
           ))}

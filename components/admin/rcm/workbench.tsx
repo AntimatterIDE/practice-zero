@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DaySheet } from "@/components/admin/rcm/day-sheet";
 import { chartGaps, focusClinicDay } from "@/lib/rcm/chart";
@@ -11,6 +12,38 @@ import { MetricTile } from "@/components/admin/bits/surface";
 import { LoadingDesk, PageHeader, useClinicToday } from "@/components/admin/rcm/ui";
 import { useRcm } from "@/components/admin/rcm/store";
 import { cn } from "@/lib/utils";
+
+function OnRequestHeader() {
+  return (
+    <header
+      className="relative -mx-4 -mt-6 mb-8 overflow-hidden border-b border-slash/15 px-4 py-8 sm:-mx-6 sm:px-6 lg:-mx-8 lg:-mt-8 lg:px-8 lg:py-10"
+      style={{
+        backgroundColor: "#F5F4EF",
+        backgroundImage:
+          "radial-gradient(ellipse 72% 130% at 96% -20%, rgb(125 147 255 / 0.55), transparent 58%), linear-gradient(105deg, #ECEAE3 0%, #F5F4EF 72%)",
+      }}
+    >
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <div className="max-w-2xl">
+          <p className="kicker">On request</p>
+          <h2 className="mt-3 max-w-[18ch] font-sans text-[1.7rem] font-semibold lowercase leading-[1.08] tracking-[-0.03em] text-ink sm:text-3xl">
+            any workflow. any feature you ask for.
+          </h2>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-graphite sm:text-[15px]">
+            If the practice already works a certain way, we build that in. If a feature is missing from this desk, name it. We build that too.
+          </p>
+        </div>
+        <Link
+          href="/contact"
+          className="group inline-flex shrink-0 items-center gap-2 text-sm font-medium text-slash transition-colors hover:text-oxide-deep"
+        >
+          Tell us what to build
+          <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+        </Link>
+      </div>
+    </header>
+  );
+}
 
 export function Workbench() {
   const { ready, patients, appointments, tasks, agentRuns, claims, visitNotes } = useRcm();
@@ -100,6 +133,7 @@ export function Workbench() {
 
   return (
     <main>
+      <OnRequestHeader />
       <PageHeader
         kicker="Practice"
         title={focus === today ? "Today" : "Clinic day"}
@@ -115,9 +149,9 @@ export function Workbench() {
           </div>
         }
       />
-      <section className="mt-6 grid overflow-hidden rounded-[var(--rb-r-2xl,14px)] border border-neutral-200/80 bg-white sm:grid-cols-2 xl:grid-cols-4">
+      <section className="mt-6 grid overflow-hidden rounded-[12px] border border-line/80 bg-card sm:grid-cols-2 xl:grid-cols-4">
         {pulse.map((item, index) => (
-          <div key={item.label} className={cn(index > 0 && "border-neutral-200 sm:border-l", index > 1 && "border-t xl:border-t-0")}>
+          <div key={item.label} className={cn(index > 0 && "border-line sm:border-l", index > 1 && "border-t xl:border-t-0")}>
             <MetricTile href={item.href} label={item.label} value={item.value} detail={item.detail} />
           </div>
         ))}
@@ -132,25 +166,25 @@ export function Workbench() {
             checkout={(visit) => checkoutBrief({ visit, claims, notes: visitNotes, appointments })}
           />
         </div>
-        <aside className="min-w-0 max-w-full overflow-hidden rounded-[var(--rb-r-2xl,14px)] border border-neutral-200/80 bg-white">
-          <div className="flex items-end justify-between gap-3 border-b border-neutral-200 px-5 py-4">
+        <aside className="min-w-0 max-w-full overflow-hidden rounded-[12px] border border-line/80 bg-card">
+          <div className="flex items-end justify-between gap-3 border-b border-line px-5 py-4">
             <div>
-              <p className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">Front desk</p>
-              <h2 className="mt-1 text-sm font-medium text-neutral-900">Needs you</h2>
+              <p className="text-[11px] font-medium uppercase tracking-wider text-graphite">Front desk</p>
+              <h2 className="mt-1 text-sm font-medium text-ink">Needs you</h2>
             </div>
-            <Link href="/try/tasks" className="text-[13px] text-neutral-700 underline decoration-neutral-300 underline-offset-4">
+            <Link href="/try/tasks" className="text-[13px] text-graphite underline decoration-line underline-offset-4">
               All tasks
             </Link>
           </div>
           <ul className="grid">
-            {queue.length === 0 ? <li className="px-5 py-6 text-sm text-neutral-500">Calls, tasks, and charts are caught up.</li> : null}
+            {queue.length === 0 ? <li className="px-5 py-6 text-sm text-graphite">Calls, tasks, and charts are caught up.</li> : null}
             {queue.map((item) => (
-              <li key={item.key} className="border-t border-neutral-100 first:border-t-0">
-                <Link href={item.href} className="grid grid-cols-[4.5rem_1fr] gap-3 px-5 py-4 hover:bg-neutral-50">
-                  <span className="pt-0.5 text-[11px] font-medium uppercase tracking-wider text-neutral-500">{item.kicker}</span>
+              <li key={item.key} className="border-t border-mist first:border-t-0">
+                <Link href={item.href} className="grid grid-cols-[4.5rem_1fr] gap-3 px-5 py-4 hover:bg-mist">
+                  <span className="pt-0.5 text-[11px] font-medium uppercase tracking-wider text-graphite">{item.kicker}</span>
                   <span>
-                    <span className="block text-[13px] font-medium text-neutral-900">{item.title}</span>
-                    <span className="mt-0.5 block text-[13px] text-neutral-500">{item.detail}</span>
+                    <span className="block text-[13px] font-medium text-ink">{item.title}</span>
+                    <span className="mt-0.5 block text-[13px] text-graphite">{item.detail}</span>
                   </span>
                 </Link>
               </li>
@@ -158,19 +192,19 @@ export function Workbench() {
           </ul>
         </aside>
       </div>
-      <section className="mt-6 overflow-hidden rounded-[var(--rb-r-2xl,14px)] border border-neutral-200/80 bg-white">
-        <div className="border-b border-neutral-200 px-5 py-4">
-          <p className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">This morning</p>
-          <h2 className="mt-1 text-sm font-medium text-neutral-900">Agent runs</h2>
+      <section className="mt-6 overflow-hidden rounded-[12px] border border-line/80 bg-card">
+        <div className="border-b border-line px-5 py-4">
+          <p className="text-[11px] font-medium uppercase tracking-wider text-graphite">This morning</p>
+          <h2 className="mt-1 text-sm font-medium text-ink">Agent runs</h2>
         </div>
         <ul className="grid">
           {agentRuns.map((run) => (
-            <li key={run.id} className="border-t border-neutral-100 first:border-t-0">
-              <Link href={run.href} className="grid gap-1 px-5 py-4 hover:bg-neutral-50 sm:grid-cols-[9rem_1fr]">
-                <span className="text-[13px] text-neutral-500">{formatWhen(run.at)}</span>
+            <li key={run.id} className="border-t border-mist first:border-t-0">
+              <Link href={run.href} className="grid gap-1 px-5 py-4 hover:bg-mist sm:grid-cols-[9rem_1fr]">
+                <span className="text-[13px] text-graphite">{formatWhen(run.at)}</span>
                 <span>
-                  <span className="block text-[13px] font-medium text-neutral-900">{run.title}</span>
-                  <span className="mt-0.5 block text-[13px] text-neutral-500">{run.detail}</span>
+                  <span className="block text-[13px] font-medium text-ink">{run.title}</span>
+                  <span className="mt-0.5 block text-[13px] text-graphite">{run.detail}</span>
                 </span>
               </Link>
             </li>

@@ -5,7 +5,7 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#F5F4EF",
-  "theme_color": "#2D4BF0",
+  "theme_color": "#111418",
   "icons": [
     {
       "src": "/brand/icon-192.png",
@@ -18,9 +18,10 @@
       "type": "image/png"
     },
     {
-      "src": "/apple-icon.png",
-      "sizes": "180x180",
-      "type": "image/png"
+      "src": "/brand/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

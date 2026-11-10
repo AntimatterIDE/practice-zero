@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ZeroLogo, ZeroMark } from "@/components/brand";
 import { cn } from "@/lib/utils";
 
 type BrandMarkProps = {
@@ -7,30 +8,21 @@ type BrandMarkProps = {
   showWordmark?: boolean;
   inverted?: boolean;
   size?: "sm" | "md" | "lg";
+  /** Homepage splash only. The pill draws, the slash lands, the wordmark settles. */
+  animate?: boolean;
 };
 
-const sizes = {
-  sm: { device: 22, text: "text-lg" },
-  md: { device: 28, text: "text-xl" },
-  lg: { device: 36, text: "text-2xl" },
-};
+const logoSize = {
+  sm: "sm",
+  md: "md",
+  lg: "lg",
+} as const;
 
-function Device({ className, size }: { className?: string; size: number }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 64 80"
-      fill="none"
-      width={size}
-      height={Math.round(size * 1.25)}
-      className={className}
-      aria-hidden="true"
-    >
-      <ellipse cx="32" cy="40" rx="22" ry="30" stroke="currentColor" strokeWidth="7" />
-      <path d="M14 62 L50 18" stroke="#2D4BF0" strokeWidth="7" strokeLinecap="round" />
-    </svg>
-  );
-}
+const markSize = {
+  sm: 22,
+  md: 28,
+  lg: 36,
+};
 
 export function BrandMark({
   href = "/",
@@ -38,28 +30,22 @@ export function BrandMark({
   showWordmark = true,
   inverted = false,
   size = "md",
+  animate = false,
 }: BrandMarkProps) {
-  const dims = sizes[size];
-  const content = (
-    <span className={cn("inline-flex items-center gap-2.5", className)}>
-      <Device className={inverted ? "text-paper" : "text-ink"} size={dims.device} />
-      {showWordmark ? (
-        <span
-          className={cn(
-            "font-sans font-semibold lowercase tracking-[-0.03em]",
-            dims.text,
-            inverted ? "text-paper" : "text-ink",
-          )}
-        >
-          practice zero
-        </span>
-      ) : null}
-    </span>
+  const tone = inverted ? "paper" : "ink";
+  const content = showWordmark ? (
+    <ZeroLogo size={logoSize[size]} tone={tone} animate={animate} className={className} />
+  ) : (
+    <ZeroMark size={markSize[size]} tone={tone} cut="heavy" className={className} />
   );
 
   if (!href) return content;
   return (
-    <Link href={href} className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slash">
+    <Link
+      href={href}
+      aria-label="practice zero home"
+      className="rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slash"
+    >
       {content}
     </Link>
   );
@@ -72,10 +58,9 @@ export function ZeroDevice({
   className?: string;
   tone?: "default" | "ink" | "slash";
 }) {
-  const color =
-    tone === "slash" ? "text-ink" : tone === "ink" ? "text-slash" : "text-slash";
+  const color = tone === "ink" ? "text-lift" : tone === "slash" ? "text-paper" : "text-slash";
   return (
-    <span className={cn("inline-flex font-mono text-[1.35em] leading-none", color, className)} aria-hidden="true">
+    <span className={cn("inline-flex font-mono text-[1.35em] font-medium leading-none", color, className)} aria-hidden="true">
       Ø
     </span>
   );

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { CountToZero, ZeroMark } from "@/components/brand";
 import { onUserEngagement, shouldSkipHeavyVisuals } from "@/lib/lab-environment";
 
 const queue = [
@@ -14,80 +15,24 @@ const queue = [
 
 export function HomeMetrics() {
   const rootRef = useRef<HTMLElement>(null);
-  const [count, setCount] = useState(0);
+  const [play, setPlay] = useState(false);
+  const [settled, setSettled] = useState(false);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
-    if (shouldSkipHeavyVisuals()) {
-      setCount(0);
-      return;
-    }
-
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const root = rootRef.current;
-    if (!root || media.matches) {
-      setCount(0);
-      return;
-    }
-
-    let frame = 0;
-    let timer = 0;
-    let started = false;
-    let visible = false;
-    let engaged = false;
-
-    const start = () => {
-      if (started || !visible || !engaged || shouldSkipHeavyVisuals()) return;
-      started = true;
-      setCount(23);
-      const begin = performance.now();
-      const duration = 2400;
-      const tick = (now: number) => {
-        const t = Math.min(1, (now - begin) / duration);
-        const eased = 1 - (1 - t) ** 3;
-        setCount(Math.round(23 * (1 - eased)));
-        if (t < 1) frame = requestAnimationFrame(tick);
-        else setCount(0);
-      };
-      frame = requestAnimationFrame(tick);
-      timer = window.setInterval(() => {
-        setActive((value) => (value + 1) % queue.length);
-      }, 2200);
-    };
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          visible = true;
-          start();
-          io.disconnect();
-        }
-      },
-      { rootMargin: "80px" },
-    );
-    io.observe(root);
-
-    const detachEngagement = onUserEngagement(() => {
-      engaged = true;
-      start();
+    if (shouldSkipHeavyVisuals()) return;
+    return onUserEngagement(() => {
+      if (!shouldSkipHeavyVisuals()) setPlay(true);
     });
-
-    const onChange = () => {
-      if (media.matches) {
-        cancelAnimationFrame(frame);
-        window.clearInterval(timer);
-        setCount(0);
-      }
-    };
-    media.addEventListener("change", onChange);
-    return () => {
-      io.disconnect();
-      detachEngagement();
-      cancelAnimationFrame(frame);
-      window.clearInterval(timer);
-      media.removeEventListener("change", onChange);
-    };
   }, []);
+
+  useEffect(() => {
+    if (!play) return;
+    const timer = window.setInterval(() => {
+      setActive((value) => (value + 1) % queue.length);
+    }, 2200);
+    return () => window.clearInterval(timer);
+  }, [play]);
 
   return (
     <section ref={rootRef} className="border-t border-line bg-paper px-6 py-20 lg:py-28">
@@ -96,19 +41,26 @@ export function HomeMetrics() {
           <div className="relative flex h-full flex-col">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-foam">Morning board</p>
-                <div className="mt-3 flex items-end gap-3">
-                  <span className="font-sans text-6xl font-semibold tracking-[-0.05em] tabular-nums sm:text-7xl">
-                    {count}
-                  </span>
-                  <span className="mb-2 font-mono text-[11px] uppercase tracking-[0.2em] text-paper/80">
-                    open tasks
-                  </span>
+                <p className="font-mono text-[11px] uppercase tracking-[0.06em] text-lift">Morning board</p>
+                <div className="mt-3">
+                  {play ? (
+                    <CountToZero
+                      steps={[23, 16, 9, 4, 1, 0]}
+                      label="open tasks"
+                      tone="dark"
+                      onComplete={() => setSettled(true)}
+                    />
+                  ) : (
+                    <div className="flex items-end gap-3">
+                      <span className="font-mono text-6xl font-medium tabular-nums leading-none text-paper sm:text-7xl">0</span>
+                      <span className="pb-[0.35em] font-mono text-[11px] uppercase tracking-[0.2em] text-paper/80">
+                        open tasks
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
-              <span className="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-full bg-slash font-mono text-lg text-paper">
-                Ø
-              </span>
+              <ZeroMark size={40} tone="paper" title="practice zero" />
             </div>
 
             <div className="relative mt-8 flex-1">
@@ -116,17 +68,17 @@ export function HomeMetrics() {
               <ul className="space-y-3">
                 {queue.map((item, index) => {
                   const isActive = index === active;
-                  const cleared = count === 0 && index <= active;
+                  const cleared = settled && index <= active;
                   return (
                     <li
                       key={item.id}
                       className={`relative rounded-2xl border px-4 py-3 pl-10 transition-colors duration-300 ${
-                        isActive ? "border-slash/40 bg-slash/15" : "border-paper/10 bg-paper/5"
+                        isActive ? "border-lift/50 bg-lift/15" : "border-paper/10 bg-paper/5"
                       }`}
                     >
                       <span
                         className={`absolute left-3 top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full ${
-                          cleared ? "bg-slash" : "bg-paper/30"
+                          cleared ? "bg-lift" : "bg-paper/30"
                         }`}
                       />
                       <div className="flex items-center justify-between gap-3">
@@ -135,7 +87,7 @@ export function HomeMetrics() {
                           <p className="mt-0.5 text-xs text-paper/80">{item.detail}</p>
                         </div>
                         {isActive ? (
-                          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-foam">Live</span>
+                          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-lift">Live</span>
                         ) : null}
                       </div>
                     </li>

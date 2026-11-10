@@ -77,7 +77,7 @@ function Group({
 }) {
   return (
     <div className="mt-6 first:mt-0">
-      <p className="mb-1 px-3 text-[11px] font-medium uppercase tracking-wider text-neutral-500">{label}</p>
+      <p className="mb-1 px-3 font-mono text-[11px] font-medium uppercase tracking-[0.06em] text-graphite">{label}</p>
       <div className="grid gap-0.5">
         {links.map((link) => {
           const active = isActiveDesk(pathname, link.href);
@@ -86,8 +86,8 @@ function Group({
               key={link.href}
               href={link.href}
               className={cn(
-                "flex min-h-10 items-center rounded-[var(--rb-r-md,8px)] px-3 text-[13px] text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900",
-                active && "bg-neutral-100 font-medium text-neutral-900",
+                "flex min-h-10 items-center rounded-[10px] px-3 text-[13px] text-graphite hover:bg-paper hover:text-ink",
+                active && "bg-paper font-medium text-ink",
               )}
               aria-current={active ? "page" : undefined}
             >

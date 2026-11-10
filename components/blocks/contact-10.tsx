@@ -3,7 +3,8 @@
 import { FormEvent, Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion, useReducedMotion, type Variants } from "motion/react";
-import { CheckCircle2, ChevronDown, Loader2 } from "lucide-react";
+import { CheckCircle2, ChevronDown } from "lucide-react";
+import { ZeroLoader } from "@/components/brand";
 import { AnalyticsEvents, loadPersistedUtms, trackEvent } from "@/lib/analytics/events";
 import { specialties } from "@/lib/marketing/specialties";
 
@@ -358,7 +359,7 @@ function ContactForm() {
               whileTap={{ scale: 0.99 }}
               className="mt-6 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-slash px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-oxide-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slash focus-visible:ring-offset-2 focus-visible:ring-offset-ink disabled:cursor-wait disabled:opacity-70"
             >
-              {status === "sending" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+              {status === "sending" ? <ZeroLoader tone="current" slashTone="ring" label="" /> : null}
               {status === "sending" ? "Sending…" : "Request a consultation"}
             </motion.button>
           )}
