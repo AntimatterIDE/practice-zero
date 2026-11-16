@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { MarketingAnalytics } from "@/components/analytics/marketing-analytics";
 import { SiteChat } from "@/components/marketing/site-chat";
 import { ScrollToTop } from "@/components/scroll-to-top";
@@ -107,6 +108,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MarketingAnalytics />
         {children}
         <SiteChat />
+        <Analytics />
       </body>
     </html>
   );
